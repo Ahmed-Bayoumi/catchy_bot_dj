@@ -1,0 +1,102 @@
+# Django: Main web framework (version 5.0.1)
+# Latest stable version with all security patches
+# Provides: Models, Views, Templates, Admin, Authentication, ORM
+Django==5.0.1
+
+# PostgreSQL adapter for Python
+# Allows Django to communicate with PostgreSQL database
+# Required for production-grade database operations
+psycopg2-binary==2.9.9
+
+# Python Decouple: Read environment variables from .env file
+# Keeps sensitive data (passwords, API keys) out of code
+# Usage: config('SECRET_KEY')
+python-decouple==3.8
+
+# Pillow: Python Imaging Library
+# Required for handling image uploads (user avatars, attachments)
+# Supports: JPEG, PNG, GIF, BMP, etc.
+Pillow==10.2.0
+
+
+
+# FORMS & UI
+
+# Django Crispy Forms: Makes forms look beautiful
+# Renders Django forms with Bootstrap styling automatically
+# No need to write HTML for forms manually
+django-crispy-forms==2.3
+
+# Bootstrap 5 template pack for Crispy Forms
+# Provides Bootstrap 5 classes and components
+crispy-bootstrap5==2025.6
+
+# REAL-TIME FEATURES (WebSocket)
+
+# Django Channels: Adds WebSocket support to Django
+# Required for real-time chat functionality
+# Allows bidirectional communication between client and server
+channels==4.0.0
+
+# Redis channel layer for Django Channels
+# Allows multiple servers to communicate in real-time
+# Stores messages temporarily for WebSocket connections
+channels-redis==4.2.0
+
+# Daphne: ASGI server for Django Channels
+# Production-ready server for WebSocket connections
+# Replaces the default Django WSGI server
+daphne==4.1.0
+
+
+# BACKGROUND TASKS
+
+# Celery: Distributed task queue
+# For: Sending emails, processing webhooks, scheduled tasks
+# Runs tasks asynchronously without blocking the main app
+celery==5.3.6
+
+# Redis: In-memory data store
+# Used as message broker for Celery and Channels
+# Fast, reliable, and widely used
+redis==5.0.1
+
+
+
+# API & EXTERNAL INTEGRATIONS
+
+# Requests: HTTP library for making API requests
+# Used to communicate with Woztell WhatsApp API
+# Simple and elegant syntax
+requests==2.31.0
+
+# Django REST Framework: Build REST APIs
+# For creating webhooks and API endpoints
+# Provides serialization, authentication, and more
+djangorestframework==3.14.0
+
+# Django CORS Headers: Handle Cross-Origin Resource Sharing
+# Allows frontend apps to connect to our API
+# Required if using React/Vue/Angular frontend
+django-cors-headers==4.3.1
+
+
+# DEVELOPMENT TOOLS (Optional - for development only)
+
+# Django Debug Toolbar: Debugging tool for development
+# Shows SQL queries, cache hits, template rendering time
+django-debug-toolbar==4.2.0
+
+# IPython: Enhanced Python shell
+# Better than default Python shell, with syntax highlighting
+ipython==8.20.0
+
+
+
+# NOTES
+# ==============================================================================
+# 1. Always use exact versions (==) in production for stability
+# 2. Update packages regularly for security patches
+# 3. Test after each update to ensure compatibility
+# 4. Use virtual environment to isolate dependencies
+# ==============================================================================

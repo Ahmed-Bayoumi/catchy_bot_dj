@@ -1,0 +1,395 @@
+{% extends 'base.html' %}
+
+{% block title %}Dashboard - Catchy Bot CRM{% endblock %}
+
+{% block page_title %}Dashboard{% endblock %}
+{% block page_subtitle %}Welcome back, {{ user.get_full_name }}!{% endblock %}
+
+{% block content %}
+
+<!-- ========== Statistics Cards Row ========== -->
+<!--
+    Section: Key metrics overview
+    Purpose: Show important numbers at a glance
+    Contains: 4 stat cards (total leads, new today, conversion rate, user wins)
+-->
+<div class="row g-4 mb-4">
+
+    <!-- Total Leads Card -->
+    <!-- Shows: Total number of leads in system -->
+    <div class="col-md-3">
+        <div class="stat-card">
+            <!-- Icon: Users icon with light purple background -->
+            <div class="icon" style="background: rgba(102, 126, 234, 0.1); color: var(--primary-color);">
+                <i class="fas fa-users"></i>
+            </div>
+            <!-- Main number: Total leads count -->
+            <div class="number">{{ total_leads }}</div>
+            <div class="label">Total Leads</div>
+            <!-- Change indicator: Shows monthly growth -->
+            <div class="change positive">
+                <i class="fas fa-arrow-up"></i>
+                {{ new_this_month }} this month
+            </div>
+        </div>
+    </div>
+
+    <!-- New Today Card -->
+    <!-- Shows: Leads created today -->
+    <div class="col-md-3">
+        <div class="stat-card">
+            <!-- Icon: User-plus icon with light green background -->
+            <div class="icon" style="background: rgba(40, 167, 69, 0.1); color: var(--success-color);">
+                <i class="fas fa-user-plus"></i>
+            </div>
+            <!-- Main number: Today's new leads -->
+            <div class="number">{{ new_today }}</div>
+            <div class="label">New Today</div>
+            <!-- Change indicator: Shows weekly growth -->
+            <div class="change positive">
+                <i class="fas fa-arrow-up"></i>
+                {{ new_this_week }} this week
+            </div>
+        </div>
+    </div>
+
+    <!-- Conversion Rate Card -->
+    <!-- Shows: Percentage of leads converted to patients -->
+    <div class="col-md-3">
+        <div class="stat-card">
+            <!-- Icon: Chart icon with light yellow background -->
+            <div class="icon" style="background: rgba(255, 193, 7, 0.1); color: var(--warning-color);">
+                <i class="fas fa-chart-line"></i>
+            </div>
+            <!-- Main number: Conversion rate percentage -->
+            <div class="number">{{ conversion_rate|floatformat:1 }}%</div>
+            <div class="label">Conversion Rate</div>
+            <!-- Change indicator: Color based on performance (green if >50%, red if <50%) -->
+            <div class="change {% if conversion_rate > 50 %}positive{% else %}negative{% endif %}">
+                {% if conversion_rate > 50 %}
+                    <i class="fas fa-arrow-up"></i> Good
+                {% else %}
+                    <i class="fas fa-arrow-down"></i> Low
+                {% endif %}
+            </div>
+        </div>
+    </div>
+
+    <!-- Your Performance Card -->
+    <!-- Shows: Current user's wins -->
+    <div class="col-md-3">
+        <div class="stat-card">
+            <!-- Icon: Trophy icon with light blue background -->
+            <div class="icon" style="background: rgba(23, 162, 184, 0.1); color: var(--info-color);">
+                <i class="fas fa-trophy"></i>
+            </div>
+            <!-- Main number: User's won leads -->
+            <div class="number">{{ user_stats.won }}</div>
+            <div class="label">Your Wins</div>
+            <!-- Change indicator: Shows win rate -->
+            <div class="change positive">
+                <i class="fas fa-star"></i>
+                {{ user_stats.win_rate|floatformat:1 }}% win rate
+            </div>
+        </div>
+    </div>
+
+</div>
+
+<!-- ========== Charts Row ========== -->
+<!--
+    Section: Data visualization
+    Purpose: Show lead distribution by stage and source
+    Contains: 2 cards (stage chart 8 cols, source chart 4 cols)
+-->
+<div class="row g-4 mb-4">
+
+    <!-- Leads by Stage Chart -->
+    <!-- Shows: Distribution of leads across different stages -->
+    <div class="col-md-8">
+        <div class="card">
+            <div class="card-header d-flex justify-content-between align-items-center">
+                <h5 class="mb-0">
+                    <i class="fas fa-chart-bar text-primary me-2"></i>
+                    Leads by Stage
+                </h5>
+                <!-- Time period filters (placeholder for now) -->
+                <div class="btn-group btn-group-sm">
+                    <button class="btn btn-outline-secondary active">7 Days</button>
+                    <button class="btn btn-outline-secondary">30 Days</button>
+                    <button class="btn btn-outline-secondary">All Time</button>
+                </div>
+            </div>
+            <div class="card-body">
+                {% if leads_by_stage %}
+                <!-- Stage Distribution Grid -->
+                <!-- Layout: 3 columns, each showing stage stats -->
+                <div class="row g-3">
+                    {% for stage in leads_by_stage %}
+                    <div class="col-md-4">
+                        <!-- Stage header with icon and count -->
+                        <div class="d-flex align-items-center mb-2">
+                            <!-- Stage icon with colored background -->
+                            <div style="width: 40px; height: 40px; background: {{ stage.color }}20;
+                                        border-radius: 8px; display: flex; align-items: center;
+                                        justify-content: center; margin-right: 12px;">
+                                <i class="{{ stage.icon }}" style="color: {{ stage.color }};"></i>
+                            </div>
+                            <!-- Stage count and name -->
+                            <div>
+                                <div style="font-weight: 600; font-size: 20px;">{{ stage.count }}</div>
+                                <small class="text-muted">{{ stage.name }}</small>
+                            </div>
+                        </div>
+                        <!-- Progress bar showing percentage of total -->
+                        <div class="progress" style="height: 8px; background: #f0f0f0;">
+                            <div class="progress-bar" style="background: {{ stage.color }}; width: {{ stage.percentage|floatformat:0 }}%"></div>
+                        </div>
+                    </div>
+                    {% endfor %}
+                </div>
+                {% else %}
+                <!-- Empty state: No data available yet -->
+                <div class="text-center py-5">
+                    <i class="fas fa-chart-bar fa-3x text-muted mb-3"></i>
+                    <p class="text-muted">No data available yet</p>
+                    <small>Data will appear when you add your first lead</small>
+                </div>
+                {% endif %}
+            </div>
+        </div>
+    </div>
+
+    <!-- Leads by Source Chart -->
+    <!-- Shows: Where leads are coming from (WhatsApp, Facebook, etc.) -->
+    <div class="col-md-4">
+        <div class="card">
+            <div class="card-header">
+                <h5 class="mb-0">
+                    <i class="fas fa-bullseye text-primary me-2"></i>
+                    Leads by Source
+                </h5>
+            </div>
+            <div class="card-body">
+                {% if leads_by_source %}
+                <!-- Source list with icons and counts -->
+                <div class="source-list">
+                    {% for source in leads_by_source %}
+                    <div class="d-flex align-items-center justify-content-between mb-3 pb-3"
+                         style="border-bottom: 1px solid #f0f0f0;">
+                        <!-- Source info: icon + name -->
+                        <div class="d-flex align-items-center">
+                            <!-- Circular icon with source color -->
+                            <div style="width: 35px; height: 35px; background: {{ source.color }}20;
+                                        border-radius: 50%; display: flex; align-items: center;
+                                        justify-content: center; margin-right: 12px;">
+                                <i class="{{ source.icon }}" style="color: {{ source.color }};"></i>
+                            </div>
+                            <div>
+                                <div style="font-weight: 500;">{{ source.name }}</div>
+                                <small class="text-muted">{{ source.count }} leads</small>
+                            </div>
+                        </div>
+                        <!-- Source count (large, colored) -->
+                        <div style="font-weight: 700; font-size: 20px; color: {{ source.color }};">
+                            {{ source.count }}
+                        </div>
+                    </div>
+                    {% endfor %}
+                </div>
+                {% else %}
+                <!-- Empty state: No sources yet -->
+                <div class="text-center py-4">
+                    <i class="fas fa-bullseye fa-3x text-muted mb-3"></i>
+                    <p class="text-muted">No sources yet</p>
+                </div>
+                {% endif %}
+            </div>
+        </div>
+    </div>
+
+</div>
+
+<!-- ========== Recent Activity and Quick Actions Row ========== -->
+<!--
+    Section: Recent leads and quick actions
+    Purpose: Show latest activity and provide shortcuts
+    Contains: Recent leads table (8 cols) + Quick actions (4 cols)
+-->
+<div class="row g-4">
+
+    <!-- Recent Leads Table -->
+    <!-- Shows: Last 10 leads with key information -->
+    <div class="col-md-8">
+        <div class="card">
+            <div class="card-header d-flex justify-content-between align-items-center">
+                <h5 class="mb-0">
+                    <i class="fas fa-history text-primary me-2"></i>
+                    Recent Leads
+                </h5>
+                <!-- Link to view all leads -->
+                <a href="#" class="btn btn-sm btn-outline-primary">
+                    View All <i class="fas fa-arrow-right ms-1"></i>
+                </a>
+            </div>
+            <div class="card-body p-0">
+                {% if recent_leads %}
+                <!-- Table with lead information -->
+                <div class="table-responsive">
+                    <table class="table table-hover mb-0">
+                        <thead style="background: #f8f9fa;">
+                            <tr>
+                                <th>Name</th>
+                                <th>Phone</th>
+                                <th>Source</th>
+                                <th>Stage</th>
+                                <th>Date</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            {% for lead in recent_leads %}
+                            <tr>
+                                <!-- Lead name with icon -->
+                                <td>
+                                    <i class="fas fa-user-circle text-muted me-2"></i>
+                                    <strong>{{ lead.name }}</strong>
+                                </td>
+                                <!-- Phone number -->
+                                <td>{{ lead.phone }}</td>
+                                <!-- Source badge with icon and color -->
+                                <td>
+                                    <span class="badge" style="background: {{ lead.source.color }}20; color: {{ lead.source.color }};">
+                                        <i class="{{ lead.source.icon }}"></i> {{ lead.source.name }}
+                                    </span>
+                                </td>
+                                <!-- Stage badge with color -->
+                                <td>
+                                    <span class="badge" style="background: {{ lead.stage.color }}; color: white;">
+                                        {{ lead.stage.name }}
+                                    </span>
+                                </td>
+                                <!-- Time ago (e.g. "2 hours ago") -->
+                                <td>{{ lead.created_at|timesince }} ago</td>
+                            </tr>
+                            {% endfor %}
+                        </tbody>
+                    </table>
+                </div>
+                {% else %}
+                <!-- Empty state: No leads yet -->
+                <div class="text-center py-5">
+                    <i class="fas fa-inbox fa-3x text-muted mb-3"></i>
+                    <p class="text-muted mb-3">No leads yet</p>
+                    <!-- Call to action button -->
+                    <a href="#" class="btn btn-primary">
+                        <i class="fas fa-plus me-2"></i>
+                        Add Your First Lead
+                    </a>
+                </div>
+                {% endif %}
+            </div>
+        </div>
+    </div>
+
+    <!-- Quick Actions & Your Stats Column -->
+    <!-- Shows: Action buttons and user performance -->
+    <div class="col-md-4">
+
+        <!-- Quick Actions Card -->
+        <!-- Provides: Shortcuts to common tasks -->
+        <div class="card mb-4">
+            <div class="card-header">
+                <h5 class="mb-0">
+                    <i class="fas fa-bolt text-warning me-2"></i>
+                    Quick Actions
+                </h5>
+            </div>
+            <div class="card-body">
+                <!-- Action buttons stacked vertically -->
+                <div class="d-grid gap-2">
+                    <!-- Add new lead button -->
+                    <a href="#" class="btn btn-primary">
+                        <i class="fas fa-user-plus me-2"></i>
+                        Add New Lead
+                    </a>
+                    <!-- Open chat button -->
+                    <a href="#" class="btn btn-outline-primary">
+                        <i class="fas fa-comments me-2"></i>
+                        Open Chat
+                    </a>
+                    <!-- New appointment button -->
+                    <a href="#" class="btn btn-outline-primary">
+                        <i class="fas fa-calendar-plus me-2"></i>
+                        New Appointment
+                    </a>
+                </div>
+            </div>
+        </div>
+
+        <!-- Your Performance Card -->
+        <!-- Shows: Current user's detailed statistics -->
+        <div class="card">
+            <div class="card-header">
+                <h5 class="mb-0">
+                    <i class="fas fa-user-tie text-primary me-2"></i>
+                    Your Performance
+                </h5>
+            </div>
+            <div class="card-body">
+
+                <!-- Assigned Leads Progress -->
+                <div class="mb-3">
+                    <div class="d-flex justify-content-between mb-1">
+                        <small class="text-muted">Leads Assigned</small>
+                        <strong>{{ user_stats.assigned }}</strong>
+                    </div>
+                    <!-- Full progress bar (100% as baseline) -->
+                    <div class="progress" style="height: 6px;">
+                        <div class="progress-bar bg-info" style="width: 100%;"></div>
+                    </div>
+                </div>
+
+             <!-- Converted Progress -->
+                <div class="mb-3">
+                    <div class="d-flex justify-content-between mb-1">
+                        <small class="text-muted">Converted</small>
+                        <strong>{{ user_stats.converted }}</strong>
+                    </div>
+                    <div class="progress" style="height: 6px;">
+                        <div class="progress-bar bg-warning"
+                             style="width: {{ user_stats.conversion_percentage|floatformat:0 }}%;"></div>
+                    </div>
+                </div>
+
+                <!-- Won Progress -->
+                <div class="mb-3">
+                    <div class="d-flex justify-content-between mb-1">
+                        <small class="text-muted">Won</small>
+                        <strong>{{ user_stats.won }}</strong>
+                    </div>
+                    <div class="progress" style="height: 6px;">
+                        <div class="progress-bar bg-success"
+                             style="width: {{ user_stats.win_percentage|floatformat:0 }}%;"></div>
+                    </div>
+                </div>
+
+                <hr>
+
+                <!-- Performance Rates Summary -->
+                <div class="d-flex justify-content-between mb-2">
+                    <span class="text-muted">Conversion Rate:</span>
+                    <strong class="text-primary">{{ user_stats.conversion_rate|floatformat:1 }}%</strong>
+                </div>
+                <div class="d-flex justify-content-between">
+                    <span class="text-muted">Win Rate:</span>
+                    <strong class="text-success">{{ user_stats.win_rate|floatformat:1 }}%</strong>
+                </div>
+
+            </div>
+        </div>
+
+    </div>
+
+</div>
+
+{% endblock %}

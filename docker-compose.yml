@@ -1,0 +1,265 @@
+
+services:
+
+  # DATABASE SERVICE (PostgreSQL)
+  # This service runs PostgreSQL database server
+  # All application data will be stored here
+  
+  db:
+    # Use official PostgreSQL image version 15
+    # Why 15? Latest stable version with all features we need
+    # Alpine versions available but standard is more reliable
+    image: postgres:15
+    
+    # Container name for easy reference
+    # Access with: docker exec -it catchybot_db psql -U catchybot_user -d catchybot_db
+    container_name: catchybot_db
+    
+    # Persist database data even if container stops/restarts
+    # This ensures we don't lose data when restarting
+    # Volume maps: postgres_data (volume) -> /var/lib/postgresql/data (container path)
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+    
+    # Database configuration via environment variables
+    environment:
+      # Database name that Django will connect to
+      - POSTGRES_DB=catchybot_db
+      
+      # Username for database authentication
+      - POSTGRES_USER=catchybot_user
+      
+      # Password for database authentication
+      # ⚠️ IMPORTANT: Change this in production!
+      # Use strong password: mix of letters, numbers, symbols
+      - POSTGRES_PASSWORD=catchybot_pass
+    
+    # Port mapping: host_port:container_port
+    # Access PostgreSQL from host machine: localhost:5432
+    # Useful for database clients like pgAdmin, DBeaver
+    ports:
+      - "5432:5432"
+    
+    # Restart policy: always restart if container stops unexpectedly
+    # Options: no, always, on-failure, unless-stopped
+    restart: unless-stopped
+    
+    # Health check to ensure database is ready
+    # Django will wait for this before starting
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U catchybot_user -d catchybot_db"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+
+
+  # CACHE & MESSAGE BROKER SERVICE (Redis)
+  # This service runs Redis in-memory data store
+  # Used for: Celery message broker, Channels layer, Django cache
+  
+  redis:
+    # Use official Redis image version 7 (Alpine = smallest, fastest)
+    # Alpine is Linux distribution optimized for containers
+    image: redis:7-alpine
+    
+    # Container name for easy reference
+    container_name: catchybot_redis
+    
+    # Port mapping for Redis
+    # Default Redis port is 6379
+    # Used by Celery workers and Django Channels
+    ports:
+      - "6379:6379"
+    
+    # Restart policy
+    restart: unless-stopped
+    
+    # Health check to ensure Redis is ready
+    healthcheck:
+      test: ["CMD", "redis-cli", "ping"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+
+
+  # WEB APPLICATION SERVICE (Django)
+  # This is our main Django application
+  # Serves the CRM interface and handles all business logic
+  
+  web:
+    # Build image from Dockerfile in current directory
+    # Docker will look for 'Dockerfile' and build it
+    build: .
+    
+    # Container name for easy reference
+    container_name: catchybot_web
+    
+    # Command to run when container starts
+    # Overrides CMD in Dockerfile
+    # Starts Django development server on all interfaces (0.0.0.0)
+    # Port 8000 is Django's default development server port
+    command: python manage.py runserver 0.0.0.0:8000
+    
+    # Volume mapping: Mount current directory to /code in container
+    # This enables live code reloading during development
+    # Any changes you make locally are immediately reflected in container
+    # Format: ./local_path:/container_path
+    volumes:
+      - .:/code
+    
+    # Port mapping: Map host port 8008 to container port 8000
+    # Why 8008? To avoid conflict with other services on 8000
+    # Access application at: http://localhost:8008
+    ports:
+      - "8008:8000"
+    
+    # Environment variables for Django application
+    # These override .env file values (if .env exists)
+    environment:
+      # Enable debug mode (shows detailed error pages)
+      # ⚠️ ALWAYS set to False in production!
+      - DEBUG=True
+      
+      # Secret key for Django cryptographic signing
+      # Used for: sessions, passwords, CSRF tokens
+      # ⚠️ MUST change in production! Generate new key
+      - SECRET_KEY=django-insecure-your-secret-key-here-change-in-production
+      
+      # Database connection string
+      # Format: postgresql://user:password@host:port/database
+      # 'db' is the service name defined above
+      - DATABASE_URL=postgresql://catchybot_user:catchybot_pass123@db:5432/catchybot_db
+      
+      # Redis connection string
+      # Used by Celery and Django Channels
+      - REDIS_URL=redis://redis:6379/0
+      
+      # Allowed hosts (domains that can access this app)
+      # Comma-separated list, no spaces
+      - ALLOWED_HOSTS=localhost,127.0.0.1,0.0.0.0
+    
+    # Service dependencies
+    # Docker will start db and redis BEFORE starting web
+    # Also waits for health checks to pass
+    depends_on:
+      db:
+        condition: service_healthy
+      redis:
+        condition: service_healthy
+    
+    # Restart policy
+    restart: unless-stopped
+
+
+  # CELERY WORKER SERVICE (Background Tasks)
+  # This service runs Celery worker for background tasks
+  # Tasks: Send emails, process webhooks, scheduled jobs
+  
+  celery:
+    # Use same image as web service
+    build: .
+    
+    # Container name
+    container_name: catchybot_celery
+    
+    # Command to start Celery worker
+    # -A config: Points to our Celery app
+    # -l info: Log level (debug, info, warning, error)
+    # --concurrency=2: Number of worker processes
+    command: celery -A config worker -l info --concurrency=2
+    
+    # Mount code for live reloading
+    volumes:
+      - .:/code
+    
+    # Same environment as web service
+    environment:
+      - DEBUG=True
+      - SECRET_KEY=django-insecure-your-secret-key-here-change-in-production
+      - DATABASE_URL=postgresql://catchybot_user:catchybot_pass123@db:5432/catchybot_db
+      - REDIS_URL=redis://redis:6379/0
+    
+    # Depends on database and redis
+    depends_on:
+      db:
+        condition: service_healthy
+      redis:
+        condition: service_healthy
+    
+    restart: unless-stopped
+
+
+  # CELERY BEAT SERVICE (Scheduled Tasks)
+  # This service runs Celery beat scheduler
+  # For: Periodic tasks (daily reports, cleanup, etc.)
+  
+  celery-beat:
+    # Use same image as web service
+    build: .
+    
+    # Container name
+    container_name: catchybot_celery_beat
+    
+    # Command to start Celery beat
+    command: celery -A config beat -l info
+    
+    # Mount code
+    volumes:
+      - .:/code
+    
+    # Same environment
+    environment:
+      - DEBUG=True
+      - SECRET_KEY=django-insecure-your-secret-key-here-change-in-production
+      - DATABASE_URL=postgresql://catchybot_user:catchybot_pass123@db:5432/catchybot_db
+      - REDIS_URL=redis://redis:6379/0
+    
+    # Depends on redis
+    depends_on:
+      redis:
+        condition: service_healthy
+    
+    restart: unless-stopped
+
+
+# NAMED VOLUMES
+# Define persistent volumes that survive container restarts
+# Without volumes, all data is lost when container stops
+
+volumes:
+  # PostgreSQL data volume
+  # Stores all database tables, indexes, and data
+  # Location on host: /var/lib/docker/volumes/catchybot_postgres_data
+  postgres_data:
+
+
+
+# ==============================================================================
+# USEFUL COMMANDS
+# ==============================================================================
+#
+# Start all services:
+#   docker compose up -d
+#
+# Stop all services:
+#   docker compose down
+#
+# View logs:
+#   docker compose logs -f web
+#
+# Run Django command:
+#   docker compose exec web python manage.py migrate
+#
+# Access Django shell:
+#   docker compose exec web python manage.py shell
+#
+# Access database:
+#   docker compose exec db psql -U catchybot_user -d catchybot_db
+#
+# Rebuild after code changes:
+#   docker compose up -d --build
+#
+# Remove volumes (⚠️ deletes all data):
+#   docker compose down -v
+#
+# ==============================================================================
