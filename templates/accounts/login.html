@@ -16,7 +16,7 @@
 
     <style>
         /* ==============================================================
-           LOGIN PAGE STYLES
+           LOGIN PAGE STYLES (BLUE PALETTE)
            ============================================================== */
 
         * {
@@ -27,7 +27,7 @@
 
         body {
             font-family: 'Inter', sans-serif;
-            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            background: linear-gradient(135deg, #E3F2FD 0%, #BBDEFB 100%);
             min-height: 100vh;
             display: flex;
             align-items: center;
@@ -47,19 +47,13 @@
         }
 
         @keyframes slideUp {
-            from {
-                opacity: 0;
-                transform: translateY(30px);
-            }
-            to {
-                opacity: 1;
-                transform: translateY(0);
-            }
+            from { opacity: 0; transform: translateY(30px); }
+            to { opacity: 1; transform: translateY(0); }
         }
 
         /* Login Header */
         .login-header {
-            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            background: linear-gradient(135deg, #64B5F6 0%, #2196F3 100%);
             padding: 40px 30px;
             text-align: center;
             color: white;
@@ -95,13 +89,11 @@
         }
 
         /* Form Styles */
-        .form-group {
-            margin-bottom: 20px;
-        }
+        .form-group { margin-bottom: 20px; }
 
         .form-label {
             font-weight: 600;
-            color: #333;
+            color: #0D47A1;
             margin-bottom: 8px;
             display: block;
         }
@@ -110,22 +102,19 @@
             border-radius: 12px;
             padding: 14px 20px;
             padding-left: 50px;
-            border: 2px solid #e1e8ed;
+            border: 2px solid #BBDEFB;
             transition: all 0.3s;
             font-size: 15px;
         }
 
         .form-control:focus {
-            border-color: #667eea;
-            box-shadow: 0 0 0 0.2rem rgba(102, 126, 234, 0.25);
+            border-color: #42A5F5;
+            box-shadow: 0 0 0 0.2rem rgba(66, 165, 245, 0.25);
             outline: none;
         }
 
         /* Input with Icon */
-        .input-icon {
-            position: relative;
-        }
-
+        .input-icon { position: relative; }
         .input-icon i {
             position: absolute;
             left: 20px;
@@ -136,31 +125,25 @@
         }
 
         /* Checkbox */
-        .form-check {
-            margin-bottom: 20px;
-        }
-
+        .form-check { margin-bottom: 20px; }
         .form-check-input {
             width: 20px;
             height: 20px;
             border-radius: 5px;
-            border: 2px solid #e1e8ed;
+            border: 2px solid #BBDEFB;
             margin-right: 10px;
         }
 
         .form-check-input:checked {
-            background-color: #667eea;
-            border-color: #667eea;
+            background-color: #42A5F5;
+            border-color: #42A5F5;
         }
 
-        .form-check-label {
-            color: #666;
-            cursor: pointer;
-        }
+        .form-check-label { color: #0D47A1; cursor: pointer; }
 
         /* Submit Button */
         .btn-login {
-            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            background: linear-gradient(135deg, #42A5F5 0%, #1E88E5 100%);
             border: none;
             border-radius: 12px;
             padding: 14px;
@@ -170,95 +153,49 @@
             width: 100%;
             transition: all 0.3s;
             cursor: pointer;
-            box-shadow: 0 5px 15px rgba(102, 126, 234, 0.3);
+            box-shadow: 0 5px 15px rgba(66, 165, 245, 0.3);
         }
 
         .btn-login:hover {
             transform: translateY(-2px);
-            box-shadow: 0 8px 25px rgba(102, 126, 234, 0.5);
+            box-shadow: 0 8px 25px rgba(66, 165, 245, 0.5);
         }
 
-        .btn-login:active {
-            transform: translateY(0);
-        }
-
-        .btn-login i {
-            margin-right: 10px;
-        }
+        .btn-login:active { transform: translateY(0); }
+        .btn-login i { margin-right: 10px; }
 
         /* Forgot Password Link */
-        .forgot-password {
-            text-align: center;
-            margin-top: 20px;
-        }
-
+        .forgot-password { text-align: center; margin-top: 20px; }
         .forgot-password a {
-            color: #667eea;
+            color: #42A5F5;
             text-decoration: none;
             font-weight: 600;
             transition: color 0.3s;
         }
-
-        .forgot-password a:hover {
-            color: #764ba2;
-            text-decoration: underline;
-        }
+        .forgot-password a:hover { color: #1E88E5; text-decoration: underline; }
 
         /* Alert Messages */
-        .alert {
-            border-radius: 12px;
-            border: none;
-            padding: 15px 20px;
-            margin-bottom: 20px;
-            animation: slideDown 0.3s ease-out;
-        }
+        .alert { border-radius: 12px; border: none; padding: 15px 20px; margin-bottom: 20px; animation: slideDown 0.3s ease-out; }
 
         @keyframes slideDown {
-            from {
-                opacity: 0;
-                transform: translateY(-10px);
-            }
-            to {
-                opacity: 1;
-                transform: translateY(0);
-            }
+            from { opacity: 0; transform: translateY(-10px); }
+            to { opacity: 1; transform: translateY(0); }
         }
 
-        .alert-danger {
-            background-color: #fee;
-            color: #c33;
-            border-left: 4px solid #c33;
-        }
-
-        .alert-success {
-            background-color: #efe;
-            color: #3c3;
-            border-left: 4px solid #3c3;
-        }
-
-        .alert i {
-            margin-right: 10px;
-        }
+        .alert-danger { background-color: #E3F2FD; color: #0D47A1; border-left: 4px solid #0D47A1; }
+        .alert-success { background-color: #BBDEFB; color: #1E88E5; border-left: 4px solid #1E88E5; }
+        .alert i { margin-right: 10px; }
 
         /* Footer */
         .login-footer {
             text-align: center;
             padding: 20px;
-            background-color: #f8f9fa;
-            border-top: 1px solid #e1e8ed;
+            background-color: #BBDEFB;
+            border-top: 1px solid #42A5F5;
         }
 
-        .login-footer p {
-            margin: 0;
-            color: #666;
-            font-size: 14px;
-        }
-
-        .login-footer p a {
-            color: #667eea;
-            text-decoration: none;
-            font-weight: 600;
-        }
+        .login-footer p { margin: 0; color: #0D47A1; font-size: 14px; }
+        .login-footer p a { color: #42A5F5; text-decoration: none; font-weight: 600; }
 
         /* Loading Spinner */
         .btn-login.loading {
@@ -278,50 +215,24 @@
             margin-left: 10px;
         }
 
-        @keyframes spin {
-            to { transform: rotate(360deg); }
-        }
+        @keyframes spin { to { transform: rotate(360deg); } }
 
         /* Responsive */
         @media (max-width: 576px) {
-            .login-container {
-                border-radius: 0;
-            }
-
-            .login-header {
-                padding: 30px 20px;
-            }
-
-            .login-header h2 {
-                font-size: 26px;
-            }
-
-            .login-body {
-                padding: 30px 20px;
-            }
+            .login-container { border-radius: 0; }
+            .login-header { padding: 30px 20px; }
+            .login-header h2 { font-size: 26px; }
+            .login-body { padding: 30px 20px; }
         }
     </style>
 </head>
 <body>
-
     <div class="login-container">
-        <!-- ==============================================================
-             LOGIN HEADER
-             ============================================================== -->
         <div class="login-header">
-            <div class="logo">
-                <i class="fas fa-comments"></i>
-            </div>
+            <div class="logo"><i class="fas fa-comments"></i></div>
             <h2>Catchy Bot</h2>
-<!--            <p>WhatsApp Customer Management System</p>-->
         </div>
-
-        <!-- ==============================================================
-             LOGIN BODY
-             ============================================================== -->
         <div class="login-body">
-
-            <!-- Messages (Success/Error) -->
             {% if messages %}
                 {% for message in messages %}
                 <div class="alert alert-{{ message.tags }}" role="alert">
@@ -331,11 +242,8 @@
                 {% endfor %}
             {% endif %}
 
-            <!-- Login Form -->
             <form method="POST" action="{% url 'accounts:login' %}" id="loginForm">
                 {% csrf_token %}
-
-                <!-- Email Field -->
                 <div class="form-group">
                     <label for="email" class="form-label">
                         <i class="fas fa-envelope"></i>
@@ -343,23 +251,13 @@
                     </label>
                     <div class="input-icon">
                         <i class="fas fa-user"></i>
-                        <input
-                            type="email"
-                            name="email"
-                            id="email"
-                            class="form-control"
-                            placeholder="example@clinic.com"
-                            required
-                            autofocus
-                            value="{{ request.POST.email|default:'' }}"
-                        >
+                        <input type="email" name="email" id="email" class="form-control" placeholder="example@clinic.com" required autofocus value="{{ request.POST.email|default:'' }}">
                     </div>
                     {% if form.email.errors %}
                         <small class="text-danger">{{ form.email.errors.0 }}</small>
                     {% endif %}
                 </div>
 
-                <!-- Password Field -->
                 <div class="form-group">
                     <label for="password" class="form-label">
                         <i class="fas fa-lock"></i>
@@ -367,74 +265,37 @@
                     </label>
                     <div class="input-icon">
                         <i class="fas fa-key"></i>
-                        <input
-                            type="password"
-                            name="password"
-                            id="password"
-                            class="form-control"
-                            placeholder="••••••••"
-                            required
-                        >
+                        <input type="password" name="password" id="password" class="form-control" placeholder="••••••••" required>
                     </div>
                     {% if form.password.errors %}
                         <small class="text-danger">{{ form.password.errors.0 }}</small>
                     {% endif %}
                 </div>
 
-                <!-- Remember Me Checkbox -->
                 <div class="form-check">
-                    <input
-                        class="form-check-input"
-                        type="checkbox"
-                        name="remember"
-                        id="remember"
-                        {{ request.POST.remember|yesno:"checked," }}
-                    >
-                    <label class="form-check-label" for="remember">
-                        Remember me (Stay logged in for 30 days)
-                    </label>
+                    <input class="form-check-input" type="checkbox" name="remember" id="remember" {{ request.POST.remember|yesno:"checked," }}>
+                    <label class="form-check-label" for="remember">Remember me (Stay logged in for 30 days)</label>
                 </div>
 
-                <!-- Submit Button -->
                 <button type="submit" class="btn-login" id="submitBtn">
                     <i class="fas fa-sign-in-alt"></i>
                     Login
                 </button>
 
-                <!-- Forgot Password Link -->
                 <div class="forgot-password">
-                    <a href="{% url 'accounts:password_reset' %}">
-                        <i class="fas fa-question-circle"></i>
-                        Forgot your password?
-                    </a>
+                    <a href="{% url 'accounts:password_reset' %}"><i class="fas fa-question-circle"></i> Forgot your password?</a>
                 </div>
             </form>
         </div>
 
-        <!-- ==============================================================
-             LOGIN FOOTER
-             ============================================================== -->
         <div class="login-footer">
-            <p>
-                © 2025 Catchy Bot.
-                <a href="#">Privacy Policy</a> |
-                <a href="#">Terms & Conditions</a>
-            </p>
+            <p>© 2025 Catchy Bot. <a href="#">Privacy Policy</a> | <a href="#">Terms & Conditions</a></p>
         </div>
     </div>
 
-    <!-- ==============================================================
-         JAVASCRIPT
-         ============================================================== -->
-
-    <!-- Bootstrap JS -->
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
 
     <script>
-        // ==============================================================
-        // FORM SUBMISSION LOADING STATE
-        // ==============================================================
-
         document.getElementById('loginForm').addEventListener('submit', function(e) {
             const submitBtn = document.getElementById('submitBtn');
             submitBtn.classList.add('loading');
@@ -442,23 +303,13 @@
             submitBtn.disabled = true;
         });
 
-        // ==============================================================
-        // AUTO-HIDE ALERTS AFTER 5 SECONDS
-        // ==============================================================
-
         setTimeout(function() {
             const alerts = document.querySelectorAll('.alert');
             alerts.forEach(function(alert) {
                 alert.style.animation = 'slideUp 0.3s ease-out reverse';
-                setTimeout(function() {
-                    alert.style.display = 'none';
-                }, 300);
+                setTimeout(function() { alert.style.display = 'none'; }, 300);
             });
         }, 5000);
-
-        // ==============================================================
-        // ENTER KEY SUPPORT
-        // ==============================================================
 
         document.getElementById('email').addEventListener('keypress', function(e) {
             if (e.key === 'Enter') {
@@ -467,13 +318,8 @@
             }
         });
 
-        // ==============================================================
-        // PASSWORD VISIBILITY TOGGLE
-        // ==============================================================
-
         const passwordField = document.getElementById('password');
         const passwordIcon = passwordField.previousElementSibling.querySelector('i');
-
         passwordIcon.addEventListener('dblclick', function() {
             if (passwordField.type === 'password') {
                 passwordField.type = 'text';
@@ -485,10 +331,6 @@
                 this.classList.add('fa-key');
             }
         });
-
-        // ==============================================================
-        // FORM VALIDATION
-        // ==============================================================
 
         document.getElementById('loginForm').addEventListener('submit', function(e) {
             const email = document.getElementById('email').value;
@@ -509,6 +351,5 @@
             }
         });
     </script>
-
 </body>
 </html>
