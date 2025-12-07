@@ -40,6 +40,10 @@ class UserProfileInline(admin.StackedInline):
     verbose_name = _('User Profile')
     verbose_name_plural = _('User Profile')
 
+    fk_name = "user"
+    extra = 0
+    max_num = 1
+
 
     # Fieldsets for better organization (with collapse)
     fieldsets = (

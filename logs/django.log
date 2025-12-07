@@ -16463,3 +16463,2347 @@ INFO 2025-12-06 21:47:06,161 runserver HTTP GET /accounts/login/ 200 [0.01, 172.
 INFO 2025-12-06 21:47:08,625 runserver HTTP POST /accounts/login/ 302 [0.41, 172.19.0.1:37934]
 INFO 2025-12-06 21:47:08,659 runserver HTTP GET /dashboard/ 200 [0.03, 172.19.0.1:37934]
 INFO 2025-12-06 21:47:46,697 runserver HTTP GET /dashboard/settings/company/ 200 [0.02, 172.19.0.1:37934]
+INFO 2025-12-07 12:22:54,644 autoreload Watching for file changes with StatReloader
+ERROR 2025-12-07 12:23:22,545 log Internal Server Error: /admin/
+Traceback (most recent call last):
+  File "/usr/local/lib/python3.11/site-packages/django/contrib/sessions/backends/base.py", line 187, in _get_session
+    return self._session_cache
+           ^^^^^^^^^^^^^^^^^^^
+AttributeError: 'SessionStore' object has no attribute '_session_cache'
+
+During handling of the above exception, another exception occurred:
+
+Traceback (most recent call last):
+  File "/usr/local/lib/python3.11/site-packages/django/db/backends/utils.py", line 105, in _execute
+    return self.cursor.execute(sql, params)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+psycopg2.errors.UndefinedTable: relation "django_session" does not exist
+LINE 1: ...ession_data", "django_session"."expire_date" FROM "django_se...
+                                                             ^
+
+
+The above exception was the direct cause of the following exception:
+
+Traceback (most recent call last):
+  File "/usr/local/lib/python3.11/site-packages/asgiref/sync.py", line 555, in thread_handler
+    raise exc_info[1]
+  File "/usr/local/lib/python3.11/site-packages/django/core/handlers/exception.py", line 42, in inner
+    response = await get_response(request)
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/local/lib/python3.11/site-packages/asgiref/sync.py", line 555, in thread_handler
+    raise exc_info[1]
+  File "/usr/local/lib/python3.11/site-packages/django/core/handlers/base.py", line 253, in _get_response_async
+    response = await wrapped_callback(
+               ^^^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/local/lib/python3.11/site-packages/asgiref/sync.py", line 504, in __call__
+    ret = await asyncio.shield(exec_coro)
+          ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/local/lib/python3.11/concurrent/futures/thread.py", line 58, in run
+    result = self.fn(*self.args, **self.kwargs)
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/local/lib/python3.11/site-packages/asgiref/sync.py", line 559, in thread_handler
+    return func(*args, **kwargs)
+           ^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/local/lib/python3.11/site-packages/django/contrib/admin/sites.py", line 259, in wrapper
+    return self.admin_view(view, cacheable)(*args, **kwargs)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/local/lib/python3.11/site-packages/django/utils/decorators.py", line 188, in _view_wrapper
+    result = _process_exception(request, e)
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/local/lib/python3.11/site-packages/django/utils/decorators.py", line 186, in _view_wrapper
+    response = view_func(request, *args, **kwargs)
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/local/lib/python3.11/site-packages/django/views/decorators/cache.py", line 80, in _view_wrapper
+    response = view_func(request, *args, **kwargs)
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/local/lib/python3.11/site-packages/django/contrib/admin/sites.py", line 228, in inner
+    if not self.has_permission(request):
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/local/lib/python3.11/site-packages/django/contrib/admin/sites.py", line 201, in has_permission
+    return request.user.is_active and request.user.is_staff
+           ^^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/local/lib/python3.11/site-packages/django/utils/functional.py", line 251, in inner
+    self._setup()
+  File "/usr/local/lib/python3.11/site-packages/django/utils/functional.py", line 404, in _setup
+    self._wrapped = self._setupfunc()
+                    ^^^^^^^^^^^^^^^^^
+  File "/usr/local/lib/python3.11/site-packages/django/contrib/auth/middleware.py", line 33, in <lambda>
+    request.user = SimpleLazyObject(lambda: get_user(request))
+                                            ^^^^^^^^^^^^^^^^^
+  File "/usr/local/lib/python3.11/site-packages/django/contrib/auth/middleware.py", line 13, in get_user
+    request._cached_user = auth.get_user(request)
+                           ^^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/local/lib/python3.11/site-packages/django/contrib/auth/__init__.py", line 209, in get_user
+    user_id = _get_user_session_key(request)
+              ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/local/lib/python3.11/site-packages/django/contrib/auth/__init__.py", line 62, in _get_user_session_key
+    return get_user_model()._meta.pk.to_python(request.session[SESSION_KEY])
+                                               ~~~~~~~~~~~~~~~^^^^^^^^^^^^^
+  File "/usr/local/lib/python3.11/site-packages/django/contrib/sessions/backends/base.py", line 53, in __getitem__
+    return self._session[key]
+           ^^^^^^^^^^^^^
+  File "/usr/local/lib/python3.11/site-packages/django/contrib/sessions/backends/base.py", line 192, in _get_session
+    self._session_cache = self.load()
+                          ^^^^^^^^^^^
+  File "/usr/local/lib/python3.11/site-packages/django/contrib/sessions/backends/db.py", line 42, in load
+    s = self._get_session_from_db()
+        ^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/local/lib/python3.11/site-packages/django/contrib/sessions/backends/db.py", line 32, in _get_session_from_db
+    return self.model.objects.get(
+           ^^^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/local/lib/python3.11/site-packages/django/db/models/manager.py", line 87, in manager_method
+    return getattr(self.get_queryset(), name)(*args, **kwargs)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/local/lib/python3.11/site-packages/django/db/models/query.py", line 643, in get
+    num = len(clone)
+          ^^^^^^^^^^
+  File "/usr/local/lib/python3.11/site-packages/django/db/models/query.py", line 380, in __len__
+    self._fetch_all()
+  File "/usr/local/lib/python3.11/site-packages/django/db/models/query.py", line 1926, in _fetch_all
+    self._result_cache = list(self._iterable_class(self))
+                         ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/local/lib/python3.11/site-packages/django/db/models/query.py", line 91, in __iter__
+    results = compiler.execute_sql(
+              ^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/local/lib/python3.11/site-packages/django/db/models/sql/compiler.py", line 1562, in execute_sql
+    cursor.execute(sql, params)
+  File "/usr/local/lib/python3.11/site-packages/django/db/backends/utils.py", line 122, in execute
+    return super().execute(sql, params)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/local/lib/python3.11/site-packages/django/db/backends/utils.py", line 79, in execute
+    return self._execute_with_wrappers(
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/local/lib/python3.11/site-packages/django/db/backends/utils.py", line 92, in _execute_with_wrappers
+    return executor(sql, params, many, context)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/local/lib/python3.11/site-packages/django/db/backends/utils.py", line 100, in _execute
+    with self.db.wrap_database_errors:
+  File "/usr/local/lib/python3.11/site-packages/django/db/utils.py", line 91, in __exit__
+    raise dj_exc_value.with_traceback(traceback) from exc_value
+  File "/usr/local/lib/python3.11/site-packages/django/db/backends/utils.py", line 105, in _execute
+    return self.cursor.execute(sql, params)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+django.db.utils.ProgrammingError: relation "django_session" does not exist
+LINE 1: ...ession_data", "django_session"."expire_date" FROM "django_se...
+                                                             ^
+
+ERROR 2025-12-07 12:23:22,554 runserver HTTP GET /admin/ 500 [0.10, 172.18.0.1:43368]
+WARNING 2025-12-07 12:23:22,787 log Not Found: /favicon.ico
+WARNING 2025-12-07 12:23:22,789 runserver HTTP GET /favicon.ico 404 [0.01, 172.18.0.1:43368]
+ERROR 2025-12-07 12:23:27,173 log Internal Server Error: /admin/
+Traceback (most recent call last):
+  File "/usr/local/lib/python3.11/site-packages/django/contrib/sessions/backends/base.py", line 187, in _get_session
+    return self._session_cache
+           ^^^^^^^^^^^^^^^^^^^
+AttributeError: 'SessionStore' object has no attribute '_session_cache'
+
+During handling of the above exception, another exception occurred:
+
+Traceback (most recent call last):
+  File "/usr/local/lib/python3.11/site-packages/django/db/backends/utils.py", line 105, in _execute
+    return self.cursor.execute(sql, params)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+psycopg2.errors.UndefinedTable: relation "django_session" does not exist
+LINE 1: ...ession_data", "django_session"."expire_date" FROM "django_se...
+                                                             ^
+
+
+The above exception was the direct cause of the following exception:
+
+Traceback (most recent call last):
+  File "/usr/local/lib/python3.11/site-packages/asgiref/sync.py", line 555, in thread_handler
+    raise exc_info[1]
+  File "/usr/local/lib/python3.11/site-packages/django/core/handlers/exception.py", line 42, in inner
+    response = await get_response(request)
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/local/lib/python3.11/site-packages/asgiref/sync.py", line 555, in thread_handler
+    raise exc_info[1]
+  File "/usr/local/lib/python3.11/site-packages/django/core/handlers/base.py", line 253, in _get_response_async
+    response = await wrapped_callback(
+               ^^^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/local/lib/python3.11/site-packages/asgiref/sync.py", line 504, in __call__
+    ret = await asyncio.shield(exec_coro)
+          ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/local/lib/python3.11/concurrent/futures/thread.py", line 58, in run
+    result = self.fn(*self.args, **self.kwargs)
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/local/lib/python3.11/site-packages/asgiref/sync.py", line 559, in thread_handler
+    return func(*args, **kwargs)
+           ^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/local/lib/python3.11/site-packages/django/contrib/admin/sites.py", line 259, in wrapper
+    return self.admin_view(view, cacheable)(*args, **kwargs)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/local/lib/python3.11/site-packages/django/utils/decorators.py", line 188, in _view_wrapper
+    result = _process_exception(request, e)
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/local/lib/python3.11/site-packages/django/utils/decorators.py", line 186, in _view_wrapper
+    response = view_func(request, *args, **kwargs)
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/local/lib/python3.11/site-packages/django/views/decorators/cache.py", line 80, in _view_wrapper
+    response = view_func(request, *args, **kwargs)
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/local/lib/python3.11/site-packages/django/contrib/admin/sites.py", line 228, in inner
+    if not self.has_permission(request):
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/local/lib/python3.11/site-packages/django/contrib/admin/sites.py", line 201, in has_permission
+    return request.user.is_active and request.user.is_staff
+           ^^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/local/lib/python3.11/site-packages/django/utils/functional.py", line 251, in inner
+    self._setup()
+  File "/usr/local/lib/python3.11/site-packages/django/utils/functional.py", line 404, in _setup
+    self._wrapped = self._setupfunc()
+                    ^^^^^^^^^^^^^^^^^
+  File "/usr/local/lib/python3.11/site-packages/django/contrib/auth/middleware.py", line 33, in <lambda>
+    request.user = SimpleLazyObject(lambda: get_user(request))
+                                            ^^^^^^^^^^^^^^^^^
+  File "/usr/local/lib/python3.11/site-packages/django/contrib/auth/middleware.py", line 13, in get_user
+    request._cached_user = auth.get_user(request)
+                           ^^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/local/lib/python3.11/site-packages/django/contrib/auth/__init__.py", line 209, in get_user
+    user_id = _get_user_session_key(request)
+              ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/local/lib/python3.11/site-packages/django/contrib/auth/__init__.py", line 62, in _get_user_session_key
+    return get_user_model()._meta.pk.to_python(request.session[SESSION_KEY])
+                                               ~~~~~~~~~~~~~~~^^^^^^^^^^^^^
+  File "/usr/local/lib/python3.11/site-packages/django/contrib/sessions/backends/base.py", line 53, in __getitem__
+    return self._session[key]
+           ^^^^^^^^^^^^^
+  File "/usr/local/lib/python3.11/site-packages/django/contrib/sessions/backends/base.py", line 192, in _get_session
+    self._session_cache = self.load()
+                          ^^^^^^^^^^^
+  File "/usr/local/lib/python3.11/site-packages/django/contrib/sessions/backends/db.py", line 42, in load
+    s = self._get_session_from_db()
+        ^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/local/lib/python3.11/site-packages/django/contrib/sessions/backends/db.py", line 32, in _get_session_from_db
+    return self.model.objects.get(
+           ^^^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/local/lib/python3.11/site-packages/django/db/models/manager.py", line 87, in manager_method
+    return getattr(self.get_queryset(), name)(*args, **kwargs)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/local/lib/python3.11/site-packages/django/db/models/query.py", line 643, in get
+    num = len(clone)
+          ^^^^^^^^^^
+  File "/usr/local/lib/python3.11/site-packages/django/db/models/query.py", line 380, in __len__
+    self._fetch_all()
+  File "/usr/local/lib/python3.11/site-packages/django/db/models/query.py", line 1926, in _fetch_all
+    self._result_cache = list(self._iterable_class(self))
+                         ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/local/lib/python3.11/site-packages/django/db/models/query.py", line 91, in __iter__
+    results = compiler.execute_sql(
+              ^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/local/lib/python3.11/site-packages/django/db/models/sql/compiler.py", line 1562, in execute_sql
+    cursor.execute(sql, params)
+  File "/usr/local/lib/python3.11/site-packages/django/db/backends/utils.py", line 122, in execute
+    return super().execute(sql, params)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/local/lib/python3.11/site-packages/django/db/backends/utils.py", line 79, in execute
+    return self._execute_with_wrappers(
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/local/lib/python3.11/site-packages/django/db/backends/utils.py", line 92, in _execute_with_wrappers
+    return executor(sql, params, many, context)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/local/lib/python3.11/site-packages/django/db/backends/utils.py", line 100, in _execute
+    with self.db.wrap_database_errors:
+  File "/usr/local/lib/python3.11/site-packages/django/db/utils.py", line 91, in __exit__
+    raise dj_exc_value.with_traceback(traceback) from exc_value
+  File "/usr/local/lib/python3.11/site-packages/django/db/backends/utils.py", line 105, in _execute
+    return self.cursor.execute(sql, params)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+django.db.utils.ProgrammingError: relation "django_session" does not exist
+LINE 1: ...ession_data", "django_session"."expire_date" FROM "django_se...
+                                                             ^
+
+ERROR 2025-12-07 12:23:27,182 runserver HTTP GET /admin/ 500 [0.07, 172.18.0.1:43372]
+ERROR 2025-12-07 12:23:27,801 log Internal Server Error: /admin/
+Traceback (most recent call last):
+  File "/usr/local/lib/python3.11/site-packages/django/contrib/sessions/backends/base.py", line 187, in _get_session
+    return self._session_cache
+           ^^^^^^^^^^^^^^^^^^^
+AttributeError: 'SessionStore' object has no attribute '_session_cache'
+
+During handling of the above exception, another exception occurred:
+
+Traceback (most recent call last):
+  File "/usr/local/lib/python3.11/site-packages/django/db/backends/utils.py", line 105, in _execute
+    return self.cursor.execute(sql, params)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+psycopg2.errors.UndefinedTable: relation "django_session" does not exist
+LINE 1: ...ession_data", "django_session"."expire_date" FROM "django_se...
+                                                             ^
+
+
+The above exception was the direct cause of the following exception:
+
+Traceback (most recent call last):
+  File "/usr/local/lib/python3.11/site-packages/asgiref/sync.py", line 555, in thread_handler
+    raise exc_info[1]
+  File "/usr/local/lib/python3.11/site-packages/django/core/handlers/exception.py", line 42, in inner
+    response = await get_response(request)
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/local/lib/python3.11/site-packages/asgiref/sync.py", line 555, in thread_handler
+    raise exc_info[1]
+  File "/usr/local/lib/python3.11/site-packages/django/core/handlers/base.py", line 253, in _get_response_async
+    response = await wrapped_callback(
+               ^^^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/local/lib/python3.11/site-packages/asgiref/sync.py", line 504, in __call__
+    ret = await asyncio.shield(exec_coro)
+          ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/local/lib/python3.11/concurrent/futures/thread.py", line 58, in run
+    result = self.fn(*self.args, **self.kwargs)
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/local/lib/python3.11/site-packages/asgiref/sync.py", line 559, in thread_handler
+    return func(*args, **kwargs)
+           ^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/local/lib/python3.11/site-packages/django/contrib/admin/sites.py", line 259, in wrapper
+    return self.admin_view(view, cacheable)(*args, **kwargs)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/local/lib/python3.11/site-packages/django/utils/decorators.py", line 188, in _view_wrapper
+    result = _process_exception(request, e)
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/local/lib/python3.11/site-packages/django/utils/decorators.py", line 186, in _view_wrapper
+    response = view_func(request, *args, **kwargs)
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/local/lib/python3.11/site-packages/django/views/decorators/cache.py", line 80, in _view_wrapper
+    response = view_func(request, *args, **kwargs)
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/local/lib/python3.11/site-packages/django/contrib/admin/sites.py", line 228, in inner
+    if not self.has_permission(request):
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/local/lib/python3.11/site-packages/django/contrib/admin/sites.py", line 201, in has_permission
+    return request.user.is_active and request.user.is_staff
+           ^^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/local/lib/python3.11/site-packages/django/utils/functional.py", line 251, in inner
+    self._setup()
+  File "/usr/local/lib/python3.11/site-packages/django/utils/functional.py", line 404, in _setup
+    self._wrapped = self._setupfunc()
+                    ^^^^^^^^^^^^^^^^^
+  File "/usr/local/lib/python3.11/site-packages/django/contrib/auth/middleware.py", line 33, in <lambda>
+    request.user = SimpleLazyObject(lambda: get_user(request))
+                                            ^^^^^^^^^^^^^^^^^
+  File "/usr/local/lib/python3.11/site-packages/django/contrib/auth/middleware.py", line 13, in get_user
+    request._cached_user = auth.get_user(request)
+                           ^^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/local/lib/python3.11/site-packages/django/contrib/auth/__init__.py", line 209, in get_user
+    user_id = _get_user_session_key(request)
+              ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/local/lib/python3.11/site-packages/django/contrib/auth/__init__.py", line 62, in _get_user_session_key
+    return get_user_model()._meta.pk.to_python(request.session[SESSION_KEY])
+                                               ~~~~~~~~~~~~~~~^^^^^^^^^^^^^
+  File "/usr/local/lib/python3.11/site-packages/django/contrib/sessions/backends/base.py", line 53, in __getitem__
+    return self._session[key]
+           ^^^^^^^^^^^^^
+  File "/usr/local/lib/python3.11/site-packages/django/contrib/sessions/backends/base.py", line 192, in _get_session
+    self._session_cache = self.load()
+                          ^^^^^^^^^^^
+  File "/usr/local/lib/python3.11/site-packages/django/contrib/sessions/backends/db.py", line 42, in load
+    s = self._get_session_from_db()
+        ^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/local/lib/python3.11/site-packages/django/contrib/sessions/backends/db.py", line 32, in _get_session_from_db
+    return self.model.objects.get(
+           ^^^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/local/lib/python3.11/site-packages/django/db/models/manager.py", line 87, in manager_method
+    return getattr(self.get_queryset(), name)(*args, **kwargs)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/local/lib/python3.11/site-packages/django/db/models/query.py", line 643, in get
+    num = len(clone)
+          ^^^^^^^^^^
+  File "/usr/local/lib/python3.11/site-packages/django/db/models/query.py", line 380, in __len__
+    self._fetch_all()
+  File "/usr/local/lib/python3.11/site-packages/django/db/models/query.py", line 1926, in _fetch_all
+    self._result_cache = list(self._iterable_class(self))
+                         ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/local/lib/python3.11/site-packages/django/db/models/query.py", line 91, in __iter__
+    results = compiler.execute_sql(
+              ^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/local/lib/python3.11/site-packages/django/db/models/sql/compiler.py", line 1562, in execute_sql
+    cursor.execute(sql, params)
+  File "/usr/local/lib/python3.11/site-packages/django/db/backends/utils.py", line 122, in execute
+    return super().execute(sql, params)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/local/lib/python3.11/site-packages/django/db/backends/utils.py", line 79, in execute
+    return self._execute_with_wrappers(
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/local/lib/python3.11/site-packages/django/db/backends/utils.py", line 92, in _execute_with_wrappers
+    return executor(sql, params, many, context)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/local/lib/python3.11/site-packages/django/db/backends/utils.py", line 100, in _execute
+    with self.db.wrap_database_errors:
+  File "/usr/local/lib/python3.11/site-packages/django/db/utils.py", line 91, in __exit__
+    raise dj_exc_value.with_traceback(traceback) from exc_value
+  File "/usr/local/lib/python3.11/site-packages/django/db/backends/utils.py", line 105, in _execute
+    return self.cursor.execute(sql, params)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+django.db.utils.ProgrammingError: relation "django_session" does not exist
+LINE 1: ...ession_data", "django_session"."expire_date" FROM "django_se...
+                                                             ^
+
+ERROR 2025-12-07 12:23:27,807 runserver HTTP GET /admin/ 500 [0.06, 172.18.0.1:43372]
+INFO 2025-12-07 12:23:58,167 runserver HTTP GET /admin/ 302 [0.03, 172.18.0.1:44658]
+INFO 2025-12-07 12:23:58,208 runserver HTTP GET /admin/login/?next=/admin/ 200 [0.03, 172.18.0.1:44658]
+INFO 2025-12-07 12:23:58,232 runserver HTTP GET /static/admin/css/base.css 200 [0.00, 172.18.0.1:44658]
+INFO 2025-12-07 12:23:58,241 runserver HTTP GET /static/admin/css/login.css 200 [0.01, 172.18.0.1:44674]
+INFO 2025-12-07 12:23:58,263 runserver HTTP GET /static/admin/js/nav_sidebar.js 200 [0.02, 172.18.0.1:44658]
+INFO 2025-12-07 12:23:58,264 runserver HTTP GET /static/admin/css/dark_mode.css 200 [0.02, 172.18.0.1:44676]
+INFO 2025-12-07 12:23:58,267 runserver HTTP GET /static/admin/js/theme.js 200 [0.02, 172.18.0.1:44690]
+INFO 2025-12-07 12:23:58,270 runserver HTTP GET /static/admin/css/nav_sidebar.css 200 [0.02, 172.18.0.1:44686]
+INFO 2025-12-07 12:23:58,272 runserver HTTP GET /static/admin/css/responsive.css 200 [0.02, 172.18.0.1:44688]
+INFO 2025-12-07 12:38:48,552 runserver HTTP POST /admin/login/?next=/admin/ 200 [0.40, 172.18.0.1:34214]
+INFO 2025-12-07 12:38:48,576 runserver HTTP GET /static/admin/css/base.css 304 [0.00, 172.18.0.1:34214]
+INFO 2025-12-07 12:38:48,587 runserver HTTP GET /static/admin/css/dark_mode.css 304 [0.00, 172.18.0.1:34216]
+INFO 2025-12-07 12:38:48,592 runserver HTTP GET /static/admin/css/login.css 304 [0.01, 172.18.0.1:34214]
+INFO 2025-12-07 12:38:48,601 runserver HTTP GET /static/admin/css/nav_sidebar.css 304 [0.01, 172.18.0.1:34232]
+INFO 2025-12-07 12:38:48,604 runserver HTTP GET /static/admin/css/responsive.css 304 [0.01, 172.18.0.1:34248]
+INFO 2025-12-07 12:38:48,610 runserver HTTP GET /static/admin/js/theme.js 304 [0.01, 172.18.0.1:34214]
+INFO 2025-12-07 12:38:48,612 runserver HTTP GET /static/admin/js/nav_sidebar.js 304 [0.01, 172.18.0.1:34216]
+INFO 2025-12-07 12:38:53,465 runserver HTTP POST /admin/login/?next=/admin/ 200 [0.39, 172.18.0.1:34216]
+INFO 2025-12-07 12:38:57,102 runserver HTTP POST /admin/login/?next=/admin/ 200 [0.40, 172.18.0.1:39286]
+INFO 2025-12-07 12:39:11,287 runserver HTTP POST /admin/login/?next=/admin/ 200 [0.40, 172.18.0.1:44764]
+INFO 2025-12-07 12:39:56,514 runserver HTTP POST /admin/login/?next=/admin/ 200 [0.42, 172.18.0.1:34092]
+INFO 2025-12-07 12:41:30,586 runserver HTTP POST /admin/login/?next=/admin/ 200 [0.40, 172.18.0.1:36644]
+INFO 2025-12-07 12:41:30,611 runserver HTTP GET /static/admin/css/base.css 304 [0.00, 172.18.0.1:36644]
+INFO 2025-12-07 12:41:30,627 runserver HTTP GET /static/admin/css/dark_mode.css 304 [0.01, 172.18.0.1:36644]
+INFO 2025-12-07 12:41:30,629 runserver HTTP GET /static/admin/css/nav_sidebar.css 304 [0.01, 172.18.0.1:36650]
+INFO 2025-12-07 12:41:30,638 runserver HTTP GET /static/admin/css/responsive.css 304 [0.01, 172.18.0.1:36670]
+INFO 2025-12-07 12:41:30,641 runserver HTTP GET /static/admin/css/login.css 304 [0.01, 172.18.0.1:36658]
+INFO 2025-12-07 12:41:30,656 runserver HTTP GET /static/admin/js/nav_sidebar.js 304 [0.02, 172.18.0.1:36644]
+INFO 2025-12-07 12:41:30,661 runserver HTTP GET /static/admin/js/theme.js 304 [0.02, 172.18.0.1:36650]
+INFO 2025-12-07 12:41:33,665 runserver HTTP POST /admin/login/?next=/admin/ 200 [0.39, 172.18.0.1:36650]
+INFO 2025-12-07 12:41:37,781 runserver HTTP POST /admin/login/?next=/admin/ 200 [0.41, 172.18.0.1:49874]
+WARNING 2025-12-07 12:42:14,057 log Not Found: /login/
+WARNING 2025-12-07 12:42:14,059 runserver HTTP GET /login/ 404 [0.02, 172.18.0.1:53658]
+INFO 2025-12-07 12:42:44,540 runserver HTTP GET /accounts/login/ 200 [0.02, 172.18.0.1:41576]
+INFO 2025-12-07 12:43:03,384 runserver HTTP POST /accounts/login/ 200 [0.41, 172.18.0.1:37268]
+INFO 2025-12-07 12:43:19,351 runserver HTTP POST /accounts/login/ 200 [0.39, 172.18.0.1:47202]
+ERROR 2025-12-07 12:43:26,060 log Internal Server Error: /accounts/password/reset/
+Traceback (most recent call last):
+  File "/usr/local/lib/python3.11/site-packages/asgiref/sync.py", line 555, in thread_handler
+    raise exc_info[1]
+  File "/usr/local/lib/python3.11/site-packages/django/core/handlers/exception.py", line 42, in inner
+    response = await get_response(request)
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/local/lib/python3.11/site-packages/asgiref/sync.py", line 555, in thread_handler
+    raise exc_info[1]
+  File "/usr/local/lib/python3.11/site-packages/django/core/handlers/base.py", line 253, in _get_response_async
+    response = await wrapped_callback(
+               ^^^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/local/lib/python3.11/site-packages/asgiref/sync.py", line 504, in __call__
+    ret = await asyncio.shield(exec_coro)
+          ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/local/lib/python3.11/concurrent/futures/thread.py", line 58, in run
+    result = self.fn(*self.args, **self.kwargs)
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/local/lib/python3.11/site-packages/asgiref/sync.py", line 559, in thread_handler
+    return func(*args, **kwargs)
+           ^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/local/lib/python3.11/site-packages/django/views/decorators/cache.py", line 80, in _view_wrapper
+    response = view_func(request, *args, **kwargs)
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/code/apps/accounts/views.py", line 425, in password_reset_request_view
+    return render(request, 'accounts/password_reset.html', context)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/local/lib/python3.11/site-packages/django/shortcuts.py", line 24, in render
+    content = loader.render_to_string(template_name, context, request, using=using)
+              ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/local/lib/python3.11/site-packages/django/template/loader.py", line 61, in render_to_string
+    template = get_template(template_name, using=using)
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/local/lib/python3.11/site-packages/django/template/loader.py", line 19, in get_template
+    raise TemplateDoesNotExist(template_name, chain=chain)
+django.template.exceptions.TemplateDoesNotExist: accounts/password_reset.html
+ERROR 2025-12-07 12:43:26,074 runserver HTTP GET /accounts/password/reset/ 500 [0.05, 172.18.0.1:47202]
+INFO 2025-12-07 12:43:33,269 runserver HTTP GET /accounts/login/ 200 [0.01, 172.18.0.1:37900]
+INFO 2025-12-07 12:43:36,884 runserver HTTP POST /accounts/login/ 200 [0.41, 172.18.0.1:37900]
+INFO 2025-12-07 12:43:56,495 runserver HTTP POST /accounts/login/ 200 [0.41, 172.18.0.1:52060]
+INFO 2025-12-07 12:44:06,579 runserver HTTP GET /admin/ 302 [0.01, 172.18.0.1:52076]
+INFO 2025-12-07 12:44:06,598 runserver HTTP GET /admin/login/?next=/admin/ 200 [0.01, 172.18.0.1:52076]
+INFO 2025-12-07 12:44:06,646 runserver HTTP GET /static/admin/css/base.css 304 [0.00, 172.18.0.1:52076]
+INFO 2025-12-07 12:44:06,662 runserver HTTP GET /static/admin/css/dark_mode.css 304 [0.01, 172.18.0.1:52086]
+INFO 2025-12-07 12:44:06,664 runserver HTTP GET /static/admin/css/nav_sidebar.css 304 [0.01, 172.18.0.1:50648]
+INFO 2025-12-07 12:44:06,669 runserver HTTP GET /static/admin/css/responsive.css 304 [0.01, 172.18.0.1:50662]
+INFO 2025-12-07 12:44:06,672 runserver HTTP GET /static/admin/css/login.css 304 [0.01, 172.18.0.1:50650]
+INFO 2025-12-07 12:44:06,679 runserver HTTP GET /static/admin/js/theme.js 304 [0.00, 172.18.0.1:50648]
+INFO 2025-12-07 12:44:06,681 runserver HTTP GET /static/admin/js/nav_sidebar.js 304 [0.01, 172.18.0.1:52086]
+INFO 2025-12-07 12:48:28,236 autoreload /code/apps/accounts/models.py changed, reloading.
+INFO 2025-12-07 12:48:30,387 autoreload Watching for file changes with StatReloader
+INFO 2025-12-07 12:49:15,368 runserver HTTP POST /admin/login/?next=/admin/ 302 [0.49, 172.18.0.1:56240]
+INFO 2025-12-07 12:49:15,432 runserver HTTP GET /admin/ 200 [0.06, 172.18.0.1:56240]
+INFO 2025-12-07 12:49:15,457 runserver HTTP GET /static/admin/css/base.css 304 [0.00, 172.18.0.1:56240]
+INFO 2025-12-07 12:49:15,467 runserver HTTP GET /static/admin/css/dark_mode.css 304 [0.01, 172.18.0.1:56232]
+INFO 2025-12-07 12:49:15,470 runserver HTTP GET /static/admin/css/nav_sidebar.css 304 [0.01, 172.18.0.1:56240]
+INFO 2025-12-07 12:49:15,481 runserver HTTP GET /static/admin/css/responsive.css 304 [0.01, 172.18.0.1:56268]
+INFO 2025-12-07 12:49:15,483 runserver HTTP GET /static/admin/js/theme.js 304 [0.01, 172.18.0.1:56252]
+INFO 2025-12-07 12:49:15,487 runserver HTTP GET /static/admin/js/nav_sidebar.js 304 [0.01, 172.18.0.1:56278]
+INFO 2025-12-07 12:49:15,490 runserver HTTP GET /static/admin/css/dashboard.css 200 [0.02, 172.18.0.1:56242]
+INFO 2025-12-07 12:49:15,505 runserver HTTP GET /static/admin/img/icon-changelink.svg 200 [0.01, 172.18.0.1:56278]
+INFO 2025-12-07 12:49:15,507 runserver HTTP GET /static/admin/img/icon-addlink.svg 200 [0.01, 172.18.0.1:56242]
+INFO 2025-12-07 12:49:21,921 runserver HTTP GET /admin/core/company/ 200 [0.07, 172.18.0.1:56242]
+INFO 2025-12-07 12:49:21,945 runserver HTTP GET /static/admin/css/changelists.css 200 [0.00, 172.18.0.1:56242]
+INFO 2025-12-07 12:49:21,967 runserver HTTP GET /static/admin/js/core.js 200 [0.02, 172.18.0.1:56268]
+INFO 2025-12-07 12:49:21,969 runserver HTTP GET /static/admin/js/jquery.init.js 200 [0.02, 172.18.0.1:56252]
+INFO 2025-12-07 12:49:21,972 runserver HTTP GET /static/admin/js/urlify.js 200 [0.02, 172.18.0.1:56242]
+INFO 2025-12-07 12:49:21,974 runserver HTTP GET /static/admin/js/vendor/jquery/jquery.js 200 [0.03, 172.18.0.1:56278]
+INFO 2025-12-07 12:49:21,976 runserver HTTP GET /static/admin/js/admin/RelatedObjectLookups.js 200 [0.02, 172.18.0.1:56232]
+INFO 2025-12-07 12:49:21,996 runserver HTTP GET /static/admin/js/prepopulate.js 200 [0.02, 172.18.0.1:56268]
+INFO 2025-12-07 12:49:22,000 runserver HTTP GET /static/admin/js/actions.js 200 [0.02, 172.18.0.1:56252]
+INFO 2025-12-07 12:49:22,003 runserver HTTP GET /static/admin/img/search.svg 200 [0.01, 172.18.0.1:56278]
+INFO 2025-12-07 12:49:22,007 runserver HTTP GET /static/admin/js/vendor/xregexp/xregexp.js 200 [0.02, 172.18.0.1:56242]
+INFO 2025-12-07 12:49:22,019 runserver HTTP GET /admin/jsi18n/ 200 [0.07, 172.18.0.1:56240]
+INFO 2025-12-07 12:49:22,027 runserver HTTP GET /static/admin/js/filters.js 200 [0.00, 172.18.0.1:56242]
+INFO 2025-12-07 12:49:22,064 runserver HTTP GET /static/admin/img/tooltag-add.svg 200 [0.00, 172.18.0.1:56242]
+INFO 2025-12-07 12:49:22,067 runserver HTTP GET /static/admin/img/icon-viewlink.svg 200 [0.01, 172.18.0.1:56240]
+INFO 2025-12-07 12:49:23,570 runserver HTTP GET /admin/core/company/add/ 200 [0.07, 172.18.0.1:56240]
+INFO 2025-12-07 12:49:23,599 runserver HTTP GET /static/admin/css/forms.css 200 [0.00, 172.18.0.1:56240]
+INFO 2025-12-07 12:49:23,619 runserver HTTP GET /static/admin/js/prepopulate_init.js 200 [0.01, 172.18.0.1:56252]
+INFO 2025-12-07 12:49:23,622 runserver HTTP GET /static/admin/js/collapse.js 200 [0.02, 172.18.0.1:56278]
+INFO 2025-12-07 12:49:23,625 runserver HTTP GET /static/admin/css/widgets.css 200 [0.02, 172.18.0.1:56240]
+INFO 2025-12-07 12:49:23,637 runserver HTTP GET /static/admin/js/change_form.js 200 [0.00, 172.18.0.1:56240]
+INFO 2025-12-07 12:49:23,651 runserver HTTP GET /admin/jsi18n/ 200 [0.05, 172.18.0.1:56242]
+INFO 2025-12-07 12:56:54,444 runserver HTTP POST /admin/core/company/add/ 302 [0.04, 172.18.0.1:54116]
+INFO 2025-12-07 12:56:54,492 runserver HTTP GET /admin/core/company/ 200 [0.04, 172.18.0.1:54116]
+INFO 2025-12-07 12:56:54,519 runserver HTTP GET /static/admin/css/base.css 304 [0.00, 172.18.0.1:54116]
+INFO 2025-12-07 12:56:54,529 runserver HTTP GET /static/admin/css/dark_mode.css 304 [0.00, 172.18.0.1:54130]
+INFO 2025-12-07 12:56:54,533 runserver HTTP GET /static/admin/css/nav_sidebar.css 304 [0.01, 172.18.0.1:54116]
+INFO 2025-12-07 12:56:54,547 runserver HTTP GET /static/admin/css/responsive.css 304 [0.01, 172.18.0.1:54152]
+INFO 2025-12-07 12:56:54,549 runserver HTTP GET /static/admin/css/changelists.css 304 [0.01, 172.18.0.1:54138]
+INFO 2025-12-07 12:56:54,551 runserver HTTP GET /static/admin/js/jquery.init.js 304 [0.01, 172.18.0.1:54130]
+INFO 2025-12-07 12:56:54,554 runserver HTTP GET /static/admin/js/core.js 304 [0.01, 172.18.0.1:54116]
+INFO 2025-12-07 12:56:54,557 runserver HTTP GET /static/admin/js/vendor/jquery/jquery.js 304 [0.02, 172.18.0.1:54160]
+INFO 2025-12-07 12:56:54,571 runserver HTTP GET /static/admin/js/admin/RelatedObjectLookups.js 304 [0.01, 172.18.0.1:54152]
+INFO 2025-12-07 12:56:54,575 runserver HTTP GET /static/admin/js/actions.js 304 [0.01, 172.18.0.1:54138]
+INFO 2025-12-07 12:56:54,578 runserver HTTP GET /static/admin/js/prepopulate.js 304 [0.01, 172.18.0.1:54116]
+INFO 2025-12-07 12:56:54,580 runserver HTTP GET /static/admin/js/vendor/xregexp/xregexp.js 304 [0.01, 172.18.0.1:54160]
+INFO 2025-12-07 12:56:54,582 runserver HTTP GET /static/admin/js/urlify.js 304 [0.02, 172.18.0.1:54130]
+INFO 2025-12-07 12:56:54,596 runserver HTTP GET /static/admin/img/search.svg 304 [0.01, 172.18.0.1:54160]
+INFO 2025-12-07 12:56:54,603 runserver HTTP GET /admin/jsi18n/ 200 [0.07, 172.18.0.1:54166]
+INFO 2025-12-07 12:56:54,605 runserver HTTP GET /static/admin/js/theme.js 304 [0.00, 172.18.0.1:54160]
+INFO 2025-12-07 12:56:54,619 runserver HTTP GET /static/admin/js/nav_sidebar.js 304 [0.00, 172.18.0.1:54160]
+INFO 2025-12-07 12:56:54,621 runserver HTTP GET /static/admin/js/filters.js 304 [0.01, 172.18.0.1:54166]
+INFO 2025-12-07 12:56:54,665 runserver HTTP GET /static/admin/img/tooltag-add.svg 304 [0.01, 172.18.0.1:54116]
+INFO 2025-12-07 12:56:54,668 runserver HTTP GET /static/admin/img/icon-addlink.svg 304 [0.01, 172.18.0.1:54166]
+INFO 2025-12-07 12:56:54,674 runserver HTTP GET /static/admin/img/icon-yes.svg 200 [0.02, 172.18.0.1:54160]
+INFO 2025-12-07 12:56:54,678 runserver HTTP GET /static/admin/img/sorting-icons.svg 200 [0.02, 172.18.0.1:54130]
+INFO 2025-12-07 12:56:54,681 runserver HTTP GET /static/admin/img/icon-viewlink.svg 304 [0.02, 172.18.0.1:54138]
+INFO 2025-12-07 12:56:59,870 runserver HTTP GET /admin/core/leadsource/ 200 [0.05, 172.18.0.1:54130]
+INFO 2025-12-07 12:56:59,916 runserver HTTP GET /admin/jsi18n/ 200 [0.02, 172.18.0.1:54130]
+INFO 2025-12-07 12:57:01,287 runserver HTTP GET /admin/core/leadstage/ 200 [0.04, 172.18.0.1:54130]
+INFO 2025-12-07 12:57:01,334 runserver HTTP GET /admin/jsi18n/ 200 [0.02, 172.18.0.1:54130]
+INFO 2025-12-07 12:57:02,002 runserver HTTP GET /admin/core/leadsource/ 200 [0.04, 172.18.0.1:54130]
+INFO 2025-12-07 12:57:02,055 runserver HTTP GET /admin/jsi18n/ 200 [0.03, 172.18.0.1:54130]
+INFO 2025-12-07 12:57:53,079 runserver HTTP POST /admin/logout/ 302 [0.03, 172.18.0.1:54130]
+INFO 2025-12-07 12:57:53,100 runserver HTTP GET /accounts/login/ 200 [0.02, 172.18.0.1:54130]
+INFO 2025-12-07 12:57:56,256 runserver HTTP POST /accounts/login/ 302 [0.45, 172.18.0.1:54130]
+INFO 2025-12-07 12:57:56,282 runserver HTTP GET /dashboard/ 302 [0.02, 172.18.0.1:54130]
+INFO 2025-12-07 12:57:56,307 runserver HTTP GET /dashboard/ 302 [0.02, 172.18.0.1:54130]
+INFO 2025-12-07 12:57:56,332 runserver HTTP GET /dashboard/ 302 [0.02, 172.18.0.1:54130]
+INFO 2025-12-07 12:57:56,365 runserver HTTP GET /dashboard/ 302 [0.03, 172.18.0.1:54130]
+INFO 2025-12-07 12:57:56,391 runserver HTTP GET /dashboard/ 302 [0.02, 172.18.0.1:54130]
+INFO 2025-12-07 12:57:56,418 runserver HTTP GET /dashboard/ 302 [0.02, 172.18.0.1:54130]
+INFO 2025-12-07 12:57:56,444 runserver HTTP GET /dashboard/ 302 [0.02, 172.18.0.1:54130]
+INFO 2025-12-07 12:57:56,473 runserver HTTP GET /dashboard/ 302 [0.02, 172.18.0.1:54130]
+INFO 2025-12-07 12:57:56,499 runserver HTTP GET /dashboard/ 302 [0.02, 172.18.0.1:54130]
+INFO 2025-12-07 12:57:56,523 runserver HTTP GET /dashboard/ 302 [0.02, 172.18.0.1:54130]
+INFO 2025-12-07 12:57:56,548 runserver HTTP GET /dashboard/ 302 [0.02, 172.18.0.1:54130]
+INFO 2025-12-07 12:57:56,573 runserver HTTP GET /dashboard/ 302 [0.02, 172.18.0.1:54130]
+INFO 2025-12-07 12:57:56,600 runserver HTTP GET /dashboard/ 302 [0.02, 172.18.0.1:54130]
+INFO 2025-12-07 12:57:56,625 runserver HTTP GET /dashboard/ 302 [0.02, 172.18.0.1:54130]
+INFO 2025-12-07 12:57:56,650 runserver HTTP GET /dashboard/ 302 [0.02, 172.18.0.1:54130]
+INFO 2025-12-07 12:57:56,679 runserver HTTP GET /dashboard/ 302 [0.02, 172.18.0.1:54130]
+INFO 2025-12-07 12:57:56,706 runserver HTTP GET /dashboard/ 302 [0.02, 172.18.0.1:54130]
+INFO 2025-12-07 12:57:56,733 runserver HTTP GET /dashboard/ 302 [0.02, 172.18.0.1:54130]
+INFO 2025-12-07 12:57:56,758 runserver HTTP GET /dashboard/ 302 [0.02, 172.18.0.1:54130]
+INFO 2025-12-07 12:57:57,831 runserver HTTP GET /dashboard/ 302 [0.03, 172.18.0.1:54130]
+INFO 2025-12-07 12:57:57,863 runserver HTTP GET /dashboard/ 302 [0.03, 172.18.0.1:54130]
+INFO 2025-12-07 12:57:57,892 runserver HTTP GET /dashboard/ 302 [0.02, 172.18.0.1:54130]
+INFO 2025-12-07 12:57:57,920 runserver HTTP GET /dashboard/ 302 [0.02, 172.18.0.1:54130]
+INFO 2025-12-07 12:57:57,945 runserver HTTP GET /dashboard/ 302 [0.02, 172.18.0.1:54130]
+INFO 2025-12-07 12:57:57,971 runserver HTTP GET /dashboard/ 302 [0.02, 172.18.0.1:54130]
+INFO 2025-12-07 12:57:57,993 runserver HTTP GET /dashboard/ 302 [0.02, 172.18.0.1:54130]
+INFO 2025-12-07 12:57:58,021 runserver HTTP GET /dashboard/ 302 [0.02, 172.18.0.1:54130]
+INFO 2025-12-07 12:57:58,046 runserver HTTP GET /dashboard/ 302 [0.02, 172.18.0.1:54130]
+INFO 2025-12-07 12:57:58,075 runserver HTTP GET /dashboard/ 302 [0.02, 172.18.0.1:54130]
+INFO 2025-12-07 12:57:58,109 runserver HTTP GET /dashboard/ 302 [0.03, 172.18.0.1:54130]
+INFO 2025-12-07 12:57:58,141 runserver HTTP GET /dashboard/ 302 [0.03, 172.18.0.1:54130]
+INFO 2025-12-07 12:57:58,171 runserver HTTP GET /dashboard/ 302 [0.03, 172.18.0.1:54130]
+INFO 2025-12-07 12:57:58,201 runserver HTTP GET /dashboard/ 302 [0.03, 172.18.0.1:54130]
+INFO 2025-12-07 12:57:58,223 runserver HTTP GET /dashboard/ 302 [0.02, 172.18.0.1:54130]
+INFO 2025-12-07 12:57:58,245 runserver HTTP GET /dashboard/ 302 [0.02, 172.18.0.1:54130]
+INFO 2025-12-07 12:57:58,270 runserver HTTP GET /dashboard/ 302 [0.02, 172.18.0.1:54130]
+INFO 2025-12-07 12:57:58,296 runserver HTTP GET /dashboard/ 302 [0.02, 172.18.0.1:54130]
+INFO 2025-12-07 12:57:58,322 runserver HTTP GET /dashboard/ 302 [0.02, 172.18.0.1:54130]
+INFO 2025-12-07 12:57:58,349 runserver HTTP GET /dashboard/ 302 [0.02, 172.18.0.1:54130]
+INFO 2025-12-07 12:58:01,390 runserver HTTP GET /dashboard/ 302 [0.03, 172.18.0.1:54130]
+INFO 2025-12-07 12:58:01,424 runserver HTTP GET /dashboard/ 302 [0.03, 172.18.0.1:54130]
+INFO 2025-12-07 12:58:01,449 runserver HTTP GET /dashboard/ 302 [0.02, 172.18.0.1:54130]
+INFO 2025-12-07 12:58:01,475 runserver HTTP GET /dashboard/ 302 [0.02, 172.18.0.1:54130]
+INFO 2025-12-07 12:58:01,496 runserver HTTP GET /dashboard/ 302 [0.02, 172.18.0.1:54130]
+INFO 2025-12-07 12:58:01,519 runserver HTTP GET /dashboard/ 302 [0.02, 172.18.0.1:54130]
+INFO 2025-12-07 12:58:01,548 runserver HTTP GET /dashboard/ 302 [0.03, 172.18.0.1:54130]
+INFO 2025-12-07 12:58:01,576 runserver HTTP GET /dashboard/ 302 [0.02, 172.18.0.1:54130]
+INFO 2025-12-07 12:58:01,604 runserver HTTP GET /dashboard/ 302 [0.02, 172.18.0.1:54130]
+INFO 2025-12-07 12:58:01,628 runserver HTTP GET /dashboard/ 302 [0.02, 172.18.0.1:54130]
+INFO 2025-12-07 12:58:01,653 runserver HTTP GET /dashboard/ 302 [0.02, 172.18.0.1:54130]
+INFO 2025-12-07 12:58:01,680 runserver HTTP GET /dashboard/ 302 [0.02, 172.18.0.1:54130]
+INFO 2025-12-07 12:58:01,705 runserver HTTP GET /dashboard/ 302 [0.02, 172.18.0.1:54130]
+INFO 2025-12-07 12:58:01,726 runserver HTTP GET /dashboard/ 302 [0.02, 172.18.0.1:54130]
+INFO 2025-12-07 12:58:01,747 runserver HTTP GET /dashboard/ 302 [0.02, 172.18.0.1:54130]
+INFO 2025-12-07 12:58:01,775 runserver HTTP GET /dashboard/ 302 [0.02, 172.18.0.1:54130]
+INFO 2025-12-07 12:58:01,802 runserver HTTP GET /dashboard/ 302 [0.02, 172.18.0.1:54130]
+INFO 2025-12-07 12:58:01,826 runserver HTTP GET /dashboard/ 302 [0.02, 172.18.0.1:54130]
+INFO 2025-12-07 12:58:01,850 runserver HTTP GET /dashboard/ 302 [0.02, 172.18.0.1:54130]
+INFO 2025-12-07 12:58:01,875 runserver HTTP GET /dashboard/ 302 [0.02, 172.18.0.1:54130]
+INFO 2025-12-07 12:58:01,970 runserver HTTP GET /dashboard/ 302 [0.02, 172.18.0.1:54130]
+INFO 2025-12-07 12:58:01,999 runserver HTTP GET /dashboard/ 302 [0.02, 172.18.0.1:54130]
+INFO 2025-12-07 12:58:02,025 runserver HTTP GET /dashboard/ 302 [0.02, 172.18.0.1:54130]
+INFO 2025-12-07 12:58:02,048 runserver HTTP GET /dashboard/ 302 [0.02, 172.18.0.1:54130]
+INFO 2025-12-07 12:58:02,071 runserver HTTP GET /dashboard/ 302 [0.02, 172.18.0.1:54130]
+INFO 2025-12-07 12:58:02,095 runserver HTTP GET /dashboard/ 302 [0.02, 172.18.0.1:54130]
+INFO 2025-12-07 12:58:02,119 runserver HTTP GET /dashboard/ 302 [0.02, 172.18.0.1:54130]
+INFO 2025-12-07 12:58:02,144 runserver HTTP GET /dashboard/ 302 [0.02, 172.18.0.1:54130]
+INFO 2025-12-07 12:58:02,191 runserver HTTP GET /dashboard/ 302 [0.02, 172.18.0.1:48734]
+INFO 2025-12-07 12:58:02,216 runserver HTTP GET /dashboard/ 302 [0.02, 172.18.0.1:48734]
+INFO 2025-12-07 12:58:02,241 runserver HTTP GET /dashboard/ 302 [0.02, 172.18.0.1:48734]
+INFO 2025-12-07 12:58:02,265 runserver HTTP GET /dashboard/ 302 [0.02, 172.18.0.1:48734]
+INFO 2025-12-07 12:58:02,290 runserver HTTP GET /dashboard/ 302 [0.02, 172.18.0.1:48734]
+INFO 2025-12-07 12:58:02,314 runserver HTTP GET /dashboard/ 302 [0.02, 172.18.0.1:48734]
+INFO 2025-12-07 12:58:02,339 runserver HTTP GET /dashboard/ 302 [0.02, 172.18.0.1:48734]
+INFO 2025-12-07 12:58:02,389 runserver HTTP GET /dashboard/ 302 [0.02, 172.18.0.1:48740]
+INFO 2025-12-07 12:58:02,415 runserver HTTP GET /dashboard/ 302 [0.02, 172.18.0.1:48740]
+INFO 2025-12-07 12:58:02,440 runserver HTTP GET /dashboard/ 302 [0.02, 172.18.0.1:48740]
+INFO 2025-12-07 12:58:02,464 runserver HTTP GET /dashboard/ 302 [0.02, 172.18.0.1:48740]
+INFO 2025-12-07 12:58:02,491 runserver HTTP GET /dashboard/ 302 [0.02, 172.18.0.1:48740]
+INFO 2025-12-07 12:58:02,516 runserver HTTP GET /dashboard/ 302 [0.02, 172.18.0.1:48740]
+INFO 2025-12-07 12:58:02,540 runserver HTTP GET /dashboard/ 302 [0.02, 172.18.0.1:48740]
+INFO 2025-12-07 12:58:02,566 runserver HTTP GET /dashboard/ 302 [0.02, 172.18.0.1:48740]
+INFO 2025-12-07 12:58:02,620 runserver HTTP GET /dashboard/ 302 [0.02, 172.18.0.1:48750]
+INFO 2025-12-07 12:58:02,645 runserver HTTP GET /dashboard/ 302 [0.02, 172.18.0.1:48750]
+INFO 2025-12-07 12:58:02,673 runserver HTTP GET /dashboard/ 302 [0.02, 172.18.0.1:48750]
+INFO 2025-12-07 12:58:02,697 runserver HTTP GET /dashboard/ 302 [0.02, 172.18.0.1:48750]
+INFO 2025-12-07 12:58:02,727 runserver HTTP GET /dashboard/ 302 [0.03, 172.18.0.1:48750]
+INFO 2025-12-07 12:58:02,758 runserver HTTP GET /dashboard/ 302 [0.03, 172.18.0.1:48750]
+INFO 2025-12-07 12:58:02,813 runserver HTTP GET /dashboard/ 302 [0.03, 172.18.0.1:48760]
+INFO 2025-12-07 12:58:02,844 runserver HTTP GET /dashboard/ 302 [0.03, 172.18.0.1:48760]
+INFO 2025-12-07 12:58:02,871 runserver HTTP GET /dashboard/ 302 [0.02, 172.18.0.1:48760]
+INFO 2025-12-07 12:58:02,896 runserver HTTP GET /dashboard/ 302 [0.02, 172.18.0.1:48760]
+INFO 2025-12-07 12:58:02,923 runserver HTTP GET /dashboard/ 302 [0.02, 172.18.0.1:48760]
+INFO 2025-12-07 12:58:02,946 runserver HTTP GET /dashboard/ 302 [0.02, 172.18.0.1:48760]
+INFO 2025-12-07 12:58:02,972 runserver HTTP GET /dashboard/ 302 [0.02, 172.18.0.1:48760]
+INFO 2025-12-07 12:58:02,996 runserver HTTP GET /dashboard/ 302 [0.02, 172.18.0.1:48760]
+INFO 2025-12-07 12:58:03,022 runserver HTTP GET /dashboard/ 302 [0.02, 172.18.0.1:48760]
+INFO 2025-12-07 12:58:03,048 runserver HTTP GET /dashboard/ 302 [0.02, 172.18.0.1:48760]
+INFO 2025-12-07 12:58:03,076 runserver HTTP GET /dashboard/ 302 [0.02, 172.18.0.1:48760]
+INFO 2025-12-07 12:58:03,103 runserver HTTP GET /dashboard/ 302 [0.02, 172.18.0.1:48760]
+INFO 2025-12-07 12:58:03,128 runserver HTTP GET /dashboard/ 302 [0.02, 172.18.0.1:48760]
+INFO 2025-12-07 12:58:03,156 runserver HTTP GET /dashboard/ 302 [0.02, 172.18.0.1:48760]
+INFO 2025-12-07 12:58:03,182 runserver HTTP GET /dashboard/ 302 [0.02, 172.18.0.1:48760]
+INFO 2025-12-07 12:58:03,206 runserver HTTP GET /dashboard/ 302 [0.02, 172.18.0.1:48760]
+INFO 2025-12-07 12:58:03,232 runserver HTTP GET /dashboard/ 302 [0.02, 172.18.0.1:48760]
+INFO 2025-12-07 12:58:03,259 runserver HTTP GET /dashboard/ 302 [0.02, 172.18.0.1:48760]
+INFO 2025-12-07 12:58:03,283 runserver HTTP GET /dashboard/ 302 [0.02, 172.18.0.1:48760]
+INFO 2025-12-07 12:58:03,308 runserver HTTP GET /dashboard/ 302 [0.02, 172.18.0.1:48760]
+INFO 2025-12-07 12:58:08,400 runserver HTTP GET /dashboard/ 302 [0.03, 172.18.0.1:48760]
+INFO 2025-12-07 12:58:08,430 runserver HTTP GET /dashboard/ 302 [0.02, 172.18.0.1:48760]
+INFO 2025-12-07 12:58:08,458 runserver HTTP GET /dashboard/ 302 [0.02, 172.18.0.1:48760]
+INFO 2025-12-07 12:58:08,481 runserver HTTP GET /dashboard/ 302 [0.02, 172.18.0.1:48760]
+INFO 2025-12-07 12:58:08,505 runserver HTTP GET /dashboard/ 302 [0.02, 172.18.0.1:48760]
+INFO 2025-12-07 12:58:08,529 runserver HTTP GET /dashboard/ 302 [0.02, 172.18.0.1:48760]
+INFO 2025-12-07 12:58:08,559 runserver HTTP GET /dashboard/ 302 [0.02, 172.18.0.1:48760]
+INFO 2025-12-07 12:58:08,592 runserver HTTP GET /dashboard/ 302 [0.03, 172.18.0.1:48760]
+INFO 2025-12-07 12:58:08,621 runserver HTTP GET /dashboard/ 302 [0.02, 172.18.0.1:48760]
+INFO 2025-12-07 12:58:08,651 runserver HTTP GET /dashboard/ 302 [0.02, 172.18.0.1:48760]
+INFO 2025-12-07 12:58:08,679 runserver HTTP GET /dashboard/ 302 [0.02, 172.18.0.1:48760]
+INFO 2025-12-07 12:58:08,706 runserver HTTP GET /dashboard/ 302 [0.02, 172.18.0.1:48760]
+INFO 2025-12-07 12:58:08,729 runserver HTTP GET /dashboard/ 302 [0.02, 172.18.0.1:48760]
+INFO 2025-12-07 12:58:08,755 runserver HTTP GET /dashboard/ 302 [0.02, 172.18.0.1:48760]
+INFO 2025-12-07 12:58:08,779 runserver HTTP GET /dashboard/ 302 [0.02, 172.18.0.1:48760]
+INFO 2025-12-07 12:58:08,804 runserver HTTP GET /dashboard/ 302 [0.02, 172.18.0.1:48760]
+INFO 2025-12-07 12:58:08,828 runserver HTTP GET /dashboard/ 302 [0.02, 172.18.0.1:48760]
+INFO 2025-12-07 12:58:08,854 runserver HTTP GET /dashboard/ 302 [0.02, 172.18.0.1:48760]
+INFO 2025-12-07 12:58:08,881 runserver HTTP GET /dashboard/ 302 [0.02, 172.18.0.1:48760]
+INFO 2025-12-07 12:58:08,906 runserver HTTP GET /dashboard/ 302 [0.02, 172.18.0.1:48760]
+INFO 2025-12-07 12:58:38,970 runserver HTTP GET /dashboard/ 302 [0.02, 172.18.0.1:48760]
+INFO 2025-12-07 12:58:39,000 runserver HTTP GET /dashboard/ 302 [0.02, 172.18.0.1:48760]
+INFO 2025-12-07 12:58:39,028 runserver HTTP GET /dashboard/ 302 [0.02, 172.18.0.1:48760]
+INFO 2025-12-07 12:58:39,055 runserver HTTP GET /dashboard/ 302 [0.02, 172.18.0.1:48760]
+INFO 2025-12-07 12:58:39,081 runserver HTTP GET /dashboard/ 302 [0.02, 172.18.0.1:48760]
+INFO 2025-12-07 12:58:39,109 runserver HTTP GET /dashboard/ 302 [0.02, 172.18.0.1:48760]
+INFO 2025-12-07 12:58:39,134 runserver HTTP GET /dashboard/ 302 [0.02, 172.18.0.1:48760]
+INFO 2025-12-07 12:58:39,160 runserver HTTP GET /dashboard/ 302 [0.02, 172.18.0.1:48760]
+INFO 2025-12-07 12:58:39,188 runserver HTTP GET /dashboard/ 302 [0.02, 172.18.0.1:48760]
+INFO 2025-12-07 12:58:39,215 runserver HTTP GET /dashboard/ 302 [0.02, 172.18.0.1:48760]
+INFO 2025-12-07 12:58:39,241 runserver HTTP GET /dashboard/ 302 [0.02, 172.18.0.1:48760]
+INFO 2025-12-07 12:58:39,266 runserver HTTP GET /dashboard/ 302 [0.02, 172.18.0.1:48760]
+INFO 2025-12-07 12:58:39,292 runserver HTTP GET /dashboard/ 302 [0.02, 172.18.0.1:48760]
+INFO 2025-12-07 12:58:39,322 runserver HTTP GET /dashboard/ 302 [0.03, 172.18.0.1:48760]
+INFO 2025-12-07 12:58:39,348 runserver HTTP GET /dashboard/ 302 [0.02, 172.18.0.1:48760]
+INFO 2025-12-07 12:58:39,413 runserver HTTP GET /dashboard/ 302 [0.06, 172.18.0.1:48760]
+INFO 2025-12-07 12:58:39,438 runserver HTTP GET /dashboard/ 302 [0.02, 172.18.0.1:48760]
+INFO 2025-12-07 12:58:39,465 runserver HTTP GET /dashboard/ 302 [0.02, 172.18.0.1:48760]
+INFO 2025-12-07 12:58:39,490 runserver HTTP GET /dashboard/ 302 [0.02, 172.18.0.1:48760]
+INFO 2025-12-07 12:58:39,516 runserver HTTP GET /dashboard/ 302 [0.02, 172.18.0.1:48760]
+INFO 2025-12-07 12:59:34,274 runserver HTTP GET /dashboard/ 302 [0.02, 172.18.0.1:48760]
+INFO 2025-12-07 12:59:34,306 runserver HTTP GET /dashboard/ 302 [0.02, 172.18.0.1:48760]
+INFO 2025-12-07 12:59:34,343 runserver HTTP GET /dashboard/ 302 [0.03, 172.18.0.1:48760]
+INFO 2025-12-07 12:59:34,372 runserver HTTP GET /dashboard/ 302 [0.02, 172.18.0.1:48760]
+INFO 2025-12-07 12:59:34,406 runserver HTTP GET /dashboard/ 302 [0.03, 172.18.0.1:48760]
+INFO 2025-12-07 12:59:34,451 runserver HTTP GET /dashboard/ 302 [0.04, 172.18.0.1:48760]
+INFO 2025-12-07 12:59:34,482 runserver HTTP GET /dashboard/ 302 [0.03, 172.18.0.1:48760]
+INFO 2025-12-07 12:59:34,512 runserver HTTP GET /dashboard/ 302 [0.02, 172.18.0.1:48760]
+INFO 2025-12-07 12:59:34,542 runserver HTTP GET /dashboard/ 302 [0.02, 172.18.0.1:48760]
+INFO 2025-12-07 12:59:34,568 runserver HTTP GET /dashboard/ 302 [0.02, 172.18.0.1:48760]
+INFO 2025-12-07 12:59:34,593 runserver HTTP GET /dashboard/ 302 [0.02, 172.18.0.1:48760]
+INFO 2025-12-07 12:59:34,618 runserver HTTP GET /dashboard/ 302 [0.02, 172.18.0.1:48760]
+INFO 2025-12-07 12:59:34,643 runserver HTTP GET /dashboard/ 302 [0.02, 172.18.0.1:48760]
+INFO 2025-12-07 12:59:34,670 runserver HTTP GET /dashboard/ 302 [0.02, 172.18.0.1:48760]
+INFO 2025-12-07 12:59:34,694 runserver HTTP GET /dashboard/ 302 [0.02, 172.18.0.1:48760]
+INFO 2025-12-07 12:59:34,721 runserver HTTP GET /dashboard/ 302 [0.02, 172.18.0.1:48760]
+INFO 2025-12-07 12:59:34,746 runserver HTTP GET /dashboard/ 302 [0.02, 172.18.0.1:48760]
+INFO 2025-12-07 12:59:34,774 runserver HTTP GET /dashboard/ 302 [0.02, 172.18.0.1:48760]
+INFO 2025-12-07 12:59:34,803 runserver HTTP GET /dashboard/ 302 [0.02, 172.18.0.1:48760]
+INFO 2025-12-07 12:59:34,832 runserver HTTP GET /dashboard/ 302 [0.02, 172.18.0.1:48760]
+INFO 2025-12-07 13:00:34,908 runserver HTTP GET /dashboard/ 302 [0.03, 172.18.0.1:58728]
+INFO 2025-12-07 13:00:34,938 runserver HTTP GET /dashboard/ 302 [0.02, 172.18.0.1:58728]
+INFO 2025-12-07 13:00:34,966 runserver HTTP GET /dashboard/ 302 [0.02, 172.18.0.1:58728]
+INFO 2025-12-07 13:00:34,994 runserver HTTP GET /dashboard/ 302 [0.02, 172.18.0.1:58728]
+INFO 2025-12-07 13:00:35,024 runserver HTTP GET /dashboard/ 302 [0.02, 172.18.0.1:58728]
+INFO 2025-12-07 13:00:35,050 runserver HTTP GET /dashboard/ 302 [0.02, 172.18.0.1:58728]
+INFO 2025-12-07 13:00:35,077 runserver HTTP GET /dashboard/ 302 [0.02, 172.18.0.1:58728]
+INFO 2025-12-07 13:00:35,106 runserver HTTP GET /dashboard/ 302 [0.02, 172.18.0.1:58728]
+INFO 2025-12-07 13:00:35,132 runserver HTTP GET /dashboard/ 302 [0.02, 172.18.0.1:58728]
+INFO 2025-12-07 13:00:35,158 runserver HTTP GET /dashboard/ 302 [0.02, 172.18.0.1:58728]
+INFO 2025-12-07 13:00:35,188 runserver HTTP GET /dashboard/ 302 [0.02, 172.18.0.1:58728]
+INFO 2025-12-07 13:00:35,228 runserver HTTP GET /dashboard/ 302 [0.03, 172.18.0.1:58728]
+INFO 2025-12-07 13:00:35,262 runserver HTTP GET /dashboard/ 302 [0.02, 172.18.0.1:58728]
+INFO 2025-12-07 13:00:35,310 runserver HTTP GET /dashboard/ 302 [0.04, 172.18.0.1:58728]
+INFO 2025-12-07 13:00:35,359 runserver HTTP GET /dashboard/ 302 [0.04, 172.18.0.1:58728]
+INFO 2025-12-07 13:00:35,401 runserver HTTP GET /dashboard/ 302 [0.03, 172.18.0.1:58728]
+INFO 2025-12-07 13:00:35,434 runserver HTTP GET /dashboard/ 302 [0.03, 172.18.0.1:58728]
+INFO 2025-12-07 13:00:35,464 runserver HTTP GET /dashboard/ 302 [0.02, 172.18.0.1:58728]
+INFO 2025-12-07 13:00:35,496 runserver HTTP GET /dashboard/ 302 [0.03, 172.18.0.1:58728]
+INFO 2025-12-07 13:00:35,525 runserver HTTP GET /dashboard/ 302 [0.02, 172.18.0.1:58728]
+INFO 2025-12-07 13:01:19,704 runserver HTTP GET /dashboard/ 302 [0.02, 172.18.0.1:58728]
+INFO 2025-12-07 13:01:19,739 runserver HTTP GET /dashboard/ 302 [0.03, 172.18.0.1:58728]
+INFO 2025-12-07 13:01:19,769 runserver HTTP GET /dashboard/ 302 [0.02, 172.18.0.1:58728]
+INFO 2025-12-07 13:01:19,800 runserver HTTP GET /dashboard/ 302 [0.03, 172.18.0.1:58728]
+INFO 2025-12-07 13:01:19,832 runserver HTTP GET /dashboard/ 302 [0.02, 172.18.0.1:58728]
+INFO 2025-12-07 13:01:19,860 runserver HTTP GET /dashboard/ 302 [0.02, 172.18.0.1:58728]
+INFO 2025-12-07 13:01:19,888 runserver HTTP GET /dashboard/ 302 [0.02, 172.18.0.1:58728]
+INFO 2025-12-07 13:01:19,917 runserver HTTP GET /dashboard/ 302 [0.02, 172.18.0.1:58728]
+INFO 2025-12-07 13:01:19,943 runserver HTTP GET /dashboard/ 302 [0.02, 172.18.0.1:58728]
+INFO 2025-12-07 13:01:19,971 runserver HTTP GET /dashboard/ 302 [0.02, 172.18.0.1:58728]
+INFO 2025-12-07 13:01:19,998 runserver HTTP GET /dashboard/ 302 [0.02, 172.18.0.1:58728]
+INFO 2025-12-07 13:01:20,024 runserver HTTP GET /dashboard/ 302 [0.02, 172.18.0.1:58728]
+INFO 2025-12-07 13:01:20,053 runserver HTTP GET /dashboard/ 302 [0.02, 172.18.0.1:58728]
+INFO 2025-12-07 13:01:20,081 runserver HTTP GET /dashboard/ 302 [0.02, 172.18.0.1:58728]
+INFO 2025-12-07 13:01:20,108 runserver HTTP GET /dashboard/ 302 [0.02, 172.18.0.1:58728]
+INFO 2025-12-07 13:01:20,140 runserver HTTP GET /dashboard/ 302 [0.02, 172.18.0.1:58728]
+INFO 2025-12-07 13:01:20,169 runserver HTTP GET /dashboard/ 302 [0.02, 172.18.0.1:58728]
+INFO 2025-12-07 13:01:20,204 runserver HTTP GET /dashboard/ 302 [0.03, 172.18.0.1:58728]
+INFO 2025-12-07 13:01:20,234 runserver HTTP GET /dashboard/ 302 [0.02, 172.18.0.1:58728]
+INFO 2025-12-07 13:01:20,266 runserver HTTP GET /dashboard/ 302 [0.03, 172.18.0.1:58728]
+INFO 2025-12-07 13:01:25,725 runserver HTTP GET /accounts/login/ 302 [0.03, 172.18.0.1:58728]
+INFO 2025-12-07 13:01:25,758 runserver HTTP GET /dashboard/ 302 [0.03, 172.18.0.1:58728]
+INFO 2025-12-07 13:01:25,786 runserver HTTP GET /dashboard/ 302 [0.02, 172.18.0.1:58728]
+INFO 2025-12-07 13:01:25,817 runserver HTTP GET /dashboard/ 302 [0.02, 172.18.0.1:58728]
+INFO 2025-12-07 13:01:25,842 runserver HTTP GET /dashboard/ 302 [0.02, 172.18.0.1:58728]
+INFO 2025-12-07 13:01:25,871 runserver HTTP GET /dashboard/ 302 [0.02, 172.18.0.1:58728]
+INFO 2025-12-07 13:01:25,901 runserver HTTP GET /dashboard/ 302 [0.02, 172.18.0.1:58728]
+INFO 2025-12-07 13:01:25,935 runserver HTTP GET /dashboard/ 302 [0.03, 172.18.0.1:58728]
+INFO 2025-12-07 13:01:25,968 runserver HTTP GET /dashboard/ 302 [0.02, 172.18.0.1:58728]
+INFO 2025-12-07 13:01:25,997 runserver HTTP GET /dashboard/ 302 [0.02, 172.18.0.1:58728]
+INFO 2025-12-07 13:01:26,023 runserver HTTP GET /dashboard/ 302 [0.02, 172.18.0.1:58728]
+INFO 2025-12-07 13:01:26,051 runserver HTTP GET /dashboard/ 302 [0.02, 172.18.0.1:58728]
+INFO 2025-12-07 13:01:26,079 runserver HTTP GET /dashboard/ 302 [0.02, 172.18.0.1:58728]
+INFO 2025-12-07 13:01:26,107 runserver HTTP GET /dashboard/ 302 [0.02, 172.18.0.1:58728]
+INFO 2025-12-07 13:01:26,135 runserver HTTP GET /dashboard/ 302 [0.02, 172.18.0.1:58728]
+INFO 2025-12-07 13:01:26,165 runserver HTTP GET /dashboard/ 302 [0.02, 172.18.0.1:58728]
+INFO 2025-12-07 13:01:26,193 runserver HTTP GET /dashboard/ 302 [0.02, 172.18.0.1:58728]
+INFO 2025-12-07 13:01:26,271 runserver HTTP GET /admin/core/leadsource/ 200 [0.05, 172.18.0.1:58736]
+INFO 2025-12-07 13:01:26,326 runserver HTTP GET /admin/jsi18n/ 200 [0.03, 172.18.0.1:58736]
+INFO 2025-12-07 13:01:32,927 runserver HTTP GET /admin/core/leadsource/ 200 [0.03, 172.18.0.1:58736]
+INFO 2025-12-07 13:01:32,980 runserver HTTP GET /admin/jsi18n/ 200 [0.03, 172.18.0.1:58736]
+INFO 2025-12-07 13:01:34,074 runserver HTTP GET /admin/core/company/ 200 [0.04, 172.18.0.1:58736]
+INFO 2025-12-07 13:01:34,126 runserver HTTP GET /admin/jsi18n/ 200 [0.03, 172.18.0.1:58736]
+INFO 2025-12-07 13:01:34,153 runserver HTTP GET /static/admin/img/sorting-icons.svg 304 [0.00, 172.18.0.1:58736]
+INFO 2025-12-07 13:01:39,759 runserver HTTP GET /admin/accounts/userprofile/ 200 [0.06, 172.18.0.1:58736]
+INFO 2025-12-07 13:01:39,816 runserver HTTP GET /admin/jsi18n/ 200 [0.03, 172.18.0.1:58736]
+INFO 2025-12-07 13:01:41,046 runserver HTTP GET /admin/accounts/userprofile/1/change/ 200 [0.07, 172.18.0.1:58736]
+INFO 2025-12-07 13:01:41,074 runserver HTTP GET /static/admin/css/forms.css 304 [0.00, 172.18.0.1:58736]
+INFO 2025-12-07 13:01:41,093 runserver HTTP GET /static/admin/css/widgets.css 304 [0.01, 172.18.0.1:33330]
+INFO 2025-12-07 13:01:41,098 runserver HTTP GET /static/admin/js/collapse.js 304 [0.01, 172.18.0.1:33316]
+INFO 2025-12-07 13:01:41,107 runserver HTTP GET /static/admin/js/calendar.js 200 [0.02, 172.18.0.1:58736]
+INFO 2025-12-07 13:01:41,119 runserver HTTP GET /static/admin/js/admin/DateTimeShortcuts.js 200 [0.03, 172.18.0.1:33332]
+INFO 2025-12-07 13:01:41,129 runserver HTTP GET /admin/jsi18n/ 200 [0.05, 172.18.0.1:54660]
+INFO 2025-12-07 13:01:41,132 runserver HTTP GET /static/admin/js/prepopulate_init.js 304 [0.01, 172.18.0.1:58736]
+INFO 2025-12-07 13:01:41,150 runserver HTTP GET /static/admin/img/icon-changelink.svg 304 [0.01, 172.18.0.1:54660]
+INFO 2025-12-07 13:01:41,156 runserver HTTP GET /static/admin/js/change_form.js 304 [0.00, 172.18.0.1:58736]
+INFO 2025-12-07 13:01:41,186 runserver HTTP GET /static/admin/img/icon-calendar.svg 200 [0.00, 172.18.0.1:58736]
+INFO 2025-12-07 13:01:50,497 runserver HTTP GET /admin/accounts/user/ 200 [0.05, 172.18.0.1:58736]
+INFO 2025-12-07 13:01:50,547 runserver HTTP GET /admin/jsi18n/ 200 [0.02, 172.18.0.1:58736]
+INFO 2025-12-07 13:01:52,208 runserver HTTP GET /admin/accounts/user/1/change/ 200 [0.09, 172.18.0.1:58736]
+INFO 2025-12-07 13:01:52,248 runserver HTTP GET /static/admin/js/inlines.js 200 [0.01, 172.18.0.1:54660]
+INFO 2025-12-07 13:01:52,251 runserver HTTP GET /static/admin/js/SelectBox.js 200 [0.01, 172.18.0.1:33332]
+INFO 2025-12-07 13:01:52,254 runserver HTTP GET /static/admin/js/SelectFilter2.js 200 [0.02, 172.18.0.1:33316]
+INFO 2025-12-07 13:01:52,277 runserver HTTP GET /admin/jsi18n/ 200 [0.04, 172.18.0.1:58736]
+INFO 2025-12-07 13:02:02,093 runserver HTTP POST /admin/accounts/user/1/change/ 302 [0.05, 172.18.0.1:58736]
+INFO 2025-12-07 13:02:02,137 runserver HTTP GET /admin/accounts/user/ 200 [0.04, 172.18.0.1:58736]
+INFO 2025-12-07 13:02:02,178 runserver HTTP GET /static/admin/img/search.svg 304 [0.00, 172.18.0.1:33316]
+INFO 2025-12-07 13:02:02,190 runserver HTTP GET /admin/jsi18n/ 200 [0.03, 172.18.0.1:58736]
+INFO 2025-12-07 13:02:02,209 runserver HTTP GET /static/admin/img/icon-yes.svg 304 [0.00, 172.18.0.1:58736]
+INFO 2025-12-07 13:02:05,020 runserver HTTP POST /admin/logout/ 302 [0.03, 172.18.0.1:58736]
+INFO 2025-12-07 13:02:05,031 runserver HTTP GET /accounts/login/ 200 [0.01, 172.18.0.1:58736]
+INFO 2025-12-07 13:02:07,323 runserver HTTP POST /accounts/login/ 302 [0.46, 172.18.0.1:58736]
+INFO 2025-12-07 13:02:07,373 runserver HTTP GET /dashboard/ 200 [0.04, 172.18.0.1:58736]
+INFO 2025-12-07 13:02:25,508 runserver HTTP GET /accounts/profile/ 200 [0.03, 172.18.0.1:58736]
+INFO 2025-12-07 13:02:27,696 runserver HTTP GET /dashboard/settings/company/ 200 [0.04, 172.18.0.1:58736]
+INFO 2025-12-07 13:02:35,166 runserver HTTP GET /accounts/login/ 302 [0.03, 172.18.0.1:58736]
+INFO 2025-12-07 13:02:35,201 runserver HTTP GET /dashboard/ 200 [0.03, 172.18.0.1:58736]
+INFO 2025-12-07 13:02:38,692 runserver HTTP GET /admin/accounts/user/ 200 [0.04, 172.18.0.1:58736]
+INFO 2025-12-07 13:02:39,087 runserver HTTP GET /admin/accounts/user/1/change/ 200 [0.08, 172.18.0.1:58736]
+INFO 2025-12-07 13:02:40,161 runserver HTTP GET /admin/accounts/user/ 200 [0.04, 172.18.0.1:58736]
+INFO 2025-12-07 13:02:42,479 runserver HTTP GET /admin/core/company/ 200 [0.03, 172.18.0.1:58736]
+INFO 2025-12-07 13:02:42,528 runserver HTTP GET /admin/jsi18n/ 200 [0.02, 172.18.0.1:58736]
+INFO 2025-12-07 13:04:04,135 runserver HTTP GET /admin/core/company/1/change/ 200 [0.04, 172.18.0.1:50090]
+INFO 2025-12-07 13:04:04,207 runserver HTTP GET /admin/jsi18n/ 200 [0.03, 172.18.0.1:50090]
+INFO 2025-12-07 13:04:14,037 runserver HTTP POST /admin/core/company/1/change/ 302 [0.13, 172.18.0.1:50090]
+INFO 2025-12-07 13:04:14,076 runserver HTTP GET /admin/core/company/ 200 [0.03, 172.18.0.1:50090]
+INFO 2025-12-07 13:04:14,125 runserver HTTP GET /admin/jsi18n/ 200 [0.02, 172.18.0.1:50090]
+INFO 2025-12-07 13:04:29,205 runserver HTTP GET /dashboard/settings/company/ 200 [0.03, 172.18.0.1:50090]
+INFO 2025-12-07 13:04:29,256 runserver HTTP GET /media/companies/logos/clinic-logo.png 200 [0.02, 172.18.0.1:50090]
+INFO 2025-12-07 13:04:45,032 runserver HTTP GET /admin/core/leadstage/ 200 [0.03, 172.18.0.1:50090]
+INFO 2025-12-07 13:04:45,079 runserver HTTP GET /admin/jsi18n/ 200 [0.02, 172.18.0.1:50090]
+INFO 2025-12-07 13:04:47,808 runserver HTTP GET /admin/core/leadsource/add/ 200 [0.04, 172.18.0.1:50090]
+INFO 2025-12-07 13:04:47,860 runserver HTTP GET /admin/jsi18n/ 200 [0.02, 172.18.0.1:50090]
+INFO 2025-12-07 13:07:03,699 runserver HTTP GET /admin/core/leadstage/ 200 [0.04, 172.18.0.1:34914]
+INFO 2025-12-07 13:08:07,437 autoreload /code/apps/core/urls.py changed, reloading.
+INFO 2025-12-07 13:08:09,389 autoreload Watching for file changes with StatReloader
+INFO 2025-12-07 13:08:24,025 runserver HTTP GET /admin/core/leadstage/ 200 [0.09, 172.18.0.1:34682]
+INFO 2025-12-07 13:08:24,052 runserver HTTP GET /static/admin/css/base.css 304 [0.00, 172.18.0.1:34682]
+INFO 2025-12-07 13:08:24,061 runserver HTTP GET /static/admin/css/dark_mode.css 304 [0.01, 172.18.0.1:34678]
+INFO 2025-12-07 13:08:24,075 runserver HTTP GET /static/admin/css/nav_sidebar.css 304 [0.02, 172.18.0.1:34684]
+INFO 2025-12-07 13:08:24,079 runserver HTTP GET /static/admin/css/responsive.css 304 [0.02, 172.18.0.1:34682]
+INFO 2025-12-07 13:08:24,083 runserver HTTP GET /static/admin/js/vendor/jquery/jquery.js 304 [0.02, 172.18.0.1:34704]
+INFO 2025-12-07 13:08:24,085 runserver HTTP GET /static/admin/css/changelists.css 304 [0.02, 172.18.0.1:34686]
+INFO 2025-12-07 13:08:24,096 runserver HTTP GET /static/admin/js/jquery.init.js 304 [0.02, 172.18.0.1:34678]
+INFO 2025-12-07 13:08:24,105 runserver HTTP GET /static/admin/js/actions.js 304 [0.01, 172.18.0.1:34704]
+INFO 2025-12-07 13:08:24,108 runserver HTTP GET /static/admin/js/admin/RelatedObjectLookups.js 304 [0.02, 172.18.0.1:34682]
+INFO 2025-12-07 13:08:24,111 runserver HTTP GET /static/admin/js/urlify.js 304 [0.02, 172.18.0.1:34686]
+INFO 2025-12-07 13:08:24,113 runserver HTTP GET /static/admin/js/core.js 304 [0.03, 172.18.0.1:34684]
+INFO 2025-12-07 13:08:24,122 runserver HTTP GET /static/admin/js/prepopulate.js 304 [0.02, 172.18.0.1:34678]
+INFO 2025-12-07 13:08:24,132 runserver HTTP GET /static/admin/js/vendor/xregexp/xregexp.js 304 [0.01, 172.18.0.1:34704]
+INFO 2025-12-07 13:08:24,141 runserver HTTP GET /admin/jsi18n/ 200 [0.08, 172.18.0.1:34694]
+INFO 2025-12-07 13:08:24,144 runserver HTTP GET /static/admin/js/theme.js 304 [0.01, 172.18.0.1:34704]
+INFO 2025-12-07 13:08:24,154 runserver HTTP GET /static/admin/js/nav_sidebar.js 304 [0.00, 172.18.0.1:34694]
+INFO 2025-12-07 13:08:24,166 runserver HTTP GET /static/admin/js/filters.js 304 [0.00, 172.18.0.1:34694]
+INFO 2025-12-07 13:08:25,757 runserver HTTP GET /admin/core/leadsource/ 200 [0.04, 172.18.0.1:34694]
+INFO 2025-12-07 13:08:25,806 runserver HTTP GET /admin/jsi18n/ 200 [0.02, 172.18.0.1:34694]
+INFO 2025-12-07 13:08:27,565 runserver HTTP GET /admin/core/leadsource/ 200 [0.03, 172.18.0.1:34694]
+INFO 2025-12-07 13:08:27,611 runserver HTTP GET /admin/jsi18n/ 200 [0.02, 172.18.0.1:34694]
+INFO 2025-12-07 13:08:28,471 runserver HTTP GET /admin/core/leadsource/ 200 [0.03, 172.18.0.1:34694]
+INFO 2025-12-07 13:08:28,517 runserver HTTP GET /admin/jsi18n/ 200 [0.02, 172.18.0.1:34694]
+INFO 2025-12-07 13:09:11,867 runserver HTTP GET /admin/core/leadsource/ 200 [0.05, 172.18.0.1:33240]
+INFO 2025-12-07 13:09:11,911 runserver HTTP GET /admin/jsi18n/ 200 [0.02, 172.18.0.1:33240]
+INFO 2025-12-07 13:09:20,711 runserver HTTP GET /admin/core/leadsource/3/change/ 200 [0.06, 172.18.0.1:33240]
+INFO 2025-12-07 13:09:20,737 runserver HTTP GET /static/admin/css/forms.css 304 [0.00, 172.18.0.1:33240]
+INFO 2025-12-07 13:09:20,752 runserver HTTP GET /static/admin/js/prepopulate_init.js 304 [0.01, 172.18.0.1:33240]
+INFO 2025-12-07 13:09:20,756 runserver HTTP GET /static/admin/css/widgets.css 304 [0.01, 172.18.0.1:60924]
+INFO 2025-12-07 13:09:20,767 runserver HTTP GET /static/admin/js/change_form.js 304 [0.00, 172.18.0.1:60924]
+INFO 2025-12-07 13:09:20,780 runserver HTTP GET /admin/jsi18n/ 200 [0.04, 172.18.0.1:33256]
+INFO 2025-12-07 13:10:17,661 runserver HTTP POST /admin/core/leadsource/3/change/ 302 [0.04, 172.18.0.1:33256]
+INFO 2025-12-07 13:10:17,706 runserver HTTP GET /admin/core/leadsource/ 200 [0.04, 172.18.0.1:33256]
+INFO 2025-12-07 13:10:17,734 runserver HTTP GET /static/admin/img/search.svg 304 [0.00, 172.18.0.1:60924]
+INFO 2025-12-07 13:10:17,760 runserver HTTP GET /admin/jsi18n/ 200 [0.03, 172.18.0.1:33256]
+INFO 2025-12-07 13:10:17,780 runserver HTTP GET /static/admin/img/icon-yes.svg 304 [0.00, 172.18.0.1:33256]
+INFO 2025-12-07 13:10:25,791 runserver HTTP GET /admin/core/leadsource/3/change/ 200 [0.03, 172.18.0.1:33256]
+INFO 2025-12-07 13:10:25,843 runserver HTTP GET /admin/jsi18n/ 200 [0.02, 172.18.0.1:33256]
+INFO 2025-12-07 13:10:40,235 runserver HTTP POST /admin/core/leadsource/3/change/ 302 [0.04, 172.18.0.1:33256]
+INFO 2025-12-07 13:10:40,281 runserver HTTP GET /admin/core/leadsource/ 200 [0.04, 172.18.0.1:33256]
+INFO 2025-12-07 13:10:40,327 runserver HTTP GET /admin/jsi18n/ 200 [0.02, 172.18.0.1:33256]
+INFO 2025-12-07 13:11:03,114 runserver HTTP GET /admin/core/leadsource/3/change/ 200 [0.03, 172.18.0.1:33256]
+INFO 2025-12-07 13:11:03,162 runserver HTTP GET /admin/jsi18n/ 200 [0.02, 172.18.0.1:33256]
+INFO 2025-12-07 13:11:14,449 runserver HTTP POST /admin/core/leadsource/3/change/ 302 [0.03, 172.18.0.1:33256]
+INFO 2025-12-07 13:11:14,487 runserver HTTP GET /admin/core/leadsource/ 200 [0.03, 172.18.0.1:33256]
+INFO 2025-12-07 13:11:14,534 runserver HTTP GET /admin/jsi18n/ 200 [0.02, 172.18.0.1:33256]
+INFO 2025-12-07 13:11:59,641 autoreload /code/apps/core/urls.py changed, reloading.
+INFO 2025-12-07 13:12:01,655 autoreload Watching for file changes with StatReloader
+INFO 2025-12-07 13:12:07,978 autoreload /code/apps/core/urls.py changed, reloading.
+INFO 2025-12-07 13:12:09,966 autoreload Watching for file changes with StatReloader
+INFO 2025-12-07 13:13:56,244 autoreload /code/apps/core/urls.py changed, reloading.
+INFO 2025-12-07 13:13:58,076 autoreload Watching for file changes with StatReloader
+INFO 2025-12-07 13:13:59,307 runserver HTTP GET /admin/ 200 [0.09, 172.18.0.1:52280]
+INFO 2025-12-07 13:13:59,339 runserver HTTP GET /static/admin/css/base.css 304 [0.01, 172.18.0.1:52280]
+INFO 2025-12-07 13:13:59,343 runserver HTTP GET /static/admin/css/dark_mode.css 304 [0.01, 172.18.0.1:52294]
+INFO 2025-12-07 13:13:59,357 runserver HTTP GET /static/admin/css/dashboard.css 304 [0.02, 172.18.0.1:52302]
+INFO 2025-12-07 13:13:59,364 runserver HTTP GET /static/admin/css/responsive.css 304 [0.02, 172.18.0.1:52314]
+INFO 2025-12-07 13:13:59,369 runserver HTTP GET /static/admin/css/nav_sidebar.css 304 [0.03, 172.18.0.1:52330]
+INFO 2025-12-07 13:13:59,376 runserver HTTP GET /static/admin/js/theme.js 304 [0.01, 172.18.0.1:52302]
+INFO 2025-12-07 13:13:59,380 runserver HTTP GET /static/admin/js/nav_sidebar.js 304 [0.01, 172.18.0.1:52294]
+INFO 2025-12-07 13:13:59,397 runserver HTTP GET /static/admin/img/icon-changelink.svg 304 [0.01, 172.18.0.1:52314]
+INFO 2025-12-07 13:13:59,400 runserver HTTP GET /static/admin/img/icon-addlink.svg 304 [0.01, 172.18.0.1:52330]
+INFO 2025-12-07 13:14:01,660 runserver HTTP GET /admin/core/leadstage/ 200 [0.08, 172.18.0.1:52314]
+INFO 2025-12-07 13:14:01,697 runserver HTTP GET /static/admin/js/vendor/jquery/jquery.js 304 [0.01, 172.18.0.1:52294]
+INFO 2025-12-07 13:14:01,700 runserver HTTP GET /static/admin/js/core.js 304 [0.01, 172.18.0.1:52280]
+INFO 2025-12-07 13:14:01,703 runserver HTTP GET /static/admin/js/jquery.init.js 304 [0.02, 172.18.0.1:52302]
+INFO 2025-12-07 13:14:01,708 runserver HTTP GET /static/admin/css/changelists.css 304 [0.02, 172.18.0.1:52314]
+INFO 2025-12-07 13:14:01,731 runserver HTTP GET /static/admin/js/admin/RelatedObjectLookups.js 304 [0.03, 172.18.0.1:52334]
+INFO 2025-12-07 13:14:01,733 runserver HTTP GET /static/admin/js/actions.js 304 [0.02, 172.18.0.1:52294]
+INFO 2025-12-07 13:14:01,736 runserver HTTP GET /static/admin/js/prepopulate.js 304 [0.02, 172.18.0.1:52302]
+INFO 2025-12-07 13:14:01,741 runserver HTTP GET /static/admin/js/urlify.js 304 [0.03, 172.18.0.1:52280]
+INFO 2025-12-07 13:14:01,744 runserver HTTP GET /static/admin/js/vendor/xregexp/xregexp.js 304 [0.02, 172.18.0.1:52314]
+INFO 2025-12-07 13:14:01,754 runserver HTTP GET /admin/jsi18n/ 200 [0.07, 172.18.0.1:52330]
+INFO 2025-12-07 13:14:01,768 runserver HTTP GET /static/admin/js/filters.js 304 [0.00, 172.18.0.1:52330]
+INFO 2025-12-07 13:14:01,809 runserver HTTP GET /static/admin/img/tooltag-add.svg 304 [0.01, 172.18.0.1:52330]
+INFO 2025-12-07 13:14:01,811 runserver HTTP GET /static/admin/img/sorting-icons.svg 304 [0.01, 172.18.0.1:52314]
+INFO 2025-12-07 13:14:01,814 runserver HTTP GET /static/admin/img/icon-viewlink.svg 304 [0.01, 172.18.0.1:52302]
+INFO 2025-12-07 13:14:12,676 runserver HTTP GET /admin/core/leadstage/?stage_type__exact=lead 200 [0.04, 172.18.0.1:52302]
+INFO 2025-12-07 13:14:12,730 runserver HTTP GET /admin/jsi18n/ 200 [0.03, 172.18.0.1:52302]
+INFO 2025-12-07 13:14:13,870 runserver HTTP GET /admin/core/leadstage/?stage_type__exact=lead 200 [0.04, 172.18.0.1:52302]
+INFO 2025-12-07 13:14:13,922 runserver HTTP GET /admin/jsi18n/ 200 [0.03, 172.18.0.1:52302]
+INFO 2025-12-07 13:14:14,996 runserver HTTP GET /admin/core/leadstage/?stage_type__exact=patient 200 [0.04, 172.18.0.1:52302]
+INFO 2025-12-07 13:14:15,054 runserver HTTP GET /admin/jsi18n/ 200 [0.03, 172.18.0.1:52302]
+INFO 2025-12-07 13:14:15,808 runserver HTTP GET /admin/core/leadstage/?stage_type__exact=closed 200 [0.03, 172.18.0.1:52302]
+INFO 2025-12-07 13:14:15,860 runserver HTTP GET /admin/jsi18n/ 200 [0.02, 172.18.0.1:52302]
+INFO 2025-12-07 13:14:17,369 runserver HTTP GET /admin/core/leadstage/?stage_type__exact=closed 200 [0.04, 172.18.0.1:52302]
+INFO 2025-12-07 13:14:17,419 runserver HTTP GET /admin/jsi18n/ 200 [0.02, 172.18.0.1:52302]
+INFO 2025-12-07 13:14:18,923 runserver HTTP GET /admin/core/leadstage/? 200 [0.04, 172.18.0.1:52302]
+INFO 2025-12-07 13:14:18,972 runserver HTTP GET /admin/jsi18n/ 200 [0.02, 172.18.0.1:52302]
+INFO 2025-12-07 13:14:21,195 runserver HTTP GET /admin/core/leadstage/?_facets=True 200 [0.04, 172.18.0.1:52302]
+INFO 2025-12-07 13:14:21,242 runserver HTTP GET /admin/jsi18n/ 200 [0.02, 172.18.0.1:52302]
+INFO 2025-12-07 13:14:21,265 runserver HTTP GET /static/admin/img/icon-hidelink.svg 200 [0.00, 172.18.0.1:52302]
+INFO 2025-12-07 13:14:21,828 runserver HTTP GET /admin/core/leadstage/? 200 [0.04, 172.18.0.1:52302]
+INFO 2025-12-07 13:14:21,874 runserver HTTP GET /admin/jsi18n/ 200 [0.02, 172.18.0.1:52302]
+INFO 2025-12-07 13:14:30,748 runserver HTTP GET /admin/core/leadstage/1/change/ 200 [0.07, 172.18.0.1:52302]
+INFO 2025-12-07 13:14:30,774 runserver HTTP GET /static/admin/css/forms.css 304 [0.00, 172.18.0.1:52302]
+INFO 2025-12-07 13:14:30,785 runserver HTTP GET /static/admin/js/prepopulate_init.js 304 [0.00, 172.18.0.1:52330]
+INFO 2025-12-07 13:14:30,792 runserver HTTP GET /static/admin/css/widgets.css 304 [0.01, 172.18.0.1:52302]
+INFO 2025-12-07 13:14:30,802 runserver HTTP GET /static/admin/js/change_form.js 304 [0.00, 172.18.0.1:52302]
+INFO 2025-12-07 13:14:30,818 runserver HTTP GET /admin/jsi18n/ 200 [0.04, 172.18.0.1:52314]
+INFO 2025-12-07 13:16:31,084 runserver HTTP POST /admin/logout/ 302 [0.03, 172.18.0.1:54238]
+INFO 2025-12-07 13:16:31,108 runserver HTTP GET /accounts/login/ 200 [0.02, 172.18.0.1:54238]
+INFO 2025-12-07 13:16:33,651 runserver HTTP POST /accounts/login/ 302 [0.45, 172.18.0.1:54238]
+INFO 2025-12-07 13:16:33,702 runserver HTTP GET /dashboard/ 200 [0.04, 172.18.0.1:54238]
+INFO 2025-12-07 13:16:36,249 runserver HTTP GET /accounts/profile/ 200 [0.03, 172.18.0.1:54238]
+ERROR 2025-12-07 13:16:45,503 log Internal Server Error: /accounts/profile/edit/
+Traceback (most recent call last):
+  File "/usr/local/lib/python3.11/site-packages/asgiref/sync.py", line 555, in thread_handler
+    raise exc_info[1]
+  File "/usr/local/lib/python3.11/site-packages/django/core/handlers/exception.py", line 42, in inner
+    response = await get_response(request)
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/local/lib/python3.11/site-packages/asgiref/sync.py", line 555, in thread_handler
+    raise exc_info[1]
+  File "/usr/local/lib/python3.11/site-packages/django/core/handlers/base.py", line 253, in _get_response_async
+    response = await wrapped_callback(
+               ^^^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/local/lib/python3.11/site-packages/asgiref/sync.py", line 504, in __call__
+    ret = await asyncio.shield(exec_coro)
+          ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/local/lib/python3.11/concurrent/futures/thread.py", line 58, in run
+    result = self.fn(*self.args, **self.kwargs)
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/local/lib/python3.11/site-packages/asgiref/sync.py", line 559, in thread_handler
+    return func(*args, **kwargs)
+           ^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/local/lib/python3.11/site-packages/django/contrib/auth/decorators.py", line 23, in _wrapper_view
+    return view_func(request, *args, **kwargs)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/code/apps/accounts/views.py", line 285, in profile_edit_view
+    return render(request, 'accounts/profile_edit.html', context)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/local/lib/python3.11/site-packages/django/shortcuts.py", line 24, in render
+    content = loader.render_to_string(template_name, context, request, using=using)
+              ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/local/lib/python3.11/site-packages/django/template/loader.py", line 61, in render_to_string
+    template = get_template(template_name, using=using)
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/local/lib/python3.11/site-packages/django/template/loader.py", line 19, in get_template
+    raise TemplateDoesNotExist(template_name, chain=chain)
+django.template.exceptions.TemplateDoesNotExist: accounts/profile_edit.html
+ERROR 2025-12-07 13:16:45,521 runserver HTTP GET /accounts/profile/edit/ 500 [0.08, 172.18.0.1:54238]
+INFO 2025-12-07 13:22:49,441 runserver HTTP GET /admin/ 200 [0.05, 172.18.0.1:37190]
+INFO 2025-12-07 13:22:49,469 runserver HTTP GET /static/admin/css/base.css 304 [0.00, 172.18.0.1:37190]
+INFO 2025-12-07 13:22:49,480 runserver HTTP GET /static/admin/css/dark_mode.css 304 [0.01, 172.18.0.1:37202]
+INFO 2025-12-07 13:22:49,487 runserver HTTP GET /static/admin/css/dashboard.css 304 [0.01, 172.18.0.1:37190]
+INFO 2025-12-07 13:22:49,491 runserver HTTP GET /static/admin/css/nav_sidebar.css 304 [0.01, 172.18.0.1:37214]
+INFO 2025-12-07 13:22:49,500 runserver HTTP GET /static/admin/css/responsive.css 304 [0.02, 172.18.0.1:37228]
+INFO 2025-12-07 13:22:49,520 runserver HTTP GET /static/admin/img/icon-changelink.svg 304 [0.00, 172.18.0.1:37214]
+INFO 2025-12-07 13:22:49,523 runserver HTTP GET /static/admin/js/theme.js 304 [0.03, 172.18.0.1:37190]
+INFO 2025-12-07 13:22:49,526 runserver HTTP GET /static/admin/img/icon-addlink.svg 304 [0.01, 172.18.0.1:37228]
+INFO 2025-12-07 13:22:49,532 runserver HTTP GET /static/admin/js/nav_sidebar.js 304 [0.04, 172.18.0.1:37202]
+INFO 2025-12-07 13:22:54,362 runserver HTTP POST /admin/logout/ 302 [0.03, 172.18.0.1:37202]
+INFO 2025-12-07 13:22:54,383 runserver HTTP GET /accounts/login/ 200 [0.02, 172.18.0.1:37202]
+INFO 2025-12-07 13:23:02,670 runserver HTTP POST /accounts/login/ 302 [0.47, 172.18.0.1:37202]
+INFO 2025-12-07 13:23:02,714 runserver HTTP GET /dashboard/ 200 [0.04, 172.18.0.1:37202]
+INFO 2025-12-07 13:23:10,937 runserver HTTP GET /dashboard/settings/company/ 200 [0.03, 172.18.0.1:37202]
+INFO 2025-12-07 13:23:10,981 runserver HTTP GET /media/companies/logos/clinic-logo.png 304 [0.02, 172.18.0.1:37202]
+INFO 2025-12-07 13:23:20,163 runserver HTTP GET /accounts/profile/ 200 [0.04, 172.18.0.1:37202]
+INFO 2025-12-07 13:23:23,761 runserver HTTP GET /dashboard/ 200 [0.03, 172.18.0.1:37202]
+INFO 2025-12-07 13:23:53,406 runserver HTTP GET /accounts/profile/ 200 [0.03, 172.18.0.1:37202]
+INFO 2025-12-07 13:23:55,814 runserver HTTP GET /dashboard/ 200 [0.03, 172.18.0.1:37202]
+INFO 2025-12-07 13:26:41,140 runserver HTTP GET /dashboard/ 200 [0.05, 172.18.0.1:52848]
+INFO 2025-12-07 13:28:23,787 runserver HTTP GET /dashboard/ 200 [0.04, 172.18.0.1:44510]
+INFO 2025-12-07 13:28:25,301 runserver HTTP GET /accounts/users/ 200 [0.04, 172.18.0.1:44510]
+ERROR 2025-12-07 13:28:28,913 log Internal Server Error: /accounts/users/1/
+Traceback (most recent call last):
+  File "/usr/local/lib/python3.11/site-packages/asgiref/sync.py", line 555, in thread_handler
+    raise exc_info[1]
+  File "/usr/local/lib/python3.11/site-packages/django/core/handlers/exception.py", line 42, in inner
+    response = await get_response(request)
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/local/lib/python3.11/site-packages/asgiref/sync.py", line 555, in thread_handler
+    raise exc_info[1]
+  File "/usr/local/lib/python3.11/site-packages/django/core/handlers/base.py", line 253, in _get_response_async
+    response = await wrapped_callback(
+               ^^^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/local/lib/python3.11/site-packages/asgiref/sync.py", line 504, in __call__
+    ret = await asyncio.shield(exec_coro)
+          ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/local/lib/python3.11/concurrent/futures/thread.py", line 58, in run
+    result = self.fn(*self.args, **self.kwargs)
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/local/lib/python3.11/site-packages/asgiref/sync.py", line 559, in thread_handler
+    return func(*args, **kwargs)
+           ^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/local/lib/python3.11/site-packages/django/contrib/auth/decorators.py", line 23, in _wrapper_view
+    return view_func(request, *args, **kwargs)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/code/apps/accounts/views.py", line 620, in user_detail_view
+    return render(request, 'accounts/user_detail.html', context)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/local/lib/python3.11/site-packages/django/shortcuts.py", line 24, in render
+    content = loader.render_to_string(template_name, context, request, using=using)
+              ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/local/lib/python3.11/site-packages/django/template/loader.py", line 61, in render_to_string
+    template = get_template(template_name, using=using)
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/local/lib/python3.11/site-packages/django/template/loader.py", line 19, in get_template
+    raise TemplateDoesNotExist(template_name, chain=chain)
+django.template.exceptions.TemplateDoesNotExist: accounts/user_detail.html
+ERROR 2025-12-07 13:28:28,929 runserver HTTP GET /accounts/users/1/ 500 [0.07, 172.18.0.1:44510]
+ERROR 2025-12-07 13:30:15,204 log Internal Server Error: /accounts/users/
+Traceback (most recent call last):
+  File "/usr/local/lib/python3.11/site-packages/asgiref/sync.py", line 555, in thread_handler
+    raise exc_info[1]
+  File "/usr/local/lib/python3.11/site-packages/django/core/handlers/exception.py", line 42, in inner
+    response = await get_response(request)
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/local/lib/python3.11/site-packages/asgiref/sync.py", line 555, in thread_handler
+    raise exc_info[1]
+  File "/usr/local/lib/python3.11/site-packages/django/core/handlers/base.py", line 253, in _get_response_async
+    response = await wrapped_callback(
+               ^^^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/local/lib/python3.11/site-packages/asgiref/sync.py", line 504, in __call__
+    ret = await asyncio.shield(exec_coro)
+          ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/local/lib/python3.11/concurrent/futures/thread.py", line 58, in run
+    result = self.fn(*self.args, **self.kwargs)
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/local/lib/python3.11/site-packages/asgiref/sync.py", line 559, in thread_handler
+    return func(*args, **kwargs)
+           ^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/local/lib/python3.11/site-packages/django/contrib/auth/decorators.py", line 23, in _wrapper_view
+    return view_func(request, *args, **kwargs)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/code/apps/accounts/decorators.py", line 43, in wrapper
+    return view_func(request, *args, **kwargs)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/code/apps/accounts/views.py", line 564, in user_list_view
+    return render(request, 'accounts/user_list.html', context)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/local/lib/python3.11/site-packages/django/shortcuts.py", line 24, in render
+    content = loader.render_to_string(template_name, context, request, using=using)
+              ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/local/lib/python3.11/site-packages/django/template/loader.py", line 62, in render_to_string
+    return template.render(context, request)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/local/lib/python3.11/site-packages/django/template/backends/django.py", line 61, in render
+    return self.template.render(context)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/local/lib/python3.11/site-packages/django/template/base.py", line 171, in render
+    return self._render(context)
+           ^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/local/lib/python3.11/site-packages/django/template/base.py", line 163, in _render
+    return self.nodelist.render(context)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/local/lib/python3.11/site-packages/django/template/base.py", line 1000, in render
+    return SafeString("".join([node.render_annotated(context) for node in self]))
+                              ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/local/lib/python3.11/site-packages/django/template/base.py", line 1000, in <listcomp>
+    return SafeString("".join([node.render_annotated(context) for node in self]))
+                               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/local/lib/python3.11/site-packages/django/template/base.py", line 961, in render_annotated
+    return self.render(context)
+           ^^^^^^^^^^^^^^^^^^^^
+  File "/usr/local/lib/python3.11/site-packages/django/template/loader_tags.py", line 134, in render
+    compiled_parent = self.get_parent(context)
+                      ^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/local/lib/python3.11/site-packages/django/template/loader_tags.py", line 131, in get_parent
+    return self.find_template(parent, context)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/local/lib/python3.11/site-packages/django/template/loader_tags.py", line 109, in find_template
+    template, origin = context.template.engine.find_template(
+                       ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/local/lib/python3.11/site-packages/django/template/engine.py", line 157, in find_template
+    template = loader.get_template(name, skip=skip)
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/local/lib/python3.11/site-packages/django/template/loaders/cached.py", line 57, in get_template
+    template = super().get_template(template_name, skip)
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/local/lib/python3.11/site-packages/django/template/loaders/base.py", line 28, in get_template
+    return Template(
+           ^^^^^^^^^
+  File "/usr/local/lib/python3.11/site-packages/django/template/base.py", line 154, in __init__
+    self.nodelist = self.compile_nodelist()
+                    ^^^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/local/lib/python3.11/site-packages/django/template/base.py", line 196, in compile_nodelist
+    return parser.parse()
+           ^^^^^^^^^^^^^^
+  File "/usr/local/lib/python3.11/site-packages/django/template/base.py", line 510, in parse
+    raise self.error(token, e)
+  File "/usr/local/lib/python3.11/site-packages/django/template/base.py", line 508, in parse
+    compiled_result = compile_func(self, token)
+                      ^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/local/lib/python3.11/site-packages/django/template/defaulttags.py", line 974, in do_if
+    nodelist = parser.parse(("endif",))
+               ^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/local/lib/python3.11/site-packages/django/template/base.py", line 510, in parse
+    raise self.error(token, e)
+  File "/usr/local/lib/python3.11/site-packages/django/template/base.py", line 508, in parse
+    compiled_result = compile_func(self, token)
+                      ^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/local/lib/python3.11/site-packages/django/template/loader_tags.py", line 228, in do_block
+    raise TemplateSyntaxError(
+django.template.exceptions.TemplateSyntaxError: 'block' tag with name 'content' appears more than once
+ERROR 2025-12-07 13:30:15,224 runserver HTTP GET /accounts/users/ 500 [0.12, 172.18.0.1:52494]
+ERROR 2025-12-07 13:30:19,565 log Internal Server Error: /dashboard/
+Traceback (most recent call last):
+  File "/usr/local/lib/python3.11/site-packages/asgiref/sync.py", line 555, in thread_handler
+    raise exc_info[1]
+  File "/usr/local/lib/python3.11/site-packages/django/core/handlers/exception.py", line 42, in inner
+    response = await get_response(request)
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/local/lib/python3.11/site-packages/asgiref/sync.py", line 555, in thread_handler
+    raise exc_info[1]
+  File "/usr/local/lib/python3.11/site-packages/django/core/handlers/base.py", line 253, in _get_response_async
+    response = await wrapped_callback(
+               ^^^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/local/lib/python3.11/site-packages/asgiref/sync.py", line 504, in __call__
+    ret = await asyncio.shield(exec_coro)
+          ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/local/lib/python3.11/concurrent/futures/thread.py", line 58, in run
+    result = self.fn(*self.args, **self.kwargs)
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/local/lib/python3.11/site-packages/asgiref/sync.py", line 559, in thread_handler
+    return func(*args, **kwargs)
+           ^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/local/lib/python3.11/site-packages/django/contrib/auth/decorators.py", line 23, in _wrapper_view
+    return view_func(request, *args, **kwargs)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/code/apps/accounts/decorators.py", line 153, in wrapper
+    return view_func(request, *args, **kwargs)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/code/apps/core/views.py", line 145, in dashboard_view
+    return render(request, 'core/dashboard.html', context)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/local/lib/python3.11/site-packages/django/shortcuts.py", line 24, in render
+    content = loader.render_to_string(template_name, context, request, using=using)
+              ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/local/lib/python3.11/site-packages/django/template/loader.py", line 62, in render_to_string
+    return template.render(context, request)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/local/lib/python3.11/site-packages/django/template/backends/django.py", line 61, in render
+    return self.template.render(context)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/local/lib/python3.11/site-packages/django/template/base.py", line 171, in render
+    return self._render(context)
+           ^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/local/lib/python3.11/site-packages/django/template/base.py", line 163, in _render
+    return self.nodelist.render(context)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/local/lib/python3.11/site-packages/django/template/base.py", line 1000, in render
+    return SafeString("".join([node.render_annotated(context) for node in self]))
+                              ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/local/lib/python3.11/site-packages/django/template/base.py", line 1000, in <listcomp>
+    return SafeString("".join([node.render_annotated(context) for node in self]))
+                               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/local/lib/python3.11/site-packages/django/template/base.py", line 961, in render_annotated
+    return self.render(context)
+           ^^^^^^^^^^^^^^^^^^^^
+  File "/usr/local/lib/python3.11/site-packages/django/template/loader_tags.py", line 134, in render
+    compiled_parent = self.get_parent(context)
+                      ^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/local/lib/python3.11/site-packages/django/template/loader_tags.py", line 131, in get_parent
+    return self.find_template(parent, context)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/local/lib/python3.11/site-packages/django/template/loader_tags.py", line 109, in find_template
+    template, origin = context.template.engine.find_template(
+                       ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/local/lib/python3.11/site-packages/django/template/engine.py", line 157, in find_template
+    template = loader.get_template(name, skip=skip)
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/local/lib/python3.11/site-packages/django/template/loaders/cached.py", line 57, in get_template
+    template = super().get_template(template_name, skip)
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/local/lib/python3.11/site-packages/django/template/loaders/base.py", line 28, in get_template
+    return Template(
+           ^^^^^^^^^
+  File "/usr/local/lib/python3.11/site-packages/django/template/base.py", line 154, in __init__
+    self.nodelist = self.compile_nodelist()
+                    ^^^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/local/lib/python3.11/site-packages/django/template/base.py", line 196, in compile_nodelist
+    return parser.parse()
+           ^^^^^^^^^^^^^^
+  File "/usr/local/lib/python3.11/site-packages/django/template/base.py", line 510, in parse
+    raise self.error(token, e)
+  File "/usr/local/lib/python3.11/site-packages/django/template/base.py", line 508, in parse
+    compiled_result = compile_func(self, token)
+                      ^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/local/lib/python3.11/site-packages/django/template/defaulttags.py", line 974, in do_if
+    nodelist = parser.parse(("endif",))
+               ^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/local/lib/python3.11/site-packages/django/template/base.py", line 510, in parse
+    raise self.error(token, e)
+  File "/usr/local/lib/python3.11/site-packages/django/template/base.py", line 508, in parse
+    compiled_result = compile_func(self, token)
+                      ^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/local/lib/python3.11/site-packages/django/template/loader_tags.py", line 228, in do_block
+    raise TemplateSyntaxError(
+django.template.exceptions.TemplateSyntaxError: 'block' tag with name 'content' appears more than once
+ERROR 2025-12-07 13:30:19,589 runserver HTTP GET /dashboard/ 500 [0.11, 172.18.0.1:52494]
+INFO 2025-12-07 13:30:48,179 runserver HTTP GET /dashboard/ 200 [0.04, 172.18.0.1:52494]
+INFO 2025-12-07 13:30:49,621 runserver HTTP GET /accounts/users/ 200 [0.04, 172.18.0.1:52494]
+INFO 2025-12-07 13:30:51,111 runserver HTTP GET /accounts/users/1/ 200 [0.05, 172.18.0.1:52494]
+INFO 2025-12-07 13:31:41,994 runserver HTTP GET /accounts/users/ 200 [0.04, 172.18.0.1:52494]
+INFO 2025-12-07 13:31:48,402 runserver HTTP GET /accounts/users/?search=&role=&status=inactive 200 [0.03, 172.18.0.1:52494]
+INFO 2025-12-07 13:31:54,738 runserver HTTP GET /accounts/users/?search=&role=agent&status= 200 [0.03, 172.18.0.1:52494]
+INFO 2025-12-07 13:31:57,425 runserver HTTP GET /accounts/users/?search=&role=admin&status= 200 [0.03, 172.18.0.1:52494]
+INFO 2025-12-07 13:32:01,080 runserver HTTP GET /accounts/users/?search=&role=&status= 200 [0.03, 172.18.0.1:52494]
+INFO 2025-12-07 13:32:04,503 runserver HTTP GET /dashboard/settings/company/ 200 [0.03, 172.18.0.1:52494]
+INFO 2025-12-07 13:32:04,551 runserver HTTP GET /media/companies/logos/clinic-logo.png 304 [0.02, 172.18.0.1:52494]
+INFO 2025-12-07 13:32:07,063 runserver HTTP GET /accounts/users/ 200 [0.03, 172.18.0.1:52494]
+INFO 2025-12-07 13:32:08,303 runserver HTTP GET /accounts/users/1/ 200 [0.04, 172.18.0.1:52494]
+INFO 2025-12-07 13:32:23,551 runserver HTTP GET /dashboard/ 200 [0.03, 172.18.0.1:52494]
+INFO 2025-12-07 13:33:17,594 runserver HTTP GET /accounts/users/ 200 [0.03, 172.18.0.1:52494]
+INFO 2025-12-07 13:33:23,239 runserver HTTP GET /accounts/profile/ 200 [0.04, 172.18.0.1:52494]
+INFO 2025-12-07 13:33:27,040 runserver HTTP GET /admin/ 200 [0.05, 172.18.0.1:52494]
+INFO 2025-12-07 13:33:27,080 runserver HTTP GET /static/admin/css/base.css 304 [0.00, 172.18.0.1:52494]
+INFO 2025-12-07 13:33:27,084 runserver HTTP GET /static/admin/css/dark_mode.css 304 [0.01, 172.18.0.1:51720]
+INFO 2025-12-07 13:33:27,092 runserver HTTP GET /static/admin/css/nav_sidebar.css 304 [0.01, 172.18.0.1:53198]
+INFO 2025-12-07 13:33:27,103 runserver HTTP GET /static/admin/css/responsive.css 304 [0.00, 172.18.0.1:52494]
+INFO 2025-12-07 13:33:27,106 runserver HTTP GET /static/admin/css/dashboard.css 304 [0.01, 172.18.0.1:51720]
+INFO 2025-12-07 13:33:27,112 runserver HTTP GET /static/admin/js/theme.js 304 [0.00, 172.18.0.1:53198]
+INFO 2025-12-07 13:33:27,119 runserver HTTP GET /static/admin/js/nav_sidebar.js 304 [0.00, 172.18.0.1:51720]
+INFO 2025-12-07 13:33:27,137 runserver HTTP GET /static/admin/img/icon-addlink.svg 304 [0.00, 172.18.0.1:51720]
+INFO 2025-12-07 13:33:27,140 runserver HTTP GET /static/admin/img/icon-changelink.svg 304 [0.01, 172.18.0.1:53198]
+INFO 2025-12-07 13:33:29,125 runserver HTTP GET /admin/accounts/user/ 200 [0.13, 172.18.0.1:53198]
+INFO 2025-12-07 13:33:29,154 runserver HTTP GET /static/admin/css/changelists.css 304 [0.01, 172.18.0.1:53198]
+INFO 2025-12-07 13:33:29,164 runserver HTTP GET /static/admin/js/vendor/jquery/jquery.js 304 [0.02, 172.18.0.1:52494]
+INFO 2025-12-07 13:33:29,179 runserver HTTP GET /static/admin/js/admin/RelatedObjectLookups.js 304 [0.01, 172.18.0.1:53222]
+INFO 2025-12-07 13:33:29,183 runserver HTTP GET /static/admin/js/core.js 304 [0.01, 172.18.0.1:53214]
+INFO 2025-12-07 13:33:29,185 runserver HTTP GET /static/admin/js/jquery.init.js 304 [0.02, 172.18.0.1:53200]
+INFO 2025-12-07 13:33:29,194 runserver HTTP GET /static/admin/js/actions.js 304 [0.03, 172.18.0.1:53198]
+INFO 2025-12-07 13:33:29,196 runserver HTTP GET /static/admin/js/urlify.js 304 [0.02, 172.18.0.1:52494]
+INFO 2025-12-07 13:33:29,212 runserver HTTP GET /static/admin/js/prepopulate.js 304 [0.01, 172.18.0.1:53222]
+INFO 2025-12-07 13:33:29,218 runserver HTTP GET /static/admin/js/vendor/xregexp/xregexp.js 304 [0.02, 172.18.0.1:53214]
+INFO 2025-12-07 13:33:29,225 runserver HTTP GET /admin/jsi18n/ 200 [0.08, 172.18.0.1:51720]
+INFO 2025-12-07 13:33:29,232 runserver HTTP GET /static/admin/img/search.svg 304 [0.01, 172.18.0.1:53222]
+INFO 2025-12-07 13:33:29,244 runserver HTTP GET /static/admin/js/filters.js 304 [0.00, 172.18.0.1:53222]
+INFO 2025-12-07 13:33:29,267 runserver HTTP GET /static/admin/img/tooltag-add.svg 304 [0.01, 172.18.0.1:53222]
+INFO 2025-12-07 13:33:29,273 runserver HTTP GET /static/admin/img/sorting-icons.svg 304 [0.01, 172.18.0.1:51720]
+INFO 2025-12-07 13:33:29,276 runserver HTTP GET /static/admin/img/icon-viewlink.svg 304 [0.01, 172.18.0.1:53214]
+INFO 2025-12-07 13:33:31,632 runserver HTTP GET /admin/accounts/user/add/ 200 [0.10, 172.18.0.1:53214]
+INFO 2025-12-07 13:33:31,660 runserver HTTP GET /static/admin/css/forms.css 304 [0.00, 172.18.0.1:53214]
+INFO 2025-12-07 13:33:31,676 runserver HTTP GET /static/admin/js/calendar.js 304 [0.01, 172.18.0.1:53222]
+INFO 2025-12-07 13:33:31,679 runserver HTTP GET /static/admin/js/inlines.js 304 [0.01, 172.18.0.1:53200]
+INFO 2025-12-07 13:33:31,683 runserver HTTP GET /static/admin/js/collapse.js 304 [0.02, 172.18.0.1:52494]
+INFO 2025-12-07 13:33:31,687 runserver HTTP GET /static/admin/js/prepopulate_init.js 304 [0.02, 172.18.0.1:53214]
+INFO 2025-12-07 13:33:31,691 runserver HTTP GET /static/admin/js/admin/DateTimeShortcuts.js 304 [0.02, 172.18.0.1:53198]
+INFO 2025-12-07 13:33:31,707 runserver HTTP GET /static/admin/css/widgets.css 304 [0.01, 172.18.0.1:53222]
+INFO 2025-12-07 13:33:31,717 runserver HTTP GET /static/admin/js/change_form.js 304 [0.00, 172.18.0.1:53222]
+INFO 2025-12-07 13:33:31,725 runserver HTTP GET /admin/jsi18n/ 200 [0.06, 172.18.0.1:51720]
+INFO 2025-12-07 13:33:31,781 runserver HTTP GET /static/admin/img/icon-calendar.svg 304 [0.00, 172.18.0.1:51720]
+INFO 2025-12-07 13:33:31,805 runserver HTTP GET /static/admin/img/inline-delete.svg 200 [0.01, 172.18.0.1:51720]
+INFO 2025-12-07 13:34:39,486 runserver HTTP GET /static/admin/img/calendar-icons.svg 200 [0.00, 172.18.0.1:51054]
+ERROR 2025-12-07 13:34:53,855 log Internal Server Error: /admin/accounts/user/add/
+Traceback (most recent call last):
+  File "/usr/local/lib/python3.11/site-packages/django/db/backends/utils.py", line 105, in _execute
+    return self.cursor.execute(sql, params)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+psycopg2.errors.UniqueViolation: duplicate key value violates unique constraint "accounts_userprofile_user_id_key"
+DETAIL:  Key (user_id)=(2) already exists.
+
+
+The above exception was the direct cause of the following exception:
+
+Traceback (most recent call last):
+  File "/usr/local/lib/python3.11/site-packages/asgiref/sync.py", line 555, in thread_handler
+    raise exc_info[1]
+  File "/usr/local/lib/python3.11/site-packages/django/core/handlers/exception.py", line 42, in inner
+    response = await get_response(request)
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/local/lib/python3.11/site-packages/asgiref/sync.py", line 555, in thread_handler
+    raise exc_info[1]
+  File "/usr/local/lib/python3.11/site-packages/django/core/handlers/base.py", line 253, in _get_response_async
+    response = await wrapped_callback(
+               ^^^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/local/lib/python3.11/site-packages/asgiref/sync.py", line 504, in __call__
+    ret = await asyncio.shield(exec_coro)
+          ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/local/lib/python3.11/concurrent/futures/thread.py", line 58, in run
+    result = self.fn(*self.args, **self.kwargs)
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/local/lib/python3.11/site-packages/asgiref/sync.py", line 559, in thread_handler
+    return func(*args, **kwargs)
+           ^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/local/lib/python3.11/site-packages/django/contrib/admin/options.py", line 714, in wrapper
+    return self.admin_site.admin_view(view)(*args, **kwargs)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/local/lib/python3.11/site-packages/django/utils/decorators.py", line 188, in _view_wrapper
+    result = _process_exception(request, e)
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/local/lib/python3.11/site-packages/django/utils/decorators.py", line 186, in _view_wrapper
+    response = view_func(request, *args, **kwargs)
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/local/lib/python3.11/site-packages/django/views/decorators/cache.py", line 80, in _view_wrapper
+    response = view_func(request, *args, **kwargs)
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/local/lib/python3.11/site-packages/django/contrib/admin/sites.py", line 240, in inner
+    return view(request, *args, **kwargs)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/local/lib/python3.11/site-packages/django/utils/decorators.py", line 48, in _wrapper
+    return bound_method(*args, **kwargs)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/local/lib/python3.11/site-packages/django/views/decorators/debug.py", line 141, in sensitive_post_parameters_wrapper
+    return view(request, *args, **kwargs)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/local/lib/python3.11/site-packages/django/utils/decorators.py", line 48, in _wrapper
+    return bound_method(*args, **kwargs)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/local/lib/python3.11/site-packages/django/utils/decorators.py", line 188, in _view_wrapper
+    result = _process_exception(request, e)
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/local/lib/python3.11/site-packages/django/utils/decorators.py", line 186, in _view_wrapper
+    response = view_func(request, *args, **kwargs)
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/local/lib/python3.11/site-packages/django/contrib/auth/admin.py", line 121, in add_view
+    return self._add_view(request, form_url, extra_context)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/local/lib/python3.11/site-packages/django/contrib/auth/admin.py", line 149, in _add_view
+    return super().add_view(request, form_url, extra_context)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/local/lib/python3.11/site-packages/django/contrib/admin/options.py", line 1941, in add_view
+    return self.changeform_view(request, None, form_url, extra_context)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/local/lib/python3.11/site-packages/django/utils/decorators.py", line 48, in _wrapper
+    return bound_method(*args, **kwargs)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/local/lib/python3.11/site-packages/django/utils/decorators.py", line 188, in _view_wrapper
+    result = _process_exception(request, e)
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/local/lib/python3.11/site-packages/django/utils/decorators.py", line 186, in _view_wrapper
+    response = view_func(request, *args, **kwargs)
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/local/lib/python3.11/site-packages/django/contrib/admin/options.py", line 1802, in changeform_view
+    return self._changeform_view(request, object_id, form_url, extra_context)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/local/lib/python3.11/site-packages/django/contrib/admin/options.py", line 1854, in _changeform_view
+    self.save_related(request, form, formsets, not add)
+  File "/usr/local/lib/python3.11/site-packages/django/contrib/admin/options.py", line 1285, in save_related
+    self.save_formset(request, form, formset, change=change)
+  File "/usr/local/lib/python3.11/site-packages/django/contrib/admin/options.py", line 1273, in save_formset
+    formset.save()
+  File "/usr/local/lib/python3.11/site-packages/django/forms/models.py", line 793, in save
+    return self.save_existing_objects(commit) + self.save_new_objects(commit)
+                                                ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/local/lib/python3.11/site-packages/django/forms/models.py", line 953, in save_new_objects
+    self.new_objects.append(self.save_new(form, commit=commit))
+                            ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/local/lib/python3.11/site-packages/django/forms/models.py", line 1151, in save_new
+    return super().save_new(form, commit=commit)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/local/lib/python3.11/site-packages/django/forms/models.py", line 766, in save_new
+    return form.save(commit=commit)
+           ^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/local/lib/python3.11/site-packages/django/forms/models.py", line 551, in save
+    self.instance.save()
+  File "/usr/local/lib/python3.11/site-packages/django/db/models/base.py", line 822, in save
+    self.save_base(
+  File "/usr/local/lib/python3.11/site-packages/django/db/models/base.py", line 909, in save_base
+    updated = self._save_table(
+              ^^^^^^^^^^^^^^^^^
+  File "/usr/local/lib/python3.11/site-packages/django/db/models/base.py", line 1067, in _save_table
+    results = self._do_insert(
+              ^^^^^^^^^^^^^^^^
+  File "/usr/local/lib/python3.11/site-packages/django/db/models/base.py", line 1108, in _do_insert
+    return manager._insert(
+           ^^^^^^^^^^^^^^^^
+  File "/usr/local/lib/python3.11/site-packages/django/db/models/manager.py", line 87, in manager_method
+    return getattr(self.get_queryset(), name)(*args, **kwargs)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/local/lib/python3.11/site-packages/django/db/models/query.py", line 1845, in _insert
+    return query.get_compiler(using=using).execute_sql(returning_fields)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/local/lib/python3.11/site-packages/django/db/models/sql/compiler.py", line 1823, in execute_sql
+    cursor.execute(sql, params)
+  File "/usr/local/lib/python3.11/site-packages/django/db/backends/utils.py", line 122, in execute
+    return super().execute(sql, params)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/local/lib/python3.11/site-packages/django/db/backends/utils.py", line 79, in execute
+    return self._execute_with_wrappers(
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/local/lib/python3.11/site-packages/django/db/backends/utils.py", line 92, in _execute_with_wrappers
+    return executor(sql, params, many, context)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/local/lib/python3.11/site-packages/django/db/backends/utils.py", line 100, in _execute
+    with self.db.wrap_database_errors:
+  File "/usr/local/lib/python3.11/site-packages/django/db/utils.py", line 91, in __exit__
+    raise dj_exc_value.with_traceback(traceback) from exc_value
+  File "/usr/local/lib/python3.11/site-packages/django/db/backends/utils.py", line 105, in _execute
+    return self.cursor.execute(sql, params)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+django.db.utils.IntegrityError: duplicate key value violates unique constraint "accounts_userprofile_user_id_key"
+DETAIL:  Key (user_id)=(2) already exists.
+
+ERROR 2025-12-07 13:34:53,865 runserver HTTP POST /admin/accounts/user/add/ 500 [0.50, 172.18.0.1:51054]
+INFO 2025-12-07 13:35:18,439 runserver HTTP GET /admin/accounts/user/add/ 200 [0.06, 172.18.0.1:51054]
+INFO 2025-12-07 13:35:43,151 runserver HTTP GET /accounts/profile/ 200 [0.03, 172.18.0.1:54702]
+INFO 2025-12-07 13:37:11,972 runserver HTTP GET /admin/accounts/user/ 200 [0.04, 172.18.0.1:52766]
+INFO 2025-12-07 13:37:12,021 runserver HTTP GET /admin/jsi18n/ 200 [0.02, 172.18.0.1:52766]
+INFO 2025-12-07 13:37:14,152 runserver HTTP GET /admin/accounts/userprofile/ 200 [0.05, 172.18.0.1:52766]
+INFO 2025-12-07 13:37:14,185 runserver HTTP GET /static/admin/img/icon-yes.svg 304 [0.00, 172.18.0.1:52778]
+INFO 2025-12-07 13:37:14,201 runserver HTTP GET /admin/jsi18n/ 200 [0.02, 172.18.0.1:52766]
+INFO 2025-12-07 13:37:16,426 runserver HTTP GET /admin/accounts/user/ 200 [0.04, 172.18.0.1:52766]
+INFO 2025-12-07 13:37:16,473 runserver HTTP GET /admin/jsi18n/ 200 [0.02, 172.18.0.1:52766]
+INFO 2025-12-07 13:38:27,639 autoreload /code/apps/accounts/admin.py changed, reloading.
+INFO 2025-12-07 13:38:29,495 autoreload Watching for file changes with StatReloader
+INFO 2025-12-07 13:39:53,184 autoreload /code/apps/accounts/signals.py changed, reloading.
+INFO 2025-12-07 13:39:55,013 autoreload Watching for file changes with StatReloader
+INFO 2025-12-07 13:39:56,657 runserver HTTP GET /admin/accounts/user/add/ 200 [0.13, 172.18.0.1:60448]
+INFO 2025-12-07 13:39:56,707 runserver HTTP GET /admin/jsi18n/ 200 [0.03, 172.18.0.1:60448]
+INFO 2025-12-07 13:40:47,603 runserver HTTP POST /admin/accounts/user/add/ 200 [0.06, 172.18.0.1:60448]
+INFO 2025-12-07 13:40:47,652 runserver HTTP GET /admin/jsi18n/ 200 [0.02, 172.18.0.1:60448]
+ERROR 2025-12-07 13:41:29,285 log Internal Server Error: /admin/accounts/user/add/
+Traceback (most recent call last):
+  File "/usr/local/lib/python3.11/site-packages/django/db/backends/utils.py", line 105, in _execute
+    return self.cursor.execute(sql, params)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+psycopg2.errors.UniqueViolation: duplicate key value violates unique constraint "accounts_userprofile_user_id_key"
+DETAIL:  Key (user_id)=(3) already exists.
+
+
+The above exception was the direct cause of the following exception:
+
+Traceback (most recent call last):
+  File "/usr/local/lib/python3.11/site-packages/asgiref/sync.py", line 555, in thread_handler
+    raise exc_info[1]
+  File "/usr/local/lib/python3.11/site-packages/django/core/handlers/exception.py", line 42, in inner
+    response = await get_response(request)
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/local/lib/python3.11/site-packages/asgiref/sync.py", line 555, in thread_handler
+    raise exc_info[1]
+  File "/usr/local/lib/python3.11/site-packages/django/core/handlers/base.py", line 253, in _get_response_async
+    response = await wrapped_callback(
+               ^^^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/local/lib/python3.11/site-packages/asgiref/sync.py", line 504, in __call__
+    ret = await asyncio.shield(exec_coro)
+          ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/local/lib/python3.11/concurrent/futures/thread.py", line 58, in run
+    result = self.fn(*self.args, **self.kwargs)
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/local/lib/python3.11/site-packages/asgiref/sync.py", line 559, in thread_handler
+    return func(*args, **kwargs)
+           ^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/local/lib/python3.11/site-packages/django/contrib/admin/options.py", line 714, in wrapper
+    return self.admin_site.admin_view(view)(*args, **kwargs)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/local/lib/python3.11/site-packages/django/utils/decorators.py", line 188, in _view_wrapper
+    result = _process_exception(request, e)
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/local/lib/python3.11/site-packages/django/utils/decorators.py", line 186, in _view_wrapper
+    response = view_func(request, *args, **kwargs)
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/local/lib/python3.11/site-packages/django/views/decorators/cache.py", line 80, in _view_wrapper
+    response = view_func(request, *args, **kwargs)
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/local/lib/python3.11/site-packages/django/contrib/admin/sites.py", line 240, in inner
+    return view(request, *args, **kwargs)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/local/lib/python3.11/site-packages/django/utils/decorators.py", line 48, in _wrapper
+    return bound_method(*args, **kwargs)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/local/lib/python3.11/site-packages/django/views/decorators/debug.py", line 141, in sensitive_post_parameters_wrapper
+    return view(request, *args, **kwargs)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/local/lib/python3.11/site-packages/django/utils/decorators.py", line 48, in _wrapper
+    return bound_method(*args, **kwargs)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/local/lib/python3.11/site-packages/django/utils/decorators.py", line 188, in _view_wrapper
+    result = _process_exception(request, e)
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/local/lib/python3.11/site-packages/django/utils/decorators.py", line 186, in _view_wrapper
+    response = view_func(request, *args, **kwargs)
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/local/lib/python3.11/site-packages/django/contrib/auth/admin.py", line 121, in add_view
+    return self._add_view(request, form_url, extra_context)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/local/lib/python3.11/site-packages/django/contrib/auth/admin.py", line 149, in _add_view
+    return super().add_view(request, form_url, extra_context)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/local/lib/python3.11/site-packages/django/contrib/admin/options.py", line 1941, in add_view
+    return self.changeform_view(request, None, form_url, extra_context)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/local/lib/python3.11/site-packages/django/utils/decorators.py", line 48, in _wrapper
+    return bound_method(*args, **kwargs)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/local/lib/python3.11/site-packages/django/utils/decorators.py", line 188, in _view_wrapper
+    result = _process_exception(request, e)
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/local/lib/python3.11/site-packages/django/utils/decorators.py", line 186, in _view_wrapper
+    response = view_func(request, *args, **kwargs)
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/local/lib/python3.11/site-packages/django/contrib/admin/options.py", line 1802, in changeform_view
+    return self._changeform_view(request, object_id, form_url, extra_context)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/local/lib/python3.11/site-packages/django/contrib/admin/options.py", line 1854, in _changeform_view
+    self.save_related(request, form, formsets, not add)
+  File "/usr/local/lib/python3.11/site-packages/django/contrib/admin/options.py", line 1285, in save_related
+    self.save_formset(request, form, formset, change=change)
+  File "/usr/local/lib/python3.11/site-packages/django/contrib/admin/options.py", line 1273, in save_formset
+    formset.save()
+  File "/usr/local/lib/python3.11/site-packages/django/forms/models.py", line 793, in save
+    return self.save_existing_objects(commit) + self.save_new_objects(commit)
+                                                ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/local/lib/python3.11/site-packages/django/forms/models.py", line 953, in save_new_objects
+    self.new_objects.append(self.save_new(form, commit=commit))
+                            ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/local/lib/python3.11/site-packages/django/forms/models.py", line 1151, in save_new
+    return super().save_new(form, commit=commit)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/local/lib/python3.11/site-packages/django/forms/models.py", line 766, in save_new
+    return form.save(commit=commit)
+           ^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/local/lib/python3.11/site-packages/django/forms/models.py", line 551, in save
+    self.instance.save()
+  File "/usr/local/lib/python3.11/site-packages/django/db/models/base.py", line 822, in save
+    self.save_base(
+  File "/usr/local/lib/python3.11/site-packages/django/db/models/base.py", line 909, in save_base
+    updated = self._save_table(
+              ^^^^^^^^^^^^^^^^^
+  File "/usr/local/lib/python3.11/site-packages/django/db/models/base.py", line 1067, in _save_table
+    results = self._do_insert(
+              ^^^^^^^^^^^^^^^^
+  File "/usr/local/lib/python3.11/site-packages/django/db/models/base.py", line 1108, in _do_insert
+    return manager._insert(
+           ^^^^^^^^^^^^^^^^
+  File "/usr/local/lib/python3.11/site-packages/django/db/models/manager.py", line 87, in manager_method
+    return getattr(self.get_queryset(), name)(*args, **kwargs)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/local/lib/python3.11/site-packages/django/db/models/query.py", line 1845, in _insert
+    return query.get_compiler(using=using).execute_sql(returning_fields)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/local/lib/python3.11/site-packages/django/db/models/sql/compiler.py", line 1823, in execute_sql
+    cursor.execute(sql, params)
+  File "/usr/local/lib/python3.11/site-packages/django/db/backends/utils.py", line 122, in execute
+    return super().execute(sql, params)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/local/lib/python3.11/site-packages/django/db/backends/utils.py", line 79, in execute
+    return self._execute_with_wrappers(
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/local/lib/python3.11/site-packages/django/db/backends/utils.py", line 92, in _execute_with_wrappers
+    return executor(sql, params, many, context)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/local/lib/python3.11/site-packages/django/db/backends/utils.py", line 100, in _execute
+    with self.db.wrap_database_errors:
+  File "/usr/local/lib/python3.11/site-packages/django/db/utils.py", line 91, in __exit__
+    raise dj_exc_value.with_traceback(traceback) from exc_value
+  File "/usr/local/lib/python3.11/site-packages/django/db/backends/utils.py", line 105, in _execute
+    return self.cursor.execute(sql, params)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+django.db.utils.IntegrityError: duplicate key value violates unique constraint "accounts_userprofile_user_id_key"
+DETAIL:  Key (user_id)=(3) already exists.
+
+ERROR 2025-12-07 13:41:29,298 runserver HTTP POST /admin/accounts/user/add/ 500 [0.49, 172.18.0.1:60448]
+INFO 2025-12-07 13:42:37,080 autoreload /code/apps/accounts/signals.py changed, reloading.
+INFO 2025-12-07 13:42:39,023 autoreload Watching for file changes with StatReloader
+ERROR 2025-12-07 13:42:40,464 log Internal Server Error: /admin/accounts/user/add/
+Traceback (most recent call last):
+  File "/usr/local/lib/python3.11/site-packages/django/db/backends/utils.py", line 105, in _execute
+    return self.cursor.execute(sql, params)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+psycopg2.errors.UniqueViolation: duplicate key value violates unique constraint "accounts_userprofile_user_id_key"
+DETAIL:  Key (user_id)=(4) already exists.
+
+
+The above exception was the direct cause of the following exception:
+
+Traceback (most recent call last):
+  File "/usr/local/lib/python3.11/site-packages/asgiref/sync.py", line 555, in thread_handler
+    raise exc_info[1]
+  File "/usr/local/lib/python3.11/site-packages/django/core/handlers/exception.py", line 42, in inner
+    response = await get_response(request)
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/local/lib/python3.11/site-packages/asgiref/sync.py", line 555, in thread_handler
+    raise exc_info[1]
+  File "/usr/local/lib/python3.11/site-packages/django/core/handlers/base.py", line 253, in _get_response_async
+    response = await wrapped_callback(
+               ^^^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/local/lib/python3.11/site-packages/asgiref/sync.py", line 504, in __call__
+    ret = await asyncio.shield(exec_coro)
+          ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/local/lib/python3.11/concurrent/futures/thread.py", line 58, in run
+    result = self.fn(*self.args, **self.kwargs)
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/local/lib/python3.11/site-packages/asgiref/sync.py", line 559, in thread_handler
+    return func(*args, **kwargs)
+           ^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/local/lib/python3.11/site-packages/django/contrib/admin/options.py", line 714, in wrapper
+    return self.admin_site.admin_view(view)(*args, **kwargs)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/local/lib/python3.11/site-packages/django/utils/decorators.py", line 188, in _view_wrapper
+    result = _process_exception(request, e)
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/local/lib/python3.11/site-packages/django/utils/decorators.py", line 186, in _view_wrapper
+    response = view_func(request, *args, **kwargs)
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/local/lib/python3.11/site-packages/django/views/decorators/cache.py", line 80, in _view_wrapper
+    response = view_func(request, *args, **kwargs)
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/local/lib/python3.11/site-packages/django/contrib/admin/sites.py", line 240, in inner
+    return view(request, *args, **kwargs)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/local/lib/python3.11/site-packages/django/utils/decorators.py", line 48, in _wrapper
+    return bound_method(*args, **kwargs)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/local/lib/python3.11/site-packages/django/views/decorators/debug.py", line 141, in sensitive_post_parameters_wrapper
+    return view(request, *args, **kwargs)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/local/lib/python3.11/site-packages/django/utils/decorators.py", line 48, in _wrapper
+    return bound_method(*args, **kwargs)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/local/lib/python3.11/site-packages/django/utils/decorators.py", line 188, in _view_wrapper
+    result = _process_exception(request, e)
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/local/lib/python3.11/site-packages/django/utils/decorators.py", line 186, in _view_wrapper
+    response = view_func(request, *args, **kwargs)
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/local/lib/python3.11/site-packages/django/contrib/auth/admin.py", line 121, in add_view
+    return self._add_view(request, form_url, extra_context)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/local/lib/python3.11/site-packages/django/contrib/auth/admin.py", line 149, in _add_view
+    return super().add_view(request, form_url, extra_context)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/local/lib/python3.11/site-packages/django/contrib/admin/options.py", line 1941, in add_view
+    return self.changeform_view(request, None, form_url, extra_context)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/local/lib/python3.11/site-packages/django/utils/decorators.py", line 48, in _wrapper
+    return bound_method(*args, **kwargs)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/local/lib/python3.11/site-packages/django/utils/decorators.py", line 188, in _view_wrapper
+    result = _process_exception(request, e)
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/local/lib/python3.11/site-packages/django/utils/decorators.py", line 186, in _view_wrapper
+    response = view_func(request, *args, **kwargs)
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/local/lib/python3.11/site-packages/django/contrib/admin/options.py", line 1802, in changeform_view
+    return self._changeform_view(request, object_id, form_url, extra_context)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/local/lib/python3.11/site-packages/django/contrib/admin/options.py", line 1854, in _changeform_view
+    self.save_related(request, form, formsets, not add)
+  File "/usr/local/lib/python3.11/site-packages/django/contrib/admin/options.py", line 1285, in save_related
+    self.save_formset(request, form, formset, change=change)
+  File "/usr/local/lib/python3.11/site-packages/django/contrib/admin/options.py", line 1273, in save_formset
+    formset.save()
+  File "/usr/local/lib/python3.11/site-packages/django/forms/models.py", line 793, in save
+    return self.save_existing_objects(commit) + self.save_new_objects(commit)
+                                                ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/local/lib/python3.11/site-packages/django/forms/models.py", line 953, in save_new_objects
+    self.new_objects.append(self.save_new(form, commit=commit))
+                            ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/local/lib/python3.11/site-packages/django/forms/models.py", line 1151, in save_new
+    return super().save_new(form, commit=commit)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/local/lib/python3.11/site-packages/django/forms/models.py", line 766, in save_new
+    return form.save(commit=commit)
+           ^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/local/lib/python3.11/site-packages/django/forms/models.py", line 551, in save
+    self.instance.save()
+  File "/usr/local/lib/python3.11/site-packages/django/db/models/base.py", line 822, in save
+    self.save_base(
+  File "/usr/local/lib/python3.11/site-packages/django/db/models/base.py", line 909, in save_base
+    updated = self._save_table(
+              ^^^^^^^^^^^^^^^^^
+  File "/usr/local/lib/python3.11/site-packages/django/db/models/base.py", line 1067, in _save_table
+    results = self._do_insert(
+              ^^^^^^^^^^^^^^^^
+  File "/usr/local/lib/python3.11/site-packages/django/db/models/base.py", line 1108, in _do_insert
+    return manager._insert(
+           ^^^^^^^^^^^^^^^^
+  File "/usr/local/lib/python3.11/site-packages/django/db/models/manager.py", line 87, in manager_method
+    return getattr(self.get_queryset(), name)(*args, **kwargs)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/local/lib/python3.11/site-packages/django/db/models/query.py", line 1845, in _insert
+    return query.get_compiler(using=using).execute_sql(returning_fields)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/local/lib/python3.11/site-packages/django/db/models/sql/compiler.py", line 1823, in execute_sql
+    cursor.execute(sql, params)
+  File "/usr/local/lib/python3.11/site-packages/django/db/backends/utils.py", line 122, in execute
+    return super().execute(sql, params)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/local/lib/python3.11/site-packages/django/db/backends/utils.py", line 79, in execute
+    return self._execute_with_wrappers(
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/local/lib/python3.11/site-packages/django/db/backends/utils.py", line 92, in _execute_with_wrappers
+    return executor(sql, params, many, context)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/local/lib/python3.11/site-packages/django/db/backends/utils.py", line 100, in _execute
+    with self.db.wrap_database_errors:
+  File "/usr/local/lib/python3.11/site-packages/django/db/utils.py", line 91, in __exit__
+    raise dj_exc_value.with_traceback(traceback) from exc_value
+  File "/usr/local/lib/python3.11/site-packages/django/db/backends/utils.py", line 105, in _execute
+    return self.cursor.execute(sql, params)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+django.db.utils.IntegrityError: duplicate key value violates unique constraint "accounts_userprofile_user_id_key"
+DETAIL:  Key (user_id)=(4) already exists.
+
+ERROR 2025-12-07 13:42:40,477 runserver HTTP POST /admin/accounts/user/add/ 500 [0.52, 172.18.0.1:57436]
+INFO 2025-12-07 13:53:03,843 autoreload /code/apps/accounts/signals.py changed, reloading.
+INFO 2025-12-07 13:53:06,009 autoreload Watching for file changes with StatReloader
+ERROR 2025-12-07 13:53:08,163 log Internal Server Error: /admin/accounts/user/add/
+Traceback (most recent call last):
+  File "/usr/local/lib/python3.11/site-packages/django/db/backends/utils.py", line 105, in _execute
+    return self.cursor.execute(sql, params)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+psycopg2.errors.UniqueViolation: duplicate key value violates unique constraint "accounts_userprofile_user_id_key"
+DETAIL:  Key (user_id)=(5) already exists.
+
+
+The above exception was the direct cause of the following exception:
+
+Traceback (most recent call last):
+  File "/usr/local/lib/python3.11/site-packages/asgiref/sync.py", line 555, in thread_handler
+    raise exc_info[1]
+  File "/usr/local/lib/python3.11/site-packages/django/core/handlers/exception.py", line 42, in inner
+    response = await get_response(request)
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/local/lib/python3.11/site-packages/asgiref/sync.py", line 555, in thread_handler
+    raise exc_info[1]
+  File "/usr/local/lib/python3.11/site-packages/django/core/handlers/base.py", line 253, in _get_response_async
+    response = await wrapped_callback(
+               ^^^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/local/lib/python3.11/site-packages/asgiref/sync.py", line 504, in __call__
+    ret = await asyncio.shield(exec_coro)
+          ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/local/lib/python3.11/concurrent/futures/thread.py", line 58, in run
+    result = self.fn(*self.args, **self.kwargs)
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/local/lib/python3.11/site-packages/asgiref/sync.py", line 559, in thread_handler
+    return func(*args, **kwargs)
+           ^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/local/lib/python3.11/site-packages/django/contrib/admin/options.py", line 714, in wrapper
+    return self.admin_site.admin_view(view)(*args, **kwargs)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/local/lib/python3.11/site-packages/django/utils/decorators.py", line 188, in _view_wrapper
+    result = _process_exception(request, e)
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/local/lib/python3.11/site-packages/django/utils/decorators.py", line 186, in _view_wrapper
+    response = view_func(request, *args, **kwargs)
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/local/lib/python3.11/site-packages/django/views/decorators/cache.py", line 80, in _view_wrapper
+    response = view_func(request, *args, **kwargs)
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/local/lib/python3.11/site-packages/django/contrib/admin/sites.py", line 240, in inner
+    return view(request, *args, **kwargs)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/local/lib/python3.11/site-packages/django/utils/decorators.py", line 48, in _wrapper
+    return bound_method(*args, **kwargs)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/local/lib/python3.11/site-packages/django/views/decorators/debug.py", line 141, in sensitive_post_parameters_wrapper
+    return view(request, *args, **kwargs)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/local/lib/python3.11/site-packages/django/utils/decorators.py", line 48, in _wrapper
+    return bound_method(*args, **kwargs)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/local/lib/python3.11/site-packages/django/utils/decorators.py", line 188, in _view_wrapper
+    result = _process_exception(request, e)
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/local/lib/python3.11/site-packages/django/utils/decorators.py", line 186, in _view_wrapper
+    response = view_func(request, *args, **kwargs)
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/local/lib/python3.11/site-packages/django/contrib/auth/admin.py", line 121, in add_view
+    return self._add_view(request, form_url, extra_context)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/local/lib/python3.11/site-packages/django/contrib/auth/admin.py", line 149, in _add_view
+    return super().add_view(request, form_url, extra_context)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/local/lib/python3.11/site-packages/django/contrib/admin/options.py", line 1941, in add_view
+    return self.changeform_view(request, None, form_url, extra_context)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/local/lib/python3.11/site-packages/django/utils/decorators.py", line 48, in _wrapper
+    return bound_method(*args, **kwargs)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/local/lib/python3.11/site-packages/django/utils/decorators.py", line 188, in _view_wrapper
+    result = _process_exception(request, e)
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/local/lib/python3.11/site-packages/django/utils/decorators.py", line 186, in _view_wrapper
+    response = view_func(request, *args, **kwargs)
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/local/lib/python3.11/site-packages/django/contrib/admin/options.py", line 1802, in changeform_view
+    return self._changeform_view(request, object_id, form_url, extra_context)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/local/lib/python3.11/site-packages/django/contrib/admin/options.py", line 1854, in _changeform_view
+    self.save_related(request, form, formsets, not add)
+  File "/usr/local/lib/python3.11/site-packages/django/contrib/admin/options.py", line 1285, in save_related
+    self.save_formset(request, form, formset, change=change)
+  File "/usr/local/lib/python3.11/site-packages/django/contrib/admin/options.py", line 1273, in save_formset
+    formset.save()
+  File "/usr/local/lib/python3.11/site-packages/django/forms/models.py", line 793, in save
+    return self.save_existing_objects(commit) + self.save_new_objects(commit)
+                                                ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/local/lib/python3.11/site-packages/django/forms/models.py", line 953, in save_new_objects
+    self.new_objects.append(self.save_new(form, commit=commit))
+                            ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/local/lib/python3.11/site-packages/django/forms/models.py", line 1151, in save_new
+    return super().save_new(form, commit=commit)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/local/lib/python3.11/site-packages/django/forms/models.py", line 766, in save_new
+    return form.save(commit=commit)
+           ^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/local/lib/python3.11/site-packages/django/forms/models.py", line 551, in save
+    self.instance.save()
+  File "/usr/local/lib/python3.11/site-packages/django/db/models/base.py", line 822, in save
+    self.save_base(
+  File "/usr/local/lib/python3.11/site-packages/django/db/models/base.py", line 909, in save_base
+    updated = self._save_table(
+              ^^^^^^^^^^^^^^^^^
+  File "/usr/local/lib/python3.11/site-packages/django/db/models/base.py", line 1067, in _save_table
+    results = self._do_insert(
+              ^^^^^^^^^^^^^^^^
+  File "/usr/local/lib/python3.11/site-packages/django/db/models/base.py", line 1108, in _do_insert
+    return manager._insert(
+           ^^^^^^^^^^^^^^^^
+  File "/usr/local/lib/python3.11/site-packages/django/db/models/manager.py", line 87, in manager_method
+    return getattr(self.get_queryset(), name)(*args, **kwargs)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/local/lib/python3.11/site-packages/django/db/models/query.py", line 1845, in _insert
+    return query.get_compiler(using=using).execute_sql(returning_fields)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/local/lib/python3.11/site-packages/django/db/models/sql/compiler.py", line 1823, in execute_sql
+    cursor.execute(sql, params)
+  File "/usr/local/lib/python3.11/site-packages/django/db/backends/utils.py", line 122, in execute
+    return super().execute(sql, params)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/local/lib/python3.11/site-packages/django/db/backends/utils.py", line 79, in execute
+    return self._execute_with_wrappers(
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/local/lib/python3.11/site-packages/django/db/backends/utils.py", line 92, in _execute_with_wrappers
+    return executor(sql, params, many, context)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/local/lib/python3.11/site-packages/django/db/backends/utils.py", line 100, in _execute
+    with self.db.wrap_database_errors:
+  File "/usr/local/lib/python3.11/site-packages/django/db/utils.py", line 91, in __exit__
+    raise dj_exc_value.with_traceback(traceback) from exc_value
+  File "/usr/local/lib/python3.11/site-packages/django/db/backends/utils.py", line 105, in _execute
+    return self.cursor.execute(sql, params)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+django.db.utils.IntegrityError: duplicate key value violates unique constraint "accounts_userprofile_user_id_key"
+DETAIL:  Key (user_id)=(5) already exists.
+
+ERROR 2025-12-07 13:53:08,191 runserver HTTP POST /admin/accounts/user/add/ 500 [0.61, 172.18.0.1:54106]
+INFO 2025-12-07 13:53:28,749 runserver HTTP GET /accounts/profile/ 200 [0.05, 172.18.0.1:54106]
+INFO 2025-12-07 13:59:40,363 runserver HTTP GET /admin/ 200 [0.06, 172.18.0.1:36210]
+INFO 2025-12-07 13:59:40,390 runserver HTTP GET /static/admin/css/base.css 304 [0.00, 172.18.0.1:36210]
+INFO 2025-12-07 13:59:40,400 runserver HTTP GET /static/admin/css/dark_mode.css 304 [0.00, 172.18.0.1:36210]
+INFO 2025-12-07 13:59:40,408 runserver HTTP GET /static/admin/css/nav_sidebar.css 304 [0.01, 172.18.0.1:36204]
+INFO 2025-12-07 13:59:40,419 runserver HTTP GET /static/admin/css/dashboard.css 304 [0.01, 172.18.0.1:36212]
+INFO 2025-12-07 13:59:40,422 runserver HTTP GET /static/admin/css/responsive.css 304 [0.01, 172.18.0.1:36228]
+INFO 2025-12-07 13:59:40,427 runserver HTTP GET /static/admin/js/theme.js 304 [0.01, 172.18.0.1:36204]
+INFO 2025-12-07 13:59:40,432 runserver HTTP GET /static/admin/js/nav_sidebar.js 304 [0.02, 172.18.0.1:36210]
+INFO 2025-12-07 13:59:40,439 runserver HTTP GET /static/admin/img/icon-changelink.svg 304 [0.00, 172.18.0.1:36212]
+INFO 2025-12-07 13:59:40,441 runserver HTTP GET /static/admin/img/icon-addlink.svg 304 [0.01, 172.18.0.1:36228]
+INFO 2025-12-07 13:59:41,961 runserver HTTP GET /admin/accounts/user/ 200 [0.09, 172.18.0.1:36228]
+INFO 2025-12-07 13:59:41,994 runserver HTTP GET /static/admin/css/changelists.css 304 [0.01, 172.18.0.1:36228]
+INFO 2025-12-07 13:59:42,000 runserver HTTP GET /static/admin/js/vendor/jquery/jquery.js 304 [0.01, 172.18.0.1:36210]
+INFO 2025-12-07 13:59:42,004 runserver HTTP GET /static/admin/js/jquery.init.js 304 [0.02, 172.18.0.1:36204]
+INFO 2025-12-07 13:59:42,020 runserver HTTP GET /static/admin/js/actions.js 304 [0.01, 172.18.0.1:36228]
+INFO 2025-12-07 13:59:42,023 runserver HTTP GET /static/admin/js/prepopulate.js 304 [0.01, 172.18.0.1:36204]
+INFO 2025-12-07 13:59:42,026 runserver HTTP GET /static/admin/js/admin/RelatedObjectLookups.js 304 [0.02, 172.18.0.1:36252]
+INFO 2025-12-07 13:59:42,028 runserver HTTP GET /static/admin/js/urlify.js 304 [0.02, 172.18.0.1:36210]
+INFO 2025-12-07 13:59:42,034 runserver HTTP GET /static/admin/js/core.js 304 [0.03, 172.18.0.1:36240]
+INFO 2025-12-07 13:59:42,048 runserver HTTP GET /static/admin/js/vendor/xregexp/xregexp.js 304 [0.01, 172.18.0.1:36228]
+INFO 2025-12-07 13:59:42,051 runserver HTTP GET /static/admin/img/search.svg 304 [0.01, 172.18.0.1:36240]
+INFO 2025-12-07 13:59:42,053 runserver HTTP GET /admin/jsi18n/ 200 [0.07, 172.18.0.1:36212]
+INFO 2025-12-07 13:59:42,069 runserver HTTP GET /static/admin/js/filters.js 304 [0.01, 172.18.0.1:36240]
+INFO 2025-12-07 13:59:42,086 runserver HTTP GET /static/admin/img/tooltag-add.svg 304 [0.01, 172.18.0.1:36240]
+INFO 2025-12-07 13:59:42,090 runserver HTTP GET /static/admin/img/sorting-icons.svg 304 [0.01, 172.18.0.1:36212]
+INFO 2025-12-07 13:59:42,097 runserver HTTP GET /static/admin/img/icon-viewlink.svg 304 [0.01, 172.18.0.1:36228]
+INFO 2025-12-07 13:59:45,643 runserver HTTP GET /admin/accounts/user/add/ 200 [0.08, 172.18.0.1:36228]
+INFO 2025-12-07 13:59:45,679 runserver HTTP GET /static/admin/js/collapse.js 304 [0.01, 172.18.0.1:36210]
+INFO 2025-12-07 13:59:45,682 runserver HTTP GET /static/admin/js/calendar.js 304 [0.01, 172.18.0.1:36240]
+INFO 2025-12-07 13:59:45,687 runserver HTTP GET /static/admin/css/forms.css 304 [0.02, 172.18.0.1:36228]
+INFO 2025-12-07 13:59:45,689 runserver HTTP GET /static/admin/js/admin/DateTimeShortcuts.js 304 [0.02, 172.18.0.1:36252]
+INFO 2025-12-07 13:59:45,691 runserver HTTP GET /static/admin/js/inlines.js 304 [0.02, 172.18.0.1:36204]
+INFO 2025-12-07 13:59:45,703 runserver HTTP GET /static/admin/js/prepopulate_init.js 304 [0.01, 172.18.0.1:36210]
+INFO 2025-12-07 13:59:45,708 runserver HTTP GET /static/admin/css/widgets.css 304 [0.01, 172.18.0.1:36252]
+INFO 2025-12-07 13:59:45,721 runserver HTTP GET /static/admin/js/change_form.js 304 [0.00, 172.18.0.1:36252]
+INFO 2025-12-07 13:59:45,730 runserver HTTP GET /admin/jsi18n/ 200 [0.06, 172.18.0.1:36212]
+INFO 2025-12-07 14:00:52,614 runserver HTTP POST /admin/accounts/user/add/ 302 [0.43, 172.18.0.1:36238]
+INFO 2025-12-07 14:00:52,709 runserver HTTP GET /admin/accounts/user/6/change/ 200 [0.09, 172.18.0.1:36238]
+INFO 2025-12-07 14:00:52,740 runserver HTTP GET /static/admin/js/SelectBox.js 304 [0.00, 172.18.0.1:36240]
+INFO 2025-12-07 14:00:52,750 runserver HTTP GET /static/admin/js/SelectFilter2.js 304 [0.01, 172.18.0.1:36246]
+INFO 2025-12-07 14:00:52,768 runserver HTTP GET /admin/jsi18n/ 200 [0.03, 172.18.0.1:36238]
+INFO 2025-12-07 14:00:52,788 runserver HTTP GET /static/admin/img/icon-yes.svg 304 [0.00, 172.18.0.1:36238]
+INFO 2025-12-07 14:00:52,830 runserver HTTP GET /static/admin/img/icon-calendar.svg 304 [0.00, 172.18.0.1:36238]
+INFO 2025-12-07 14:00:58,205 runserver HTTP GET /admin/accounts/userprofile/ 200 [0.06, 172.18.0.1:36238]
+INFO 2025-12-07 14:00:58,259 runserver HTTP GET /admin/jsi18n/ 200 [0.03, 172.18.0.1:36238]
+INFO 2025-12-07 14:01:01,563 runserver HTTP GET /admin/accounts/user/ 200 [0.04, 172.18.0.1:36238]
+INFO 2025-12-07 14:01:01,609 runserver HTTP GET /admin/jsi18n/ 200 [0.02, 172.18.0.1:36238]
+INFO 2025-12-07 14:01:05,444 runserver HTTP GET /admin/accounts/userprofile/ 200 [0.04, 172.18.0.1:36238]
+INFO 2025-12-07 14:01:05,493 runserver HTTP GET /admin/jsi18n/ 200 [0.02, 172.18.0.1:36238]
+INFO 2025-12-07 14:01:08,043 runserver HTTP GET /admin/accounts/userprofile/10/change/ 200 [0.05, 172.18.0.1:36238]
+INFO 2025-12-07 14:01:08,094 runserver HTTP GET /admin/jsi18n/ 200 [0.02, 172.18.0.1:36238]
+INFO 2025-12-07 14:01:20,626 runserver HTTP GET /accounts/users/ 200 [0.04, 172.18.0.1:36238]
+INFO 2025-12-07 14:01:22,533 runserver HTTP GET /accounts/users/ 200 [0.03, 172.18.0.1:36238]
+INFO 2025-12-07 14:01:23,879 runserver HTTP GET /accounts/users/ 200 [0.03, 172.18.0.1:36238]
+INFO 2025-12-07 14:01:24,528 runserver HTTP GET /accounts/users/ 200 [0.03, 172.18.0.1:36238]
+INFO 2025-12-07 14:01:27,967 runserver HTTP GET /accounts/profile/ 200 [0.03, 172.18.0.1:36238]
+INFO 2025-12-07 14:01:29,461 runserver HTTP GET /accounts/logout/ 302 [0.03, 172.18.0.1:36238]
+INFO 2025-12-07 14:01:29,481 runserver HTTP GET /accounts/login/ 200 [0.02, 172.18.0.1:36238]
+INFO 2025-12-07 14:01:31,977 runserver HTTP POST /accounts/login/ 302 [0.43, 172.18.0.1:36238]
+INFO 2025-12-07 14:01:32,021 runserver HTTP GET /dashboard/ 200 [0.04, 172.18.0.1:36238]
+INFO 2025-12-07 14:01:33,179 runserver HTTP GET /accounts/users/ 200 [0.03, 172.18.0.1:36238]
+INFO 2025-12-07 14:01:39,625 runserver HTTP GET /accounts/users/?search=&role=agent&status= 200 [0.03, 172.18.0.1:36238]
+INFO 2025-12-07 14:02:16,759 runserver HTTP GET /admin/accounts/user/ 200 [0.04, 172.18.0.1:36238]
+INFO 2025-12-07 14:02:16,807 runserver HTTP GET /admin/jsi18n/ 200 [0.02, 172.18.0.1:36238]
+INFO 2025-12-07 14:03:49,370 runserver HTTP GET /admin/accounts/user/6/change/ 200 [0.08, 172.18.0.1:34918]
+INFO 2025-12-07 14:03:49,417 runserver HTTP GET /admin/jsi18n/ 200 [0.02, 172.18.0.1:34918]
+INFO 2025-12-07 14:03:56,489 runserver HTTP POST /admin/accounts/user/6/change/ 302 [0.05, 172.18.0.1:34918]
+INFO 2025-12-07 14:03:56,533 runserver HTTP GET /admin/accounts/user/ 200 [0.04, 172.18.0.1:34918]
+INFO 2025-12-07 14:03:56,581 runserver HTTP GET /admin/jsi18n/ 200 [0.02, 172.18.0.1:34918]
+ERROR 2025-12-07 14:04:00,601 log Internal Server Error: /accounts/users/
+Traceback (most recent call last):
+  File "/usr/local/lib/python3.11/site-packages/asgiref/sync.py", line 555, in thread_handler
+    raise exc_info[1]
+  File "/usr/local/lib/python3.11/site-packages/django/core/handlers/exception.py", line 42, in inner
+    response = await get_response(request)
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/local/lib/python3.11/site-packages/asgiref/sync.py", line 555, in thread_handler
+    raise exc_info[1]
+  File "/usr/local/lib/python3.11/site-packages/django/core/handlers/base.py", line 253, in _get_response_async
+    response = await wrapped_callback(
+               ^^^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/local/lib/python3.11/site-packages/asgiref/sync.py", line 504, in __call__
+    ret = await asyncio.shield(exec_coro)
+          ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/local/lib/python3.11/concurrent/futures/thread.py", line 58, in run
+    result = self.fn(*self.args, **self.kwargs)
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/local/lib/python3.11/site-packages/asgiref/sync.py", line 559, in thread_handler
+    return func(*args, **kwargs)
+           ^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/local/lib/python3.11/site-packages/django/contrib/auth/decorators.py", line 23, in _wrapper_view
+    return view_func(request, *args, **kwargs)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/code/apps/accounts/decorators.py", line 43, in wrapper
+    return view_func(request, *args, **kwargs)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/code/apps/accounts/views.py", line 564, in user_list_view
+    return render(request, 'accounts/user_list.html', context)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/local/lib/python3.11/site-packages/django/shortcuts.py", line 24, in render
+    content = loader.render_to_string(template_name, context, request, using=using)
+              ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/local/lib/python3.11/site-packages/django/template/loader.py", line 62, in render_to_string
+    return template.render(context, request)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/local/lib/python3.11/site-packages/django/template/backends/django.py", line 61, in render
+    return self.template.render(context)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/local/lib/python3.11/site-packages/django/template/base.py", line 171, in render
+    return self._render(context)
+           ^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/local/lib/python3.11/site-packages/django/template/base.py", line 163, in _render
+    return self.nodelist.render(context)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/local/lib/python3.11/site-packages/django/template/base.py", line 1000, in render
+    return SafeString("".join([node.render_annotated(context) for node in self]))
+                              ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/local/lib/python3.11/site-packages/django/template/base.py", line 1000, in <listcomp>
+    return SafeString("".join([node.render_annotated(context) for node in self]))
+                               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/local/lib/python3.11/site-packages/django/template/base.py", line 961, in render_annotated
+    return self.render(context)
+           ^^^^^^^^^^^^^^^^^^^^
+  File "/usr/local/lib/python3.11/site-packages/django/template/loader_tags.py", line 159, in render
+    return compiled_parent._render(context)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/local/lib/python3.11/site-packages/django/template/base.py", line 163, in _render
+    return self.nodelist.render(context)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/local/lib/python3.11/site-packages/django/template/base.py", line 1000, in render
+    return SafeString("".join([node.render_annotated(context) for node in self]))
+                              ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/local/lib/python3.11/site-packages/django/template/base.py", line 1000, in <listcomp>
+    return SafeString("".join([node.render_annotated(context) for node in self]))
+                               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/local/lib/python3.11/site-packages/django/template/base.py", line 961, in render_annotated
+    return self.render(context)
+           ^^^^^^^^^^^^^^^^^^^^
+  File "/usr/local/lib/python3.11/site-packages/django/template/defaulttags.py", line 325, in render
+    return nodelist.render(context)
+           ^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/local/lib/python3.11/site-packages/django/template/base.py", line 1000, in render
+    return SafeString("".join([node.render_annotated(context) for node in self]))
+                              ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/local/lib/python3.11/site-packages/django/template/base.py", line 1000, in <listcomp>
+    return SafeString("".join([node.render_annotated(context) for node in self]))
+                               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/local/lib/python3.11/site-packages/django/template/base.py", line 961, in render_annotated
+    return self.render(context)
+           ^^^^^^^^^^^^^^^^^^^^
+  File "/usr/local/lib/python3.11/site-packages/django/template/loader_tags.py", line 65, in render
+    result = block.nodelist.render(context)
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/local/lib/python3.11/site-packages/django/template/base.py", line 1000, in render
+    return SafeString("".join([node.render_annotated(context) for node in self]))
+                              ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/local/lib/python3.11/site-packages/django/template/base.py", line 1000, in <listcomp>
+    return SafeString("".join([node.render_annotated(context) for node in self]))
+                               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/local/lib/python3.11/site-packages/django/template/base.py", line 961, in render_annotated
+    return self.render(context)
+           ^^^^^^^^^^^^^^^^^^^^
+  File "/usr/local/lib/python3.11/site-packages/django/template/defaulttags.py", line 325, in render
+    return nodelist.render(context)
+           ^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/local/lib/python3.11/site-packages/django/template/base.py", line 1000, in render
+    return SafeString("".join([node.render_annotated(context) for node in self]))
+                              ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/local/lib/python3.11/site-packages/django/template/base.py", line 1000, in <listcomp>
+    return SafeString("".join([node.render_annotated(context) for node in self]))
+                               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/local/lib/python3.11/site-packages/django/template/base.py", line 961, in render_annotated
+    return self.render(context)
+           ^^^^^^^^^^^^^^^^^^^^
+  File "/usr/local/lib/python3.11/site-packages/django/template/defaulttags.py", line 241, in render
+    nodelist.append(node.render_annotated(context))
+                    ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/local/lib/python3.11/site-packages/django/template/base.py", line 961, in render_annotated
+    return self.render(context)
+           ^^^^^^^^^^^^^^^^^^^^
+  File "/usr/local/lib/python3.11/site-packages/django/template/defaulttags.py", line 325, in render
+    return nodelist.render(context)
+           ^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/local/lib/python3.11/site-packages/django/template/base.py", line 1000, in render
+    return SafeString("".join([node.render_annotated(context) for node in self]))
+                              ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/local/lib/python3.11/site-packages/django/template/base.py", line 1000, in <listcomp>
+    return SafeString("".join([node.render_annotated(context) for node in self]))
+                               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/local/lib/python3.11/site-packages/django/template/base.py", line 961, in render_annotated
+    return self.render(context)
+           ^^^^^^^^^^^^^^^^^^^^
+  File "/usr/local/lib/python3.11/site-packages/django/template/defaulttags.py", line 478, in render
+    url = reverse(view_name, args=args, kwargs=kwargs, current_app=current_app)
+          ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/local/lib/python3.11/site-packages/django/urls/base.py", line 88, in reverse
+    return resolver._reverse_with_prefix(view, prefix, *args, **kwargs)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/local/lib/python3.11/site-packages/django/urls/resolvers.py", line 848, in _reverse_with_prefix
+    raise NoReverseMatch(msg)
+django.urls.exceptions.NoReverseMatch: Reverse for 'user_toggle_status' not found. 'user_toggle_status' is not a valid view function or pattern name.
+ERROR 2025-12-07 14:04:00,631 runserver HTTP GET /accounts/users/ 500 [0.29, 172.18.0.1:34918]
+INFO 2025-12-07 14:04:07,825 runserver HTTP GET /dashboard/ 200 [0.03, 172.18.0.1:34918]
+ERROR 2025-12-07 14:04:09,072 log Internal Server Error: /accounts/users/
+Traceback (most recent call last):
+  File "/usr/local/lib/python3.11/site-packages/asgiref/sync.py", line 555, in thread_handler
+    raise exc_info[1]
+  File "/usr/local/lib/python3.11/site-packages/django/core/handlers/exception.py", line 42, in inner
+    response = await get_response(request)
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/local/lib/python3.11/site-packages/asgiref/sync.py", line 555, in thread_handler
+    raise exc_info[1]
+  File "/usr/local/lib/python3.11/site-packages/django/core/handlers/base.py", line 253, in _get_response_async
+    response = await wrapped_callback(
+               ^^^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/local/lib/python3.11/site-packages/asgiref/sync.py", line 504, in __call__
+    ret = await asyncio.shield(exec_coro)
+          ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/local/lib/python3.11/concurrent/futures/thread.py", line 58, in run
+    result = self.fn(*self.args, **self.kwargs)
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/local/lib/python3.11/site-packages/asgiref/sync.py", line 559, in thread_handler
+    return func(*args, **kwargs)
+           ^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/local/lib/python3.11/site-packages/django/contrib/auth/decorators.py", line 23, in _wrapper_view
+    return view_func(request, *args, **kwargs)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/code/apps/accounts/decorators.py", line 43, in wrapper
+    return view_func(request, *args, **kwargs)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/code/apps/accounts/views.py", line 564, in user_list_view
+    return render(request, 'accounts/user_list.html', context)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/local/lib/python3.11/site-packages/django/shortcuts.py", line 24, in render
+    content = loader.render_to_string(template_name, context, request, using=using)
+              ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/local/lib/python3.11/site-packages/django/template/loader.py", line 62, in render_to_string
+    return template.render(context, request)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/local/lib/python3.11/site-packages/django/template/backends/django.py", line 61, in render
+    return self.template.render(context)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/local/lib/python3.11/site-packages/django/template/base.py", line 171, in render
+    return self._render(context)
+           ^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/local/lib/python3.11/site-packages/django/template/base.py", line 163, in _render
+    return self.nodelist.render(context)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/local/lib/python3.11/site-packages/django/template/base.py", line 1000, in render
+    return SafeString("".join([node.render_annotated(context) for node in self]))
+                              ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/local/lib/python3.11/site-packages/django/template/base.py", line 1000, in <listcomp>
+    return SafeString("".join([node.render_annotated(context) for node in self]))
+                               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/local/lib/python3.11/site-packages/django/template/base.py", line 961, in render_annotated
+    return self.render(context)
+           ^^^^^^^^^^^^^^^^^^^^
+  File "/usr/local/lib/python3.11/site-packages/django/template/loader_tags.py", line 159, in render
+    return compiled_parent._render(context)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/local/lib/python3.11/site-packages/django/template/base.py", line 163, in _render
+    return self.nodelist.render(context)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/local/lib/python3.11/site-packages/django/template/base.py", line 1000, in render
+    return SafeString("".join([node.render_annotated(context) for node in self]))
+                              ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/local/lib/python3.11/site-packages/django/template/base.py", line 1000, in <listcomp>
+    return SafeString("".join([node.render_annotated(context) for node in self]))
+                               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/local/lib/python3.11/site-packages/django/template/base.py", line 961, in render_annotated
+    return self.render(context)
+           ^^^^^^^^^^^^^^^^^^^^
+  File "/usr/local/lib/python3.11/site-packages/django/template/defaulttags.py", line 325, in render
+    return nodelist.render(context)
+           ^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/local/lib/python3.11/site-packages/django/template/base.py", line 1000, in render
+    return SafeString("".join([node.render_annotated(context) for node in self]))
+                              ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/local/lib/python3.11/site-packages/django/template/base.py", line 1000, in <listcomp>
+    return SafeString("".join([node.render_annotated(context) for node in self]))
+                               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/local/lib/python3.11/site-packages/django/template/base.py", line 961, in render_annotated
+    return self.render(context)
+           ^^^^^^^^^^^^^^^^^^^^
+  File "/usr/local/lib/python3.11/site-packages/django/template/loader_tags.py", line 65, in render
+    result = block.nodelist.render(context)
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/local/lib/python3.11/site-packages/django/template/base.py", line 1000, in render
+    return SafeString("".join([node.render_annotated(context) for node in self]))
+                              ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/local/lib/python3.11/site-packages/django/template/base.py", line 1000, in <listcomp>
+    return SafeString("".join([node.render_annotated(context) for node in self]))
+                               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/local/lib/python3.11/site-packages/django/template/base.py", line 961, in render_annotated
+    return self.render(context)
+           ^^^^^^^^^^^^^^^^^^^^
+  File "/usr/local/lib/python3.11/site-packages/django/template/defaulttags.py", line 325, in render
+    return nodelist.render(context)
+           ^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/local/lib/python3.11/site-packages/django/template/base.py", line 1000, in render
+    return SafeString("".join([node.render_annotated(context) for node in self]))
+                              ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/local/lib/python3.11/site-packages/django/template/base.py", line 1000, in <listcomp>
+    return SafeString("".join([node.render_annotated(context) for node in self]))
+                               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/local/lib/python3.11/site-packages/django/template/base.py", line 961, in render_annotated
+    return self.render(context)
+           ^^^^^^^^^^^^^^^^^^^^
+  File "/usr/local/lib/python3.11/site-packages/django/template/defaulttags.py", line 241, in render
+    nodelist.append(node.render_annotated(context))
+                    ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/local/lib/python3.11/site-packages/django/template/base.py", line 961, in render_annotated
+    return self.render(context)
+           ^^^^^^^^^^^^^^^^^^^^
+  File "/usr/local/lib/python3.11/site-packages/django/template/defaulttags.py", line 325, in render
+    return nodelist.render(context)
+           ^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/local/lib/python3.11/site-packages/django/template/base.py", line 1000, in render
+    return SafeString("".join([node.render_annotated(context) for node in self]))
+                              ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/local/lib/python3.11/site-packages/django/template/base.py", line 1000, in <listcomp>
+    return SafeString("".join([node.render_annotated(context) for node in self]))
+                               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/local/lib/python3.11/site-packages/django/template/base.py", line 961, in render_annotated
+    return self.render(context)
+           ^^^^^^^^^^^^^^^^^^^^
+  File "/usr/local/lib/python3.11/site-packages/django/template/defaulttags.py", line 478, in render
+    url = reverse(view_name, args=args, kwargs=kwargs, current_app=current_app)
+          ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/local/lib/python3.11/site-packages/django/urls/base.py", line 88, in reverse
+    return resolver._reverse_with_prefix(view, prefix, *args, **kwargs)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/local/lib/python3.11/site-packages/django/urls/resolvers.py", line 848, in _reverse_with_prefix
+    raise NoReverseMatch(msg)
+django.urls.exceptions.NoReverseMatch: Reverse for 'user_toggle_status' not found. 'user_toggle_status' is not a valid view function or pattern name.
+ERROR 2025-12-07 14:04:09,095 runserver HTTP GET /accounts/users/ 500 [0.13, 172.18.0.1:34918]
+INFO 2025-12-07 14:04:18,053 runserver HTTP GET /admin/accounts/user/add/ 200 [0.05, 172.18.0.1:34918]
+INFO 2025-12-07 14:04:18,100 runserver HTTP GET /admin/jsi18n/ 200 [0.02, 172.18.0.1:34918]
+INFO 2025-12-07 14:06:14,319 autoreload /code/apps/accounts/urls.py changed, reloading.
+INFO 2025-12-07 14:06:16,355 autoreload Watching for file changes with StatReloader
+INFO 2025-12-07 14:06:17,207 runserver HTTP GET /accounts/users/ 200 [0.07, 172.18.0.1:47644]
+INFO 2025-12-07 14:06:21,069 runserver HTTP GET /accounts/users/6/ 200 [0.04, 172.18.0.1:47644]
+INFO 2025-12-07 14:06:28,644 runserver HTTP GET /accounts/users/6/ 200 [0.03, 172.18.0.1:47644]
+INFO 2025-12-07 14:06:33,741 runserver HTTP GET /accounts/users/6/ 200 [0.03, 172.18.0.1:47644]
+INFO 2025-12-07 14:06:37,454 runserver HTTP GET /accounts/users/6/ 200 [0.03, 172.18.0.1:47644]
+INFO 2025-12-07 14:06:40,858 runserver HTTP GET /accounts/users/1/ 200 [0.03, 172.18.0.1:47644]
+INFO 2025-12-07 14:06:44,847 runserver HTTP GET /accounts/users/6/ 200 [0.03, 172.18.0.1:47644]
+INFO 2025-12-07 14:07:04,587 runserver HTTP GET /accounts/users/?search=&role=admin&status= 200 [0.03, 172.18.0.1:47644]
+INFO 2025-12-07 14:07:06,903 runserver HTTP GET /accounts/users/?search=&role=agent&status= 200 [0.03, 172.18.0.1:47644]
+INFO 2025-12-07 14:07:10,590 runserver HTTP GET /accounts/users/?search=&role=&status= 200 [0.03, 172.18.0.1:47644]
+INFO 2025-12-07 14:07:17,279 runserver HTTP GET /accounts/users/6/ 200 [0.03, 172.18.0.1:47644]
+INFO 2025-12-07 14:07:20,487 runserver HTTP GET /accounts/users/1/ 200 [0.03, 172.18.0.1:47644]
+INFO 2025-12-07 14:07:24,394 runserver HTTP GET /accounts/users/6/ 200 [0.03, 172.18.0.1:47644]
+INFO 2025-12-07 14:09:11,689 runserver HTTP GET /admin/accounts/user/ 200 [0.11, 172.18.0.1:39766]
+INFO 2025-12-07 14:09:11,736 runserver HTTP GET /admin/jsi18n/ 200 [0.02, 172.18.0.1:39766]
+INFO 2025-12-07 14:12:28,483 autoreload /code/apps/accounts/views.py changed, reloading.
+INFO 2025-12-07 14:12:30,298 autoreload Watching for file changes with StatReloader
+INFO 2025-12-07 14:12:51,833 autoreload /code/apps/accounts/views.py changed, reloading.
+INFO 2025-12-07 14:12:53,775 autoreload Watching for file changes with StatReloader
+INFO 2025-12-07 14:12:59,796 runserver HTTP GET /accounts/users/6/ 200 [0.07, 172.18.0.1:45388]
+INFO 2025-12-07 14:13:00,230 runserver HTTP GET /accounts/users/6/ 200 [0.03, 172.18.0.1:45388]
+INFO 2025-12-07 14:13:05,154 runserver HTTP GET /accounts/users/6/ 200 [0.03, 172.18.0.1:45388]
+INFO 2025-12-07 14:18:07,851 autoreload /code/apps/accounts/views.py changed, reloading.
+INFO 2025-12-07 14:18:09,604 autoreload Watching for file changes with StatReloader
+INFO 2025-12-07 14:18:43,421 autoreload /code/apps/accounts/views.py changed, reloading.
+INFO 2025-12-07 14:18:45,175 autoreload Watching for file changes with StatReloader
+INFO 2025-12-07 14:18:53,272 autoreload /code/apps/accounts/views.py changed, reloading.
+INFO 2025-12-07 14:18:54,979 autoreload Watching for file changes with StatReloader
+INFO 2025-12-07 14:21:47,043 runserver HTTP GET /accounts/users/?search=&role=&status= 200 [0.07, 172.18.0.1:57362]
+ERROR 2025-12-07 14:21:49,014 log Internal Server Error: /accounts/users/6/
+Traceback (most recent call last):
+  File "/usr/local/lib/python3.11/site-packages/asgiref/sync.py", line 555, in thread_handler
+    raise exc_info[1]
+  File "/usr/local/lib/python3.11/site-packages/django/core/handlers/exception.py", line 42, in inner
+    response = await get_response(request)
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/local/lib/python3.11/site-packages/asgiref/sync.py", line 555, in thread_handler
+    raise exc_info[1]
+  File "/usr/local/lib/python3.11/site-packages/django/core/handlers/base.py", line 253, in _get_response_async
+    response = await wrapped_callback(
+               ^^^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/local/lib/python3.11/site-packages/asgiref/sync.py", line 504, in __call__
+    ret = await asyncio.shield(exec_coro)
+          ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/local/lib/python3.11/concurrent/futures/thread.py", line 58, in run
+    result = self.fn(*self.args, **self.kwargs)
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/local/lib/python3.11/site-packages/asgiref/sync.py", line 559, in thread_handler
+    return func(*args, **kwargs)
+           ^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/local/lib/python3.11/site-packages/django/contrib/auth/decorators.py", line 23, in _wrapper_view
+    return view_func(request, *args, **kwargs)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/code/apps/accounts/views.py", line 590, in user_detail_view
+    if request.user.is_admin() and user.company != request.user.company:
+                                   ^^^^
+NameError: name 'user' is not defined
+ERROR 2025-12-07 14:21:49,028 runserver HTTP GET /accounts/users/6/ 500 [0.06, 172.18.0.1:57362]
+INFO 2025-12-07 14:22:21,432 autoreload /code/apps/accounts/views.py changed, reloading.
+INFO 2025-12-07 14:22:23,252 autoreload Watching for file changes with StatReloader
+ERROR 2025-12-07 14:22:25,201 log Internal Server Error: /accounts/users/6/
+Traceback (most recent call last):
+  File "/usr/local/lib/python3.11/site-packages/asgiref/sync.py", line 555, in thread_handler
+    raise exc_info[1]
+  File "/usr/local/lib/python3.11/site-packages/django/core/handlers/exception.py", line 42, in inner
+    response = await get_response(request)
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/local/lib/python3.11/site-packages/asgiref/sync.py", line 555, in thread_handler
+    raise exc_info[1]
+  File "/usr/local/lib/python3.11/site-packages/django/core/handlers/base.py", line 253, in _get_response_async
+    response = await wrapped_callback(
+               ^^^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/local/lib/python3.11/site-packages/asgiref/sync.py", line 504, in __call__
+    ret = await asyncio.shield(exec_coro)
+          ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/local/lib/python3.11/concurrent/futures/thread.py", line 58, in run
+    result = self.fn(*self.args, **self.kwargs)
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/local/lib/python3.11/site-packages/asgiref/sync.py", line 559, in thread_handler
+    return func(*args, **kwargs)
+           ^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/local/lib/python3.11/site-packages/django/contrib/auth/decorators.py", line 23, in _wrapper_view
+    return view_func(request, *args, **kwargs)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/code/apps/accounts/views.py", line 590, in user_detail_view
+    if request.user.is_admin() and user.company != request.user.company:
+                                   ^^^^
+NameError: name 'user' is not defined
+ERROR 2025-12-07 14:22:25,228 runserver HTTP GET /accounts/users/6/ 500 [0.09, 172.18.0.1:50846]
+INFO 2025-12-07 14:22:54,014 autoreload /code/apps/accounts/views.py changed, reloading.
+INFO 2025-12-07 14:22:55,906 autoreload Watching for file changes with StatReloader
+ERROR 2025-12-07 14:22:58,026 log Internal Server Error: /accounts/users/6/
+Traceback (most recent call last):
+  File "/usr/local/lib/python3.11/site-packages/asgiref/sync.py", line 555, in thread_handler
+    raise exc_info[1]
+  File "/usr/local/lib/python3.11/site-packages/django/core/handlers/exception.py", line 42, in inner
+    response = await get_response(request)
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/local/lib/python3.11/site-packages/asgiref/sync.py", line 555, in thread_handler
+    raise exc_info[1]
+  File "/usr/local/lib/python3.11/site-packages/django/core/handlers/base.py", line 253, in _get_response_async
+    response = await wrapped_callback(
+               ^^^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/local/lib/python3.11/site-packages/asgiref/sync.py", line 504, in __call__
+    ret = await asyncio.shield(exec_coro)
+          ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/local/lib/python3.11/concurrent/futures/thread.py", line 58, in run
+    result = self.fn(*self.args, **self.kwargs)
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/local/lib/python3.11/site-packages/asgiref/sync.py", line 559, in thread_handler
+    return func(*args, **kwargs)
+           ^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/local/lib/python3.11/site-packages/django/contrib/auth/decorators.py", line 23, in _wrapper_view
+    return view_func(request, *args, **kwargs)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/code/apps/accounts/views.py", line 590, in user_detail_view
+    if request.user.is_admin() and user.company != request.user.company:
+                                   ^^^^
+NameError: name 'user' is not defined
+ERROR 2025-12-07 14:22:58,040 runserver HTTP GET /accounts/users/6/ 500 [0.09, 172.18.0.1:42222]
+INFO 2025-12-07 14:23:20,175 autoreload /code/apps/accounts/views.py changed, reloading.
+INFO 2025-12-07 14:23:22,050 autoreload Watching for file changes with StatReloader
+ERROR 2025-12-07 14:23:24,398 log Internal Server Error: /accounts/users/6/
+Traceback (most recent call last):
+  File "/usr/local/lib/python3.11/site-packages/asgiref/sync.py", line 555, in thread_handler
+    raise exc_info[1]
+  File "/usr/local/lib/python3.11/site-packages/django/core/handlers/exception.py", line 42, in inner
+    response = await get_response(request)
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/local/lib/python3.11/site-packages/asgiref/sync.py", line 555, in thread_handler
+    raise exc_info[1]
+  File "/usr/local/lib/python3.11/site-packages/django/core/handlers/base.py", line 253, in _get_response_async
+    response = await wrapped_callback(
+               ^^^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/local/lib/python3.11/site-packages/asgiref/sync.py", line 504, in __call__
+    ret = await asyncio.shield(exec_coro)
+          ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/local/lib/python3.11/concurrent/futures/thread.py", line 58, in run
+    result = self.fn(*self.args, **self.kwargs)
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/local/lib/python3.11/site-packages/asgiref/sync.py", line 559, in thread_handler
+    return func(*args, **kwargs)
+           ^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/local/lib/python3.11/site-packages/django/contrib/auth/decorators.py", line 23, in _wrapper_view
+    return view_func(request, *args, **kwargs)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/code/apps/accounts/views.py", line 590, in user_detail_view
+    if request.viewed_user.is_admin() and viewed_user.company != request.user.company:
+       ^^^^^^^^^^^^^^^^^^^
+AttributeError: 'ASGIRequest' object has no attribute 'viewed_user'
+ERROR 2025-12-07 14:23:24,415 runserver HTTP GET /accounts/users/6/ 500 [0.08, 172.18.0.1:58794]
+INFO 2025-12-07 14:24:39,849 autoreload /code/apps/accounts/views.py changed, reloading.
+INFO 2025-12-07 14:24:41,797 autoreload Watching for file changes with StatReloader
+INFO 2025-12-07 14:24:42,788 runserver HTTP GET /accounts/users/6/ 200 [0.06, 172.18.0.1:34900]
+INFO 2025-12-07 14:24:49,125 runserver HTTP GET /accounts/users/ 200 [0.04, 172.18.0.1:34900]
+INFO 2025-12-07 14:24:51,069 runserver HTTP GET /accounts/users/1/ 200 [0.04, 172.18.0.1:34900]
+INFO 2025-12-07 14:24:54,007 runserver HTTP GET /accounts/users/6/ 200 [0.03, 172.18.0.1:34900]
+INFO 2025-12-07 14:25:06,783 runserver HTTP GET /dashboard/ 200 [0.04, 172.18.0.1:34900]

@@ -568,57 +568,42 @@ def user_list_view(request):             #######################################
 def user_detail_view(request, pk):
     """
     View detailed information about a user
-
-    Access control:
-    - Admin: Can view any user
-    - Agent: Can only view own profile
-
-    URL: /accounts/users/<pk>/
-    Template: templates/accounts/user_detail.html
     """
-    user = get_object_or_404(User, pk=pk)
+    viewed_user = get_object_or_404(User, pk=pk)
 
     # Permission check
-    if not request.user.is_admin() and user != request.user:
+    if not request.user.is_admin() and viewed_user != request.user:
         messages.error(
             request,
             _('You do not have permission to view this user.')
         )
         return redirect('accounts:profile')
 
-    # Check if user belongs to same company
-    # if request.user.is_admin() and user.company != request.user.company:
-    #     messages.error(
-    #         request,
-    #         _('User not found.')
-    #     )
-    #     return redirect('accounts:user_list')
+    # Check if user belongs to same company (for admins)
+    if request.user.is_admin() and viewed_user.company != request.user.company:
+         messages.error(
+             request,
+             _('User not found.')
+         )
+         return redirect('accounts:user_list')
 
-    profile = user.profile
+    profile = viewed_user.profile
 
     # Performance metrics
-    conversion_rate = user.get_conversion_rate()
-    win_rate = user.get_win_rate()
-    performance_score = user.get_performance_score()
-
-    # TODO: Get user's leads (Phase 3)
-    # from apps.leads.models import Lead
-    # recent_leads = Lead.objects.filter(
-    #     assigned_to=user
-    # ).order_by('-created_at')[:5]
+    conversion_rate = viewed_user.get_conversion_rate()
+    win_rate = viewed_user.get_win_rate()
+    performance_score = viewed_user.get_performance_score()
 
     context = {
-        'viewed_user': user,
+        'viewed_user': viewed_user,
         'profile': profile,
         'conversion_rate': conversion_rate,
         'win_rate': win_rate,
         'performance_score': performance_score,
-        # 'recent_leads': recent_leads,
-        'page_title': user.get_full_name(),
+        'page_title': viewed_user.get_full_name(),
     }
 
     return render(request, 'accounts/user_detail.html', context)
-
 
 @login_required
 @admin_required

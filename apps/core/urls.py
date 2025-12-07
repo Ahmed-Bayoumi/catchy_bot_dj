@@ -11,4 +11,3 @@ urlpatterns = [
     path('settings/company/', views.company_settings_view, name='company_settings'),
 ]
 
-

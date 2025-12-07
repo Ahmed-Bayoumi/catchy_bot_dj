@@ -31,6 +31,7 @@ urlpatterns = [
         name='password_reset_confirm'
     ),
     path('users/', views.user_list_view, name='user_list'),
+    path('users/<int:pk>/toggle-status/', views.toggle_user_status, name='user_toggle_status'),
     path('users/<int:pk>/', views.user_detail_view, name='user_detail'),
     path('users/create/', views.user_create_view, name='user_create'),
     path('users/<int:pk>/edit/', views.user_edit_view, name='user_edit'),

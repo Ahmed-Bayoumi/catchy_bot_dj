@@ -453,7 +453,7 @@
                 </a>
             </li>
             <li>
-                <a href="#" class="{% if active_page == 'users' %}active{% endif %}">
+                <a href="{% url 'accounts:user_list' %}" class="{% if active_page == 'users' %}active{% endif %}">
                     <i class="fas fa-user-cog"></i>
                     <span>Users</span>
                 </a>

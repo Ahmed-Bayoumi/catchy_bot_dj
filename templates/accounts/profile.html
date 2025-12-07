@@ -1,9 +1,596 @@
-{% extends "base.html" %}
+{% extends 'base.html' %}
 
-{% block page_title %}Profile{% endblock %}
+{% block title %}Profile - {{ user.get_full_name }}{% endblock %}
+
+{% block page_title %}My Profile{% endblock %}
+{% block page_subtitle %}View and manage your account information{% endblock %}
 
 {% block content %}
-<h2>{{ user.get_full_name }}</h2>
-<p>Email: {{ user.email }}</p>
-<p>Role: {{ user.get_role_display }}</p>
+
+<!-- ========== Profile Content ========== -->
+<div class="row">
+
+    <!-- ========== Left Column: User Info Card ========== -->
+    <div class="col-md-4">
+
+        <!-- User Info Card -->
+        <div class="card">
+            <div class="card-body text-center">
+
+                <!-- Avatar/Photo -->
+                <div class="mb-4">
+                    {% if user.avatar %}
+                        <!-- User uploaded avatar -->
+                        <img src="{{ user.avatar.url }}"
+                             alt="{{ user.get_full_name }}"
+                             class="rounded-circle mb-3"
+                             style="width: 150px; height: 150px; object-fit: cover; border: 4px solid var(--primary-color);">
+                    {% else %}
+                        <!-- Default avatar with initials -->
+                        <div style="width: 150px; height: 150px;
+                                    background: linear-gradient(135deg, var(--primary-color), var(--secondary-color));
+                                    border-radius: 50%;
+                                    display: flex; align-items: center; justify-content: center;
+                                    margin: 0 auto 20px;
+                                    border: 4px solid var(--primary-color);
+                                    box-shadow: 0 4px 15px rgba(102, 126, 234, 0.3);">
+                            <span style="color: white; font-size: 60px; font-weight: 700;">
+                                {{ user.get_initials }}
+                            </span>
+                        </div>
+                    {% endif %}
+
+                    <!-- Change Photo Button (placeholder) -->
+                    <button class="btn btn-sm btn-outline-primary" disabled>
+                        <i class="fas fa-camera me-2"></i>
+                        Change Photo
+                    </button>
+                </div>
+
+                <!-- Name -->
+                <h4 class="mb-1">{{ user.get_full_name }}</h4>
+
+                <!-- Role Badge -->
+                {% if user.role == 'admin' %}
+                    <span class="badge bg-danger mb-2" style="font-size: 14px;">
+                        <i class="fas fa-crown me-1"></i>
+                        Administrator
+                    </span>
+                {% else %}
+                    <span class="badge bg-primary mb-2" style="font-size: 14px;">
+                        <i class="fas fa-user-tie me-1"></i>
+                        Agent
+                    </span>
+                {% endif %}
+
+                <!-- Company -->
+                <p class="text-muted mb-3">
+                    <i class="fas fa-building me-2"></i>
+                    {{ user.company.name }}
+                </p>
+
+                <hr>
+
+                <!-- Quick Stats -->
+                <div class="row text-center mb-3">
+                    <div class="col-4">
+                        <div class="h4 mb-0 text-primary">{{ user.total_leads_assigned }}</div>
+                        <small class="text-muted">Assigned</small>
+                    </div>
+                    <div class="col-4">
+                        <div class="h4 mb-0 text-warning">{{ user.total_leads_converted }}</div>
+                        <small class="text-muted">Converted</small>
+                    </div>
+                    <div class="col-4">
+                        <div class="h4 mb-0 text-success">{{ user.total_leads_won }}</div>
+                        <small class="text-muted">Won</small>
+                    </div>
+                </div>
+
+                <!-- Edit Profile Button -->
+                <div class="d-grid gap-2">
+                    <a href="{% url 'accounts:profile_edit' %}" class="btn btn-primary">
+                        <i class="fas fa-edit me-2"></i>
+                        Edit Profile
+                    </a>
+                </div>
+
+            </div>
+        </div>
+
+        <!-- Performance Card -->
+        <div class="card mt-3">
+            <div class="card-header">
+                <h5 class="mb-0">
+                    <i class="fas fa-chart-line text-primary me-2"></i>
+                    Performance
+                </h5>
+            </div>
+            <div class="card-body">
+
+                <!-- Conversion Rate -->
+                <div class="mb-3">
+                    <div class="d-flex justify-content-between mb-1">
+                        <span>Conversion Rate</span>
+                        <strong class="text-primary">{{ user.get_conversion_rate|floatformat:1 }}%</strong>
+                    </div>
+                    <div class="progress" style="height: 8px;">
+                        <div class="progress-bar bg-primary"
+                             style="width: {{ user.get_conversion_rate }}%"></div>
+                    </div>
+                </div>
+
+                <!-- Win Rate -->
+                <div class="mb-0">
+                    <div class="d-flex justify-content-between mb-1">
+                        <span>Win Rate</span>
+                        <strong class="text-success">{{ user.get_win_rate|floatformat:1 }}%</strong>
+                    </div>
+                    <div class="progress" style="height: 8px;">
+                        <div class="progress-bar bg-success"
+                             style="width: {{ user.get_win_rate }}%"></div>
+                    </div>
+                </div>
+
+            </div>
+        </div>
+
+    </div>
+
+    <!-- ========== Right Column: Details Tabs ========== -->
+    <div class="col-md-8">
+
+        <!-- Tabs Navigation -->
+        <ul class="nav nav-tabs mb-3" id="profileTabs" role="tablist">
+            <li class="nav-item" role="presentation">
+                <button class="nav-link active"
+                        id="details-tab"
+                        data-bs-toggle="tab"
+                        data-bs-target="#details"
+                        type="button">
+                    <i class="fas fa-info-circle me-2"></i>
+                    Details
+                </button>
+            </li>
+            <li class="nav-item" role="presentation">
+                <button class="nav-link"
+                        id="activity-tab"
+                        data-bs-toggle="tab"
+                        data-bs-target="#activity"
+                        type="button">
+                    <i class="fas fa-history me-2"></i>
+                    Activity
+                </button>
+            </li>
+            <li class="nav-item" role="presentation">
+                <button class="nav-link"
+                        id="settings-tab"
+                        data-bs-toggle="tab"
+                        data-bs-target="#settings"
+                        type="button">
+                    <i class="fas fa-cog me-2"></i>
+                    Settings
+                </button>
+            </li>
+        </ul>
+
+        <!-- Tabs Content -->
+        <div class="tab-content" id="profileTabsContent">
+
+            <!-- ========== Details Tab ========== -->
+            <div class="tab-pane fade show active" id="details" role="tabpanel">
+
+                <!-- Contact Information Card -->
+                <div class="card mb-3">
+                    <div class="card-header">
+                        <h5 class="mb-0">
+                            <i class="fas fa-address-card text-primary me-2"></i>
+                            Contact Information
+                        </h5>
+                    </div>
+                    <div class="card-body">
+
+                        <!-- Email -->
+                        <div class="row mb-3">
+                            <div class="col-md-4">
+                                <label class="text-muted">
+                                    <i class="fas fa-envelope me-2"></i>
+                                    Email
+                                </label>
+                            </div>
+                            <div class="col-md-8">
+                                <strong>{{ user.email }}</strong>
+                            </div>
+                        </div>
+
+                        <!-- Phone -->
+                        <div class="row mb-3">
+                            <div class="col-md-4">
+                                <label class="text-muted">
+                                    <i class="fas fa-phone me-2"></i>
+                                    Phone
+                                </label>
+                            </div>
+                            <div class="col-md-8">
+                                <strong>{{ user.phone|default:"Not provided" }}</strong>
+                            </div>
+                        </div>
+
+                        <!-- Job Title -->
+                        <div class="row mb-3">
+                            <div class="col-md-4">
+                                <label class="text-muted">
+                                    <i class="fas fa-briefcase me-2"></i>
+                                    Job Title
+                                </label>
+                            </div>
+                            <div class="col-md-8">
+                                <strong>{{ user.job_title|default:"Not specified" }}</strong>
+                            </div>
+                        </div>
+
+                        <!-- Department -->
+                        <div class="row mb-0">
+                            <div class="col-md-4">
+                                <label class="text-muted">
+                                    <i class="fas fa-sitemap me-2"></i>
+                                    Department
+                                </label>
+                            </div>
+                            <div class="col-md-8">
+                                <strong>{{ user.department|default:"Not specified" }}</strong>
+                            </div>
+                        </div>
+
+                    </div>
+                </div>
+
+                <!-- Personal Information Card -->
+                <div class="card mb-3">
+                    <div class="card-header">
+                        <h5 class="mb-0">
+                            <i class="fas fa-user text-primary me-2"></i>
+                            Personal Information
+                        </h5>
+                    </div>
+                    <div class="card-body">
+
+                        <!-- Bio -->
+                        <div class="row mb-3">
+                            <div class="col-md-4">
+                                <label class="text-muted">Bio</label>
+                            </div>
+                            <div class="col-md-8">
+                                <p class="mb-0">{{ user.profile.bio|default:"No bio provided"|linebreaks }}</p>
+                            </div>
+                        </div>
+
+                        <!-- Date of Birth -->
+                        <div class="row mb-3">
+                            <div class="col-md-4">
+                                <label class="text-muted">Date of Birth</label>
+                            </div>
+                            <div class="col-md-8">
+                                {% if user.profile.date_of_birth %}
+                                    <strong>{{ user.profile.date_of_birth|date:"F d, Y" }}</strong>
+                                    <span class="text-muted">({{ user.profile.get_age }} years old)</span>
+                                {% else %}
+                                    <span class="text-muted">Not provided</span>
+                                {% endif %}
+                            </div>
+                        </div>
+
+                        <!-- Location -->
+                        <div class="row mb-0">
+                            <div class="col-md-4">
+                                <label class="text-muted">
+                                    <i class="fas fa-map-marker-alt me-2"></i>
+                                    Location
+                                </label>
+                            </div>
+                            <div class="col-md-8">
+                                {% if user.profile.city or user.profile.country %}
+                                    <strong>
+                                        {{ user.profile.city|default:"" }}
+                                        {% if user.profile.city and user.profile.country %}, {% endif %}
+                                        {{ user.profile.country|default:"" }}
+                                    </strong>
+                                {% else %}
+                                    <span class="text-muted">Not provided</span>
+                                {% endif %}
+                            </div>
+                        </div>
+
+                    </div>
+                </div>
+
+                <!-- Social Links Card -->
+                <div class="card">
+                    <div class="card-header">
+                        <h5 class="mb-0">
+                            <i class="fas fa-share-alt text-primary me-2"></i>
+                            Social Links
+                        </h5>
+                    </div>
+                    <div class="card-body">
+
+                        <!-- LinkedIn -->
+                        <div class="row mb-3">
+                            <div class="col-md-4">
+                                <label class="text-muted">
+                                    <i class="fab fa-linkedin me-2"></i>
+                                    LinkedIn
+                                </label>
+                            </div>
+                            <div class="col-md-8">
+                                {% if user.profile.linkedin_url %}
+                                    <a href="{{ user.profile.linkedin_url }}" target="_blank">
+                                        {{ user.profile.linkedin_url }}
+                                        <i class="fas fa-external-link-alt ms-1"></i>
+                                    </a>
+                                {% else %}
+                                    <span class="text-muted">Not provided</span>
+                                {% endif %}
+                            </div>
+                        </div>
+
+                        <!-- Twitter -->
+                        <div class="row mb-0">
+                            <div class="col-md-4">
+                                <label class="text-muted">
+                                    <i class="fab fa-twitter me-2"></i>
+                                    Twitter
+                                </label>
+                            </div>
+                            <div class="col-md-8">
+                                {% if user.profile.twitter_url %}
+                                    <a href="{{ user.profile.twitter_url }}" target="_blank">
+                                        {{ user.profile.twitter_url }}
+                                        <i class="fas fa-external-link-alt ms-1"></i>
+                                    </a>
+                                {% else %}
+                                    <span class="text-muted">Not provided</span>
+                                {% endif %}
+                            </div>
+                        </div>
+
+                    </div>
+                </div>
+
+            </div>
+
+            <!-- ========== Activity Tab ========== -->
+            <div class="tab-pane fade" id="activity" role="tabpanel">
+
+                <div class="card">
+                    <div class="card-header">
+                        <h5 class="mb-0">
+                            <i class="fas fa-history text-primary me-2"></i>
+                            Activity Log
+                        </h5>
+                    </div>
+                    <div class="card-body">
+
+                        <!-- Account Created -->
+                        <div class="d-flex mb-3 pb-3" style="border-bottom: 1px solid #e9ecef;">
+                            <div class="me-3">
+                                <div style="width: 40px; height: 40px;
+                                            background: rgba(40, 167, 69, 0.1);
+                                            border-radius: 50%;
+                                            display: flex; align-items: center; justify-content: center;">
+                                    <i class="fas fa-user-plus" style="color: var(--success-color);"></i>
+                                </div>
+                            </div>
+                            <div class="flex-grow-1">
+                                <strong>Account Created</strong>
+                                <p class="text-muted mb-0">
+                                    <small>
+                                        {{ user.date_joined|date:"F d, Y \a\t H:i" }}
+                                        ({{ user.date_joined|timesince }} ago)
+                                    </small>
+                                </p>
+                            </div>
+                        </div>
+
+                        <!-- Last Login -->
+                        <div class="d-flex mb-3 pb-3" style="border-bottom: 1px solid #e9ecef;">
+                            <div class="me-3">
+                                <div style="width: 40px; height: 40px;
+                                            background: rgba(102, 126, 234, 0.1);
+                                            border-radius: 50%;
+                                            display: flex; align-items: center; justify-content: center;">
+                                    <i class="fas fa-sign-in-alt" style="color: var(--primary-color);"></i>
+                                </div>
+                            </div>
+                            <div class="flex-grow-1">
+                                <strong>Last Login</strong>
+                                <p class="text-muted mb-0">
+                                    <small>
+                                        {% if user.last_login %}
+                                            {{ user.last_login|date:"F d, Y \a\t H:i" }}
+                                            ({{ user.last_login|timesince }} ago)
+                                        {% else %}
+                                            Never logged in before
+                                        {% endif %}
+                                    </small>
+                                </p>
+                            </div>
+                        </div>
+
+                        <!-- Total Logins -->
+                        <div class="d-flex mb-3">
+                            <div class="me-3">
+                                <div style="width: 40px; height: 40px;
+                                            background: rgba(255, 193, 7, 0.1);
+                                            border-radius: 50%;
+                                            display: flex; align-items: center; justify-content: center;">
+                                    <i class="fas fa-hashtag" style="color: var(--warning-color);"></i>
+                                </div>
+                            </div>
+                            <div class="flex-grow-1">
+                                <strong>Total Logins</strong>
+                                <p class="text-muted mb-0">
+                                    <small>{{ user.login_count }} times</small>
+                                </p>
+                            </div>
+                        </div>
+
+                    </div>
+                </div>
+
+            </div>
+
+            <!-- ========== Settings Tab ========== -->
+            <div class="tab-pane fade" id="settings" role="tabpanel">
+
+                <div class="card">
+                    <div class="card-header">
+                        <h5 class="mb-0">
+                            <i class="fas fa-cog text-primary me-2"></i>
+                            Preferences
+                        </h5>
+                    </div>
+                    <div class="card-body">
+
+                        <!-- Email Notifications -->
+                        <div class="d-flex justify-content-between align-items-center mb-3 pb-3"
+                             style="border-bottom: 1px solid #e9ecef;">
+                            <div>
+                                <strong>Email Notifications</strong>
+                                <p class="text-muted mb-0">
+                                    <small>Receive notifications via email</small>
+                                </p>
+                            </div>
+                            <div>
+                                {% if user.profile.email_notifications %}
+                                    <span class="badge bg-success">Enabled</span>
+                                {% else %}
+                                    <span class="badge bg-secondary">Disabled</span>
+                                {% endif %}
+                            </div>
+                        </div>
+
+                        <!-- SMS Notifications -->
+                        <div class="d-flex justify-content-between align-items-center mb-3 pb-3"
+                             style="border-bottom: 1px solid #e9ecef;">
+                            <div>
+                                <strong>SMS Notifications</strong>
+                                <p class="text-muted mb-0">
+                                    <small>Receive notifications via SMS</small>
+                                </p>
+                            </div>
+                            <div>
+                                {% if user.profile.sms_notifications %}
+                                    <span class="badge bg-success">Enabled</span>
+                                {% else %}
+                                    <span class="badge bg-secondary">Disabled</span>
+                                {% endif %}
+                            </div>
+                        </div>
+
+                        <!-- Theme -->
+                        <div class="d-flex justify-content-between align-items-center mb-3 pb-3"
+                             style="border-bottom: 1px solid #e9ecef;">
+                            <div>
+                                <strong>Theme</strong>
+                                <p class="text-muted mb-0">
+                                    <small>Interface appearance</small>
+                                </p>
+                            </div>
+                            <div>
+                                <span class="badge bg-primary">{{ user.profile.get_theme_display }}</span>
+                            </div>
+                        </div>
+
+                        <!-- Language -->
+                        <div class="d-flex justify-content-between align-items-center">
+                            <div>
+                                <strong>Language</strong>
+                                <p class="text-muted mb-0">
+                                    <small>Interface language</small>
+                                </p>
+                            </div>
+                            <div>
+                                <span class="badge bg-info">{{ user.profile.get_language_display }}</span>
+                            </div>
+                        </div>
+
+                    </div>
+                </div>
+
+                <!-- Change Password Card -->
+                <div class="card mt-3">
+                    <div class="card-header">
+                        <h5 class="mb-0">
+                            <i class="fas fa-lock text-primary me-2"></i>
+                            Security
+                        </h5>
+                    </div>
+                    <div class="card-body">
+                        <p class="text-muted mb-3">
+                            Keep your account secure by using a strong password
+                        </p>
+                        <button class="btn btn-outline-danger" disabled>
+                            <i class="fas fa-key me-2"></i>
+                            Change Password
+                        </button>
+                        <small class="text-muted d-block mt-2">
+                            (Password change will be enabled in next update)
+                        </small>
+                    </div>
+                </div>
+
+            </div>
+
+        </div>
+
+    </div>
+
+</div>
+
+{% endblock %}
+
+{% block extra_css %}
+<style>
+    /* Profile page custom styles */
+
+    /* Avatar hover effect */
+    .rounded-circle {
+        transition: transform 0.3s ease;
+    }
+
+    .rounded-circle:hover {
+        transform: scale(1.05);
+    }
+
+    /* Tab styling */
+    .nav-tabs .nav-link {
+        color: #6c757d;
+        border: none;
+        border-bottom: 3px solid transparent;
+        transition: all 0.3s;
+    }
+
+    .nav-tabs .nav-link:hover {
+        border-bottom-color: var(--primary-color);
+        color: var(--primary-color);
+    }
+
+    .nav-tabs .nav-link.active {
+        color: var(--primary-color);
+        border-bottom-color: var(--primary-color);
+        background: transparent;
+        font-weight: 600;
+    }
+
+    /* Info rows */
+    .row.mb-3 {
+        padding: 8px 0;
+    }
+
+    /* Activity timeline */
+    .d-flex.mb-3 {
+        position: relative;
+    }
+</style>
 {% endblock %}

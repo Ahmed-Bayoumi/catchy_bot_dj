@@ -29,40 +29,38 @@ def create_user_profile(sender, instance, created, **kwargs):
         **kwargs: Additional arguments
     """
     if created:
-        # Only run for NEW users (not updates)
-        UserProfile.objects.create(user=instance)
-
-        # Optional: Set default preferences
-        profile = instance.profile
-        profile.theme = 'light'  # Default to light theme
-        profile.email_notifications = True  # Enable email notifications
-        profile.save()
+        if created:
+            profile, created_profile = UserProfile.objects.get_or_create(user=instance)
+            if created_profile:
+                profile.theme = 'light'
+                profile.email_notifications = True
+                profile.save()
 
         # Log the action
         print(f"✅ Profile created for user: {instance.email}")
 
-
-@receiver(post_save, sender=User)
-def save_user_profile(sender, instance, **kwargs):
-    """
-    Save UserProfile when User is saved
-
-    This ensures profile is saved whenever user is saved
-    Useful if you update profile fields along with user fields
-
-    Args:
-        sender (Model class): User model
-        instance (User): The user instance being saved
-        **kwargs: Additional arguments
-
-    Note:
-    - This runs for BOTH new and existing users
-    - For new users: profile was just created by create_user_profile()
-    - For existing users: ensures profile stays in sync
-    """
-    # Check if profile exists (should always exist after create_user_profile)
-    if hasattr(instance, 'profile'):
-        instance.profile.save()
+#
+# @receiver(post_save, sender=User)
+# def save_user_profile(sender, instance, **kwargs):
+#     """
+#     Save UserProfile when User is saved
+#
+#     This ensures profile is saved whenever user is saved
+#     Useful if you update profile fields along with user fields
+#
+#     Args:
+#         sender (Model class): User model
+#         instance (User): The user instance being saved
+#         **kwargs: Additional arguments
+#
+#     Note:
+#     - This runs for BOTH new and existing users
+#     - For new users: profile was just created by create_user_profile()
+#     - For existing users: ensures profile stays in sync
+#     """
+#     # Check if profile exists (should always exist after create_user_profile)
+#     if hasattr(instance, 'profile'):
+#         instance.profile.save()
 
 
 

@@ -78,12 +78,6 @@ class UserManager(BaseUserManager):
             email (str): Admin email
             password (str): Admin password
             **extra_fields: Additional fields
-
-        Returns:
-            User: The created superuser
-
-        Example:
-            python manage.py createsuperuser
         """
         # Set required superuser flags
         extra_fields.setdefault('is_staff', True)

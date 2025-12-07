@@ -1,0 +1,652 @@
+{% extends 'base.html' %}
+
+{% block title %}{{ viewed_user.get_full_name }} - User Details{% endblock %}
+
+{% block page_title %}
+    <a href="{% url 'accounts:user_list' %}" class="text-decoration-none text-dark">
+        <i class="fas fa-arrow-left me-2"></i>
+        Users
+    </a>
+    <i class="fas fa-chevron-right mx-2 text-muted" style="font-size: 14px;"></i>
+    {{ viewed_user.get_full_name }}
+{% endblock %}
+
+{% block page_subtitle %}View and manage user information{% endblock %}
+
+{% block content %}
+
+<!-- ========== User Detail Content ========== -->
+<div class="row">
+    
+    <!-- ========== Left Column: User Info Card ========== -->
+    <div class="col-md-4">
+        
+        <!-- User Info Card -->
+        <div class="card">
+            <div class="card-body text-center">
+                
+                <!-- Avatar/Photo -->
+                <div class="mb-4">
+                    {% if viewed_user.avatar %}
+                        <!-- User uploaded avatar -->
+                        <img src="{{ viewed_user.avatar.url }}"
+                             alt="{{ viewed_user.get_full_name }}"
+                             class="rounded-circle mb-3"
+                             style="width: 150px; height: 150px; object-fit: cover; border: 4px solid var(--primary-color);">
+                    {% else %}
+                        <!-- Default avatar with initials -->
+                        <div style="width: 150px; height: 150px; 
+                                    background: linear-gradient(135deg, var(--primary-color), var(--secondary-color));
+                                    border-radius: 50%; 
+                                    display: flex; align-items: center; justify-content: center;
+                                    margin: 0 auto 20px;
+                                    border: 4px solid var(--primary-color);
+                                    box-shadow: 0 4px 15px rgba(102, 126, 234, 0.3);">
+                            <span style="color: white; font-size: 60px; font-weight: 700;">
+                                {{ viewed_user.get_initials }}
+                            </span>
+                        </div>
+                    {% endif %}
+                </div>
+                
+                <!-- Name -->
+                <h4 class="mb-1">{{ viewed_user.get_full_name }}</h4>
+                
+                <!-- Role Badge -->
+                {% if viewed_user.role == 'admin' %}
+                    <span class="badge bg-danger mb-2" style="font-size: 14px;">
+                        <i class="fas fa-crown me-1"></i>
+                        Administrator
+                    </span>
+                {% else %}
+                    <span class="badge bg-primary mb-2" style="font-size: 14px;">
+                        <i class="fas fa-user-tie me-1"></i>
+                        Agent
+                    </span>
+                {% endif %}
+                
+                <!-- Status Badge -->
+                {% if viewed_user.is_active %}
+                    <span class="badge bg-success mb-2" style="font-size: 14px;">
+                        <i class="fas fa-check-circle me-1"></i>
+                        Active
+                    </span>
+                {% else %}
+                    <span class="badge bg-secondary mb-2" style="font-size: 14px;">
+                        <i class="fas fa-times-circle me-1"></i>
+                        Inactive
+                    </span>
+                {% endif %}
+                
+                <!-- Company -->
+                <p class="text-muted mb-3">
+                    <i class="fas fa-building me-2"></i>
+                    {{ viewed_user.company.name }}
+                </p>
+                
+                <hr>
+                
+                <!-- Quick Stats -->
+                <div class="row text-center mb-3">
+                    <div class="col-4">
+                        <div class="h4 mb-0 text-primary">{{ viewed_user.total_leads_assigned }}</div>
+                        <small class="text-muted">Assigned</small>
+                    </div>
+                    <div class="col-4">
+                        <div class="h4 mb-0 text-warning">{{ viewed_user.total_leads_converted }}</div>
+                        <small class="text-muted">Converted</small>
+                    </div>
+                    <div class="col-4">
+                        <div class="h4 mb-0 text-success">{{ viewed_user.total_leads_won }}</div>
+                        <small class="text-muted">Won</small>
+                    </div>
+                </div>
+                
+                <!-- Action Buttons -->
+                <div class="d-grid gap-2">
+                    <!-- Edit Button (disabled for now) -->
+                    <button class="btn btn-primary" disabled>
+                        <i class="fas fa-edit me-2"></i>
+                        Edit User
+                    </button>
+                    
+                    <!-- Toggle Status Button -->
+                    {% if viewed_user != request.user %}
+                    <form method="POST" 
+                          action="{% url 'accounts:user_toggle_status' user.id %}"
+                          style="margin: 0;">
+                        {% csrf_token %}
+                        {% if viewed_user.is_active %}
+                            <button type="submit" 
+                                    class="btn btn-outline-danger w-100"
+                                    onclick="return confirm('Are you sure you want to deactivate {{ viewed_user.get_full_name }}?\n\nThis user will not be able to log in until reactivated.')">
+                                <i class="fas fa-ban me-2"></i>
+                                Deactivate User
+                            </button>
+                        {% else %}
+                            <button type="submit" 
+                                    class="btn btn-outline-success w-100"
+                                    onclick="return confirm('Are you sure you want to activate {{ viewed_user.get_full_name }}?')">
+                                <i class="fas fa-check me-2"></i>
+                                Activate User
+                            </button>
+                        {% endif %}
+                    </form>
+                    {% else %}
+                    <div class="alert alert-info mb-0">
+                        <small>
+                            <i class="fas fa-info-circle me-2"></i>
+                            This is your account
+                        </small>
+                    </div>
+                    {% endif %}
+                </div>
+                
+            </div>
+        </div>
+        
+        <!-- Performance Card -->
+        <div class="card mt-3">
+            <div class="card-header">
+                <h5 class="mb-0">
+                    <i class="fas fa-chart-line text-primary me-2"></i>
+                    Performance Metrics
+                </h5>
+            </div>
+            <div class="card-body">
+                
+                <!-- Conversion Rate -->
+                <div class="mb-3">
+                    <div class="d-flex justify-content-between mb-1">
+                        <span>Conversion Rate</span>
+                        <strong class="text-primary">{{ viewed_user.get_conversion_rate|floatformat:1 }}%</strong>
+                    </div>
+                    <div class="progress" style="height: 8px;">
+                        <div class="progress-bar bg-primary" 
+                             style="width: {{ viewed_user.get_conversion_rate }}%"></div>
+                    </div>
+                </div>
+                
+                <!-- Win Rate -->
+                <div class="mb-0">
+                    <div class="d-flex justify-content-between mb-1">
+                        <span>Win Rate</span>
+                        <strong class="text-success">{{ viewed_user.get_win_rate|floatformat:1 }}%</strong>
+                    </div>
+                    <div class="progress" style="height: 8px;">
+                        <div class="progress-bar bg-success" 
+                             style="width: {{ viewed_user.get_win_rate }}%"></div>
+                    </div>
+                </div>
+                
+            </div>
+        </div>
+        
+    </div>
+    
+    <!-- ========== Right Column: Details Tabs ========== -->
+    <div class="col-md-8">
+        
+        <!-- Tabs Navigation -->
+        <ul class="nav nav-tabs mb-3" id="userDetailTabs" role="tablist">
+            <li class="nav-item" role="presentation">
+                <button class="nav-link active" 
+                        id="contact-tab" 
+                        data-bs-toggle="tab" 
+                        data-bs-target="#contact" 
+                        type="button">
+                    <i class="fas fa-address-card me-2"></i>
+                    Contact Info
+                </button>
+            </li>
+            <li class="nav-item" role="presentation">
+                <button class="nav-link" 
+                        id="personal-tab" 
+                        data-bs-toggle="tab" 
+                        data-bs-target="#personal" 
+                        type="button">
+                    <i class="fas fa-user me-2"></i>
+                    Personal Info
+                </button>
+            </li>
+            <li class="nav-item" role="presentation">
+                <button class="nav-link" 
+                        id="activity-tab" 
+                        data-bs-toggle="tab" 
+                        data-bs-target="#activity" 
+                        type="button">
+                    <i class="fas fa-history me-2"></i>
+                    Activity
+                </button>
+            </li>
+            <li class="nav-item" role="presentation">
+                <button class="nav-link" 
+                        id="leads-tab" 
+                        data-bs-toggle="tab" 
+                        data-bs-target="#leads" 
+                        type="button">
+                    <i class="fas fa-users me-2"></i>
+                    Leads
+                    <span class="badge bg-primary ms-1">{{ viewed_user.total_leads_assigned }}</span>
+                </button>
+            </li>
+        </ul>
+        
+        <!-- Tabs Content -->
+        <div class="tab-content" id="userDetailTabsContent">
+            
+            <!-- ========== Contact Info Tab ========== -->
+            <div class="tab-pane fade show active" id="contact" role="tabpanel">
+                
+                <div class="card">
+                    <div class="card-header">
+                        <h5 class="mb-0">
+                            <i class="fas fa-address-card text-primary me-2"></i>
+                            Contact Information
+                        </h5>
+                    </div>
+                    <div class="card-body">
+                        
+                        <!-- Email -->
+                        <div class="row mb-3">
+                            <div class="col-md-4">
+                                <label class="text-muted">
+                                    <i class="fas fa-envelope me-2"></i>
+                                    Email
+                                </label>
+                            </div>
+                            <div class="col-md-8">
+                                <strong>{{ viewed_user.email }}</strong>
+                                <a href="mailto:{{ viewed_user.email }}" class="btn btn-sm btn-outline-primary ms-2">
+                                    <i class="fas fa-paper-plane"></i>
+                                </a>
+                            </div>
+                        </div>
+                        
+                        <!-- Phone -->
+                        <div class="row mb-3">
+                            <div class="col-md-4">
+                                <label class="text-muted">
+                                    <i class="fas fa-phone me-2"></i>
+                                    Phone
+                                </label>
+                            </div>
+                            <div class="col-md-8">
+                                {% if viewed_user.phone %}
+                                    <strong>{{ viewed_user.phone }}</strong>
+                                    <a href="tel:{{ viewed_user.phone }}" class="btn btn-sm btn-outline-primary ms-2">
+                                        <i class="fas fa-phone"></i>
+                                    </a>
+                                {% else %}
+                                    <span class="text-muted">Not provided</span>
+                                {% endif %}
+                            </div>
+                        </div>
+                        
+                        <!-- Job Title -->
+                        <div class="row mb-3">
+                            <div class="col-md-4">
+                                <label class="text-muted">
+                                    <i class="fas fa-briefcase me-2"></i>
+                                    Job Title
+                                </label>
+                            </div>
+                            <div class="col-md-8">
+                                <strong>{{ viewed_user.job_title|default:"Not specified" }}</strong>
+                            </div>
+                        </div>
+                        
+                        <!-- Department -->
+                        <div class="row mb-0">
+                            <div class="col-md-4">
+                                <label class="text-muted">
+                                    <i class="fas fa-sitemap me-2"></i>
+                                    Department
+                                </label>
+                            </div>
+                            <div class="col-md-8">
+                                <strong>{{ viewed_user.department|default:"Not specified" }}</strong>
+                            </div>
+                        </div>
+                        
+                    </div>
+                </div>
+                
+            </div>
+            
+            <!-- ========== Personal Info Tab ========== -->
+            <div class="tab-pane fade" id="personal" role="tabpanel">
+                
+                <div class="card mb-3">
+                    <div class="card-header">
+                        <h5 class="mb-0">
+                            <i class="fas fa-user text-primary me-2"></i>
+                            Personal Information
+                        </h5>
+                    </div>
+                    <div class="card-body">
+                        
+                        <!-- Bio -->
+                        <div class="row mb-3">
+                            <div class="col-md-4">
+                                <label class="text-muted">Bio</label>
+                            </div>
+                            <div class="col-md-8">
+                                <p class="mb-0">{{ viewed_user.profile.bio|default:"No bio provided"|linebreaks }}</p>
+                            </div>
+                        </div>
+                        
+                        <!-- Date of Birth -->
+                        <div class="row mb-3">
+                            <div class="col-md-4">
+                                <label class="text-muted">Date of Birth</label>
+                            </div>
+                            <div class="col-md-8">
+                                {% if viewed_user.profile.date_of_birth %}
+                                    <strong>{{ viewed_user.profile.date_of_birth|date:"F d, Y" }}</strong>
+                                    <span class="text-muted">({{ viewed_user.profile.get_age }} years old)</span>
+                                {% else %}
+                                    <span class="text-muted">Not provided</span>
+                                {% endif %}
+                            </div>
+                        </div>
+                        
+                        <!-- Address -->
+                        <div class="row mb-3">
+                            <div class="col-md-4">
+                                <label class="text-muted">
+                                    <i class="fas fa-map-marker-alt me-2"></i>
+                                    Address
+                                </label>
+                            </div>
+                            <div class="col-md-8">
+                                {% if viewed_user.profile.address %}
+                                    <p class="mb-0">{{ viewed_user.profile.address|linebreaks }}</p>
+                                {% else %}
+                                    <span class="text-muted">Not provided</span>
+                                {% endif %}
+                            </div>
+                        </div>
+                        
+                        <!-- Location -->
+                        <div class="row mb-0">
+                            <div class="col-md-4">
+                                <label class="text-muted">City & Country</label>
+                            </div>
+                            <div class="col-md-8">
+                                {% if viewed_user.profile.city or viewed_user.profile.country %}
+                                    <strong>
+                                        {{ viewed_user.profile.city|default:"" }}
+                                        {% if viewed_user.profile.city and viewed_user.profile.country %}, {% endif %}
+                                        {{ viewed_user.profile.country|default:"" }}
+                                    </strong>
+                                {% else %}
+                                    <span class="text-muted">Not provided</span>
+                                {% endif %}
+                            </div>
+                        </div>
+                        
+                    </div>
+                </div>
+                
+                <!-- Social Links Card -->
+                <div class="card">
+                    <div class="card-header">
+                        <h5 class="mb-0">
+                            <i class="fas fa-share-alt text-primary me-2"></i>
+                            Social Links
+                        </h5>
+                    </div>
+                    <div class="card-body">
+                        
+                        <!-- LinkedIn -->
+                        <div class="row mb-3">
+                            <div class="col-md-4">
+                                <label class="text-muted">
+                                    <i class="fab fa-linkedin me-2"></i>
+                                    LinkedIn
+                                </label>
+                            </div>
+                            <div class="col-md-8">
+                                {% if viewed_user.profile.linkedin_url %}
+                                    <a href="{{ viewed_user.profile.linkedin_url }}" target="_blank" class="text-decoration-none">
+                                        {{ viewed_user.profile.linkedin_url }}
+                                        <i class="fas fa-external-link-alt ms-1"></i>
+                                    </a>
+                                {% else %}
+                                    <span class="text-muted">Not provided</span>
+                                {% endif %}
+                            </div>
+                        </div>
+                        
+                        <!-- Twitter -->
+                        <div class="row mb-0">
+                            <div class="col-md-4">
+                                <label class="text-muted">
+                                    <i class="fab fa-twitter me-2"></i>
+                                    Twitter
+                                </label>
+                            </div>
+                            <div class="col-md-8">
+                                {% if viewed_user.profile.twitter_url %}
+                                    <a href="{{ viewed_user.profile.twitter_url }}" target="_blank" class="text-decoration-none">
+                                        {{ viewed_user.profile.twitter_url }}
+                                        <i class="fas fa-external-link-alt ms-1"></i>
+                                    </a>
+                                {% else %}
+                                    <span class="text-muted">Not provided</span>
+                                {% endif %}
+                            </div>
+                        </div>
+                        
+                    </div>
+                </div>
+                
+            </div>
+            
+            <!-- ========== Activity Tab ========== -->
+            <div class="tab-pane fade" id="activity" role="tabpanel">
+                
+                <div class="card">
+                    <div class="card-header">
+                        <h5 class="mb-0">
+                            <i class="fas fa-history text-primary me-2"></i>
+                            Activity Log
+                        </h5>
+                    </div>
+                    <div class="card-body">
+                        
+                        <!-- Account Created -->
+                        <div class="d-flex mb-3 pb-3" style="border-bottom: 1px solid #e9ecef;">
+                            <div class="me-3">
+                                <div style="width: 40px; height: 40px; 
+                                            background: rgba(40, 167, 69, 0.1);
+                                            border-radius: 50%;
+                                            display: flex; align-items: center; justify-content: center;">
+                                    <i class="fas fa-user-plus" style="color: var(--success-color);"></i>
+                                </div>
+                            </div>
+                            <div class="flex-grow-1">
+                                <strong>Account Created</strong>
+                                <p class="text-muted mb-0">
+                                    <small>
+                                        {{ viewed_user.date_joined|date:"F d, Y \a\t H:i" }}
+                                        ({{ viewed_user.date_joined|timesince }} ago)
+                                    </small>
+                                </p>
+                            </div>
+                        </div>
+                        
+                        <!-- Last Login -->
+                        <div class="d-flex mb-3 pb-3" style="border-bottom: 1px solid #e9ecef;">
+                            <div class="me-3">
+                                <div style="width: 40px; height: 40px; 
+                                            background: rgba(102, 126, 234, 0.1);
+                                            border-radius: 50%;
+                                            display: flex; align-items: center; justify-content: center;">
+                                    <i class="fas fa-sign-in-alt" style="color: var(--primary-color);"></i>
+                                </div>
+                            </div>
+                            <div class="flex-grow-1">
+                                <strong>Last Login</strong>
+                                <p class="text-muted mb-0">
+                                    <small>
+                                        {% if viewed_user.last_login %}
+                                            {{ viewed_user.last_login|date:"F d, Y \a\t H:i" }}
+                                            ({{ viewed_user.last_login|timesince }} ago)
+                                        {% else %}
+                                            Never logged in before
+                                        {% endif %}
+                                    </small>
+                                </p>
+                            </div>
+                        </div>
+                        
+                        <!-- Total Logins -->
+                        <div class="d-flex mb-3 pb-3" style="border-bottom: 1px solid #e9ecef;">
+                            <div class="me-3">
+                                <div style="width: 40px; height: 40px; 
+                                            background: rgba(255, 193, 7, 0.1);
+                                            border-radius: 50%;
+                                            display: flex; align-items: center; justify-content: center;">
+                                    <i class="fas fa-hashtag" style="color: var(--warning-color);"></i>
+                                </div>
+                            </div>
+                            <div class="flex-grow-1">
+                                <strong>Total Logins</strong>
+                                <p class="text-muted mb-0">
+                                    <small>{{ viewed_user.login_count }} times</small>
+                                </p>
+                            </div>
+                        </div>
+                        
+                        <!-- Last Login IP -->
+                        {% if viewed_user.last_login_ip %}
+                        <div class="d-flex">
+                            <div class="me-3">
+                                <div style="width: 40px; height: 40px; 
+                                            background: rgba(23, 162, 184, 0.1);
+                                            border-radius: 50%;
+                                            display: flex; align-items: center; justify-content: center;">
+                                    <i class="fas fa-network-wired" style="color: var(--info-color);"></i>
+                                </div>
+                            </div>
+                            <div class="flex-grow-1">
+                                <strong>Last Login IP</strong>
+                                <p class="text-muted mb-0">
+                                    <small><code>{{ viewed_user.last_login_ip }}</code></small>
+                                </p>
+                            </div>
+                        </div>
+                        {% endif %}
+                        
+                    </div>
+                </div>
+                
+            </div>
+            
+            <!-- ========== Leads Tab ========== -->
+            <div class="tab-pane fade" id="leads" role="tabpanel">
+                
+                <div class="card">
+                    <div class="card-header">
+                        <h5 class="mb-0">
+                            <i class="fas fa-users text-primary me-2"></i>
+                            Assigned Leads
+                        </h5>
+                    </div>
+                    <div class="card-body">
+                        
+                        <!-- Placeholder for Phase 3 -->
+                        <div class="text-center py-5">
+                            <i class="fas fa-users fa-4x text-muted mb-3"></i>
+                            <h5 class="text-muted">Leads Module Coming Soon</h5>
+                            <p class="text-muted">
+                                This section will show all leads assigned to {{ viewed_user.first_name }}<br>
+                                <small>Available in Phase 3</small>
+                            </p>
+                            
+                            <!-- Current Stats -->
+                            <div class="row mt-4">
+                                <div class="col-md-4">
+                                    <div class="h2 mb-0 text-primary">{{ viewed_user.total_leads_assigned }}</div>
+                                    <small class="text-muted">Total Assigned</small>
+                                </div>
+                                <div class="col-md-4">
+                                    <div class="h2 mb-0 text-warning">{{ viewed_user.total_leads_converted }}</div>
+                                    <small class="text-muted">Converted</small>
+                                </div>
+                                <div class="col-md-4">
+                                    <div class="h2 mb-0 text-success">{{ viewed_user.total_leads_won }}</div>
+                                    <small class="text-muted">Won</small>
+                                </div>
+                            </div>
+                        </div>
+                        
+                    </div>
+                </div>
+                
+            </div>
+            
+        </div>
+        
+    </div>
+    
+</div>
+
+{% endblock %}
+
+{% block extra_css %}
+<style>
+    /* User detail page custom styles */
+    
+    /* Avatar hover effect */
+    .rounded-circle {
+        transition: transform 0.3s ease;
+    }
+    
+    .rounded-circle:hover {
+        transform: scale(1.05);
+    }
+    
+    /* Tab styling */
+    .nav-tabs .nav-link {
+        color: #6c757d;
+        border: none;
+        border-bottom: 3px solid transparent;
+        transition: all 0.3s;
+    }
+    
+    .nav-tabs .nav-link:hover {
+        border-bottom-color: var(--primary-color);
+        color: var(--primary-color);
+    }
+    
+    .nav-tabs .nav-link.active {
+        color: var(--primary-color);
+        border-bottom-color: var(--primary-color);
+        background: transparent;
+        font-weight: 600;
+    }
+    
+    /* Info rows */
+    .row.mb-3 {
+        padding: 8px 0;
+        border-bottom: 1px solid #f0f0f0;
+    }
+    
+    .row.mb-3:last-child,
+    .row.mb-0 {
+        border-bottom: none;
+    }
+    
+    /* Code styling */
+    code {
+        background: #f8f9fa;
+        padding: 4px 8px;
+        border-radius: 4px;
+        font-size: 13px;
+        color: var(--primary-color);
+    }
+</style>
+{% endblock %}
