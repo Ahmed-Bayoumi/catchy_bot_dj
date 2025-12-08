@@ -16463,6 +16463,7 @@ INFO 2025-12-06 21:47:06,161 runserver HTTP GET /accounts/login/ 200 [0.01, 172.
 INFO 2025-12-06 21:47:08,625 runserver HTTP POST /accounts/login/ 302 [0.41, 172.19.0.1:37934]
 INFO 2025-12-06 21:47:08,659 runserver HTTP GET /dashboard/ 200 [0.03, 172.19.0.1:37934]
 INFO 2025-12-06 21:47:46,697 runserver HTTP GET /dashboard/settings/company/ 200 [0.02, 172.19.0.1:37934]
+INFO 2025-12-08 01:46:29,175 autoreload Watching for file changes with StatReloader
 INFO 2025-12-07 12:22:54,644 autoreload Watching for file changes with StatReloader
 ERROR 2025-12-07 12:23:22,545 log Internal Server Error: /admin/
 Traceback (most recent call last):
@@ -18898,3 +18899,66 @@ INFO 2025-12-07 16:40:04,309 runserver HTTP GET /dashboard/ 200 [0.05, 172.18.0.
 INFO 2025-12-07 16:40:05,265 runserver HTTP GET /dashboard/ 200 [0.03, 172.18.0.1:47356]
 INFO 2025-12-07 16:40:13,689 runserver HTTP GET /dashboard/ 200 [0.04, 172.18.0.1:47356]
 INFO 2025-12-07 16:40:14,570 runserver HTTP GET /dashboard/ 200 [0.03, 172.18.0.1:47356]
+INFO 2025-12-08 02:11:40,071 autoreload Watching for file changes with StatReloader
+INFO 2025-12-08 02:19:17,379 runserver HTTP GET /dashboard/settings/company/ 302 [0.04, 172.19.0.1:55212]
+INFO 2025-12-08 02:19:17,439 runserver HTTP GET /accounts/login/?next=/dashboard/settings/company/ 200 [0.04, 172.19.0.1:55212]
+WARNING 2025-12-08 02:19:17,673 log Not Found: /favicon.ico
+WARNING 2025-12-08 02:19:17,676 runserver HTTP GET /favicon.ico 404 [0.02, 172.19.0.1:55212]
+INFO 2025-12-08 02:19:20,762 runserver HTTP POST /accounts/login/ 302 [0.51, 172.19.0.1:55212]
+INFO 2025-12-08 02:19:20,893 runserver HTTP GET /dashboard/ 200 [0.12, 172.19.0.1:55212]
+INFO 2025-12-08 02:19:34,592 runserver HTTP GET /accounts/profile/ 200 [0.04, 172.19.0.1:43192]
+ERROR 2025-12-08 02:19:39,305 log Internal Server Error: /accounts/profile/edit/
+Traceback (most recent call last):
+  File "/usr/local/lib/python3.11/site-packages/asgiref/sync.py", line 555, in thread_handler
+    raise exc_info[1]
+  File "/usr/local/lib/python3.11/site-packages/django/core/handlers/exception.py", line 42, in inner
+    response = await get_response(request)
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/local/lib/python3.11/site-packages/asgiref/sync.py", line 555, in thread_handler
+    raise exc_info[1]
+  File "/usr/local/lib/python3.11/site-packages/django/core/handlers/base.py", line 253, in _get_response_async
+    response = await wrapped_callback(
+               ^^^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/local/lib/python3.11/site-packages/asgiref/sync.py", line 504, in __call__
+    ret = await asyncio.shield(exec_coro)
+          ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/local/lib/python3.11/concurrent/futures/thread.py", line 58, in run
+    result = self.fn(*self.args, **self.kwargs)
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/local/lib/python3.11/site-packages/asgiref/sync.py", line 559, in thread_handler
+    return func(*args, **kwargs)
+           ^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/local/lib/python3.11/site-packages/django/contrib/auth/decorators.py", line 23, in _wrapper_view
+    return view_func(request, *args, **kwargs)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/code/apps/accounts/views.py", line 285, in profile_edit_view
+    return render(request, 'accounts/profile_edit.html', context)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/local/lib/python3.11/site-packages/django/shortcuts.py", line 24, in render
+    content = loader.render_to_string(template_name, context, request, using=using)
+              ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/local/lib/python3.11/site-packages/django/template/loader.py", line 61, in render_to_string
+    template = get_template(template_name, using=using)
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/local/lib/python3.11/site-packages/django/template/loader.py", line 19, in get_template
+    raise TemplateDoesNotExist(template_name, chain=chain)
+django.template.exceptions.TemplateDoesNotExist: accounts/profile_edit.html
+ERROR 2025-12-08 02:19:39,319 runserver HTTP GET /accounts/profile/edit/ 500 [0.09, 172.19.0.1:43192]
+INFO 2025-12-08 02:19:48,384 runserver HTTP GET /accounts/users/ 200 [0.04, 172.19.0.1:54516]
+INFO 2025-12-08 02:19:51,120 runserver HTTP GET /accounts/users/3/ 200 [0.03, 172.19.0.1:54516]
+INFO 2025-12-08 02:19:55,975 runserver HTTP GET /accounts/profile/ 200 [0.03, 172.19.0.1:54532]
+INFO 2025-12-08 02:20:00,008 runserver HTTP GET /dashboard/settings/company/ 200 [0.06, 172.19.0.1:54532]
+INFO 2025-12-08 02:20:21,512 runserver HTTP GET /dashboard/ 200 [0.03, 172.19.0.1:59942]
+INFO 2025-12-08 02:20:48,432 runserver HTTP GET /accounts/profile/ 200 [0.03, 172.19.0.1:50894]
+INFO 2025-12-08 02:21:01,832 runserver HTTP GET /admin/ 200 [0.07, 172.19.0.1:50912]
+INFO 2025-12-08 02:21:01,872 runserver HTTP GET /static/admin/css/base.css 304 [0.02, 172.19.0.1:50912]
+INFO 2025-12-08 02:21:01,876 runserver HTTP GET /static/admin/css/dark_mode.css 304 [0.02, 172.19.0.1:50920]
+INFO 2025-12-08 02:21:01,887 runserver HTTP GET /static/admin/css/dashboard.css 304 [0.02, 172.19.0.1:53940]
+INFO 2025-12-08 02:21:01,892 runserver HTTP GET /static/admin/css/nav_sidebar.css 304 [0.02, 172.19.0.1:53952]
+INFO 2025-12-08 02:21:01,894 runserver HTTP GET /static/admin/css/responsive.css 304 [0.01, 172.19.0.1:53962]
+INFO 2025-12-08 02:21:01,896 runserver HTTP GET /static/admin/js/nav_sidebar.js 304 [0.01, 172.19.0.1:50912]
+INFO 2025-12-08 02:21:01,903 runserver HTTP GET /static/admin/js/theme.js 304 [0.02, 172.19.0.1:53976]
+INFO 2025-12-08 02:21:01,916 runserver HTTP GET /static/admin/img/icon-addlink.svg 304 [0.01, 172.19.0.1:50912]
+INFO 2025-12-08 02:21:01,917 runserver HTTP GET /static/admin/img/icon-changelink.svg 304 [0.01, 172.19.0.1:53976]
+INFO 2025-12-08 02:31:56,203 autoreload /code/apps/core/admin.py changed, reloading.
+INFO 2025-12-08 02:32:00,713 autoreload Watching for file changes with StatReloader

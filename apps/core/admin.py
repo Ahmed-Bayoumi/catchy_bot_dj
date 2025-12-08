@@ -5,18 +5,6 @@ from .models import Company, LeadSource, LeadStage
 
 @admin.register(Company)
 class CompanyAdmin(admin.ModelAdmin):
-    """
-    Admin interface for Company model
-
-    Features:
-        - List display with key information
-        - Search by name, email, phone
-        - Filter by status and creation date
-        - Auto-generate slug from name
-        - Show user count
-        - Organized fieldsets
-        - Custom badges for status
-    """
 
     list_display = [
         'name',
@@ -52,10 +40,6 @@ class CompanyAdmin(admin.ModelAdmin):
     def contact_info(self, obj):
         """
         Display contact information in list view
-
-        Shows:
-            - Phone with icon
-            - Email with icon
         """
         html = f'<div style="line-height: 1.5;">'
         if obj.phone:
@@ -90,11 +74,7 @@ class CompanyAdmin(admin.ModelAdmin):
     status_badge.short_description = 'Status'
 
     def users_count(self, obj):
-        """
-        Display active user count
 
-        Shows count with colored text
-        """
         count = obj.get_active_users_count()
         return format_html(
             '<span style="color: #667eea; font-weight: bold;">{} users</span>',
@@ -106,16 +86,6 @@ class CompanyAdmin(admin.ModelAdmin):
 
 @admin.register(LeadSource)
 class LeadSourceAdmin(admin.ModelAdmin):
-    """
-    Admin interface for LeadSource model
-
-    Features:
-        - Visual display with icon and color
-        - Order-based sorting
-        - Quick status toggle
-        - Color preview
-        - Icon preview
-    """
 
     list_display = [
         'order',
@@ -142,13 +112,7 @@ class LeadSourceAdmin(admin.ModelAdmin):
     )
 
     def name_with_icon(self, obj):
-        """
-        Display name with icon preview
 
-        Shows:
-            - Icon in source color
-            - Name in bold
-        """
         return format_html(
             '<i class="{}" style="color: {}; margin-right: 8px;"></i> {}',
             obj.icon,
@@ -159,13 +123,7 @@ class LeadSourceAdmin(admin.ModelAdmin):
     name_with_icon.short_description = 'Source'
 
     def color_preview(self, obj):
-        """
-        Display color preview box
 
-        Shows:
-            - 40x20 colored box
-            - Border for visibility
-        """
         return format_html(
             '<div style="width: 40px; height: 20px; background-color: {}; '
             'border-radius: 3px; border: 1px solid #ddd;"></div>',
@@ -199,16 +157,6 @@ class LeadSourceAdmin(admin.ModelAdmin):
 
 @admin.register(LeadStage)
 class LeadStageAdmin(admin.ModelAdmin):
-    """
-    Admin interface for LeadStage model
-
-    Features:
-        - Ordered list (for Kanban board order)
-        - Visual stage type badges
-        - Color preview
-        - Icon preview
-        - Grouped by stage type
-    """
 
     list_display = [
         'order',
@@ -240,13 +188,6 @@ class LeadStageAdmin(admin.ModelAdmin):
     )
 
     def name_with_icon(self, obj):
-        """
-        Display name with icon preview
-
-        Shows:
-            - Icon in stage color (if available)
-            - Name in bold
-        """
         icon_html = ''
         if obj.icon:
             icon_html = f'<i class="{obj.icon}" style="color: {obj.color}; margin-right: 8px;"></i>'
@@ -259,18 +200,11 @@ class LeadStageAdmin(admin.ModelAdmin):
     name_with_icon.short_description = 'Stage'
 
     def stage_type_badge(self, obj):
-        """
-        Display stage type as colored badge
 
-        Colors:
-            - Lead: Info blue (#17a2b8)
-            - Patient: Success green (#28a745)
-            - Closed: Secondary gray (#6c757d)
-        """
         colors = {
-            'lead': '#17a2b8',  # Info blue
-            'patient': '#28a745',  # Success green
-            'closed': '#6c757d',  # Secondary gray
+            'lead': '#17a2b8',  #  blue
+            'patient': '#28a745',  #  green
+            'closed': '#6c757d',  #  gray
         }
         return format_html(
             '<span style="background-color: {}; color: white; '
@@ -282,13 +216,6 @@ class LeadStageAdmin(admin.ModelAdmin):
     stage_type_badge.short_description = 'Type'
 
     def color_preview(self, obj):
-        """
-        Display color preview box
-
-        Shows:
-            - 40x20 colored box
-            - Border for visibility
-        """
         return format_html(
             '<div style="width: 40px; height: 20px; background-color: {}; '
             'border-radius: 3px; border: 1px solid #ddd;"></div>',
