@@ -1,0 +1,1341 @@
+# CATCHY BOT CRM - MASTER PROMPT v5.0 (Complete with Testing & WhatsApp Templates)
+
+===============================================================================
+
+## 📋 PROJECT OVERVIEW
+
+**Project Name:** Catchy Bot CRM  
+**Purpose:** WhatsApp Lead Management System for Medical Clinics  
+**Timeline:** 40 days (8 weeks)  
+**Approach:** Model → View → Template → Test (after each step)
+
+---
+
+## 🎯 WHAT WE'RE BUILDING
+
+```
+✅ Multi-tenancy (isolated clinics)
+✅ 2 Roles: Admin + Agent
+✅ WhatsApp Integration (Woztell)
+✅ WhatsApp Business Templates (Like Official WhatsApp) ⭐
+✅ Lead Journey: Lead → Patient → Won/Lost
+✅ Real-time Chat (WebSocket)
+✅ Kanban Board (Drag & Drop)
+✅ Call Logging
+✅ Appointments
+✅ Dashboard + Reports
+✅ Test EVERYTHING after each step
+```
+
+---
+
+## 📐 DEVELOPMENT APPROACH (CRITICAL!)
+
+### After EVERY Model/View/Template:
+
+```
+✅ Step 1: Create Model
+✅ Step 2: Create View
+✅ Step 3: Create Template
+✅ Step 4: Create URL
+✅ Step 5: TEST IT (manual + automated)
+✅ Step 6: Explain in Arabic what we did
+✅ Step 7: Show what we can see in browser
+✅ Step 8: Move to next feature
+
+DO NOT skip to next feature without testing current one!
+```
+
+---
+
+## ⚠️ CRITICAL: MIGRATION ORDER
+
+```
+1. accounts FIRST (Custom User)
+2. core SECOND (Company, LeadSource)
+3. leads THIRD (Lead model)
+4. whatsapp, chat, appointments, contacts LAST
+
+NEVER deviate from this order!
+```
+
+---
+
+## 🗺️ PHASES (11 Phases - 40 Days)
+
+```
+Phase 0: Setup (1 day)
+Phase 1: Accounts + Login UI ⭐ (4 days)
+Phase 2: Core + Dashboard UI (3 days)
+Phase 3: Leads + Full CRUD UI (6 days)
+Phase 4: WhatsApp + Webhook UI (5 days)
+Phase 5: WhatsApp Templates UI ⭐ (3 days)
+Phase 6: Chat + Real-time UI (6 days)
+Phase 7: Appointments + Calendar UI (4 days)
+Phase 8: Contacts UI (2 days)
+Phase 9: Reports + Export UI (3 days)
+Phase 10: Polish + Mobile (2 days)
+Phase 11: Testing + Deployment (1 day)
+```
+
+---
+
+===============================================================================
+# PHASE 1: ACCOUNTS APP (4 DAYS) - WITH FULL UI & TESTS
+===============================================================================
+
+## Day 1: Models + Admin
+
+### Step 1.1: Update settings.py
+```python
+INSTALLED_APPS = [
+    'apps.accounts',  # ⭐ FIRST!
+    'django.contrib.admin',
+    # ...
+]
+AUTH_USER_MODEL = 'accounts.User'
+```
+
+### Step 1.2: Create User Model
+```python
+# apps/accounts/models.py
+# (Full model from previous prompt)
+```
+
+### Step 1.3: Signals + Apps Config
+```python
+# apps/accounts/signals.py
+# apps/accounts/apps.py
+```
+
+### Step 1.4: First Migration ⚠️
+```bash
+docker compose exec web python manage.py makemigrations accounts
+docker compose exec web python manage.py migrate accounts
+docker compose exec web python manage.py migrate
+```
+
+### Step 1.5: Create Superuser
+```bash
+docker compose exec web python manage.py createsuperuser
+# Email: admin@example.com
+# Password: admin123
+```
+
+### ✅ TEST 1.1: Admin Panel
+```
+1. Open: http://localhost:8008/admin/
+2. Login with superuser
+3. Should see: Users, User Profiles
+4. Create test user
+5. Check profile auto-created
+
+Expected Result:
+✅ Admin opens
+✅ Can create user
+✅ Profile created automatically
+```
+
+**شرح بالعربي:**
+```
+إيه اللي عملناه؟
+- أنشأنا Custom User Model
+- عملنا أول migration
+- دخلنا الـ admin
+- جربنا إنشاء user
+
+ليه مهم؟
+- User Model لازم يكون الأول
+- لو عملنا migration غلط = مشكلة كبيرة
+- الـ admin بيأكدلنا إن كل حاجة شغالة
+
+النتيجة:
+✅ User Model شغال
+✅ Admin interface شغال
+✅ Signals شغالة (Profile auto-created)
+```
+
+---
+
+## Day 2-3: Login/Logout Views + Templates
+
+### Step 1.6: Login View
+```python
+# apps/accounts/views.py
+
+from django.contrib.auth import authenticate, login, logout
+from django.contrib.auth.decorators import login_required
+from django.shortcuts import render, redirect
+from django.contrib import messages
+
+def login_view(request):
+    """
+    User login page
+    
+    Features:
+    - Email/password authentication
+    - Remember me checkbox
+    - Redirect to next parameter or dashboard
+    - Error messages
+    """
+    if request.user.is_authenticated:
+        return redirect('core:dashboard')
+    
+    if request.method == 'POST':
+        email = request.POST.get('email')
+        password = request.POST.get('password')
+        remember = request.POST.get('remember')
+        
+        user = authenticate(request, username=email, password=password)
+        
+        if user is not None:
+            login(request, user)
+            
+            # Remember me (30 days vs session)
+            if not remember:
+                request.session.set_expiry(0)
+            
+            # Track login
+            user.increment_login_count(
+                ip_address=get_client_ip(request)
+            )
+            
+            # Redirect
+            next_url = request.GET.get('next', 'core:dashboard')
+            messages.success(request, f'مرحباً {user.get_full_name()}!')
+            return redirect(next_url)
+        else:
+            messages.error(request, 'البريد الإلكتروني أو كلمة المرور غير صحيحة')
+    
+    return render(request, 'accounts/login.html')
+
+
+def logout_view(request):
+    """User logout"""
+    logout(request)
+    messages.success(request, 'تم تسجيل الخروج بنجاح')
+    return redirect('accounts:login')
+
+
+@login_required
+def profile_view(request):
+    """
+    User profile page
+    
+    Shows:
+    - User info
+    - Profile details
+    - Performance stats
+    - Edit button
+    """
+    user = request.user
+    profile = user.profile
+    
+    context = {
+        'user': user,
+        'profile': profile,
+        'conversion_rate': user.get_conversion_rate(),
+        'win_rate': user.get_win_rate(),
+    }
+    
+    return render(request, 'accounts/profile.html', context)
+
+
+def get_client_ip(request):
+    """Get user IP address"""
+    x_forwarded_for = request.META.get('HTTP_X_FORWARDED_FOR')
+    if x_forwarded_for:
+        ip = x_forwarded_for.split(',')[0]
+    else:
+        ip = request.META.get('REMOTE_ADDR')
+    return ip
+```
+
+### Step 1.7: URLs
+```python
+# apps/accounts/urls.py
+
+from django.urls import path
+from . import views
+
+app_name = 'accounts'
+
+urlpatterns = [
+    path('login/', views.login_view, name='login'),
+    path('logout/', views.logout_view, name='logout'),
+    path('profile/', views.profile_view, name='profile'),
+]
+```
+
+```python
+# config/urls.py
+
+from django.contrib import admin
+from django.urls import path, include
+from django.conf import settings
+from django.conf.urls.static import static
+
+urlpatterns = [
+    path('admin/', admin.site.urls),
+    path('accounts/', include('apps.accounts.urls')),
+]
+
+if settings.DEBUG:
+    urlpatterns += static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
+```
+
+### Step 1.8: Login Template
+```html
+<!-- templates/accounts/login.html -->
+
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>تسجيل الدخول - Catchy Bot CRM</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        body {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
+        
+        .login-container {
+            background: white;
+            border-radius: 15px;
+            box-shadow: 0 10px 40px rgba(0,0,0,0.1);
+            overflow: hidden;
+            width: 100%;
+            max-width: 400px;
+        }
+        
+        .login-header {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            padding: 40px 30px;
+            text-align: center;
+            color: white;
+        }
+        
+        .login-header h2 {
+            margin: 0;
+            font-size: 28px;
+            font-weight: 700;
+        }
+        
+        .login-header p {
+            margin: 10px 0 0;
+            opacity: 0.9;
+        }
+        
+        .login-body {
+            padding: 40px 30px;
+        }
+        
+        .form-control {
+            border-radius: 10px;
+            padding: 12px 15px;
+            border: 2px solid #e1e8ed;
+            transition: all 0.3s;
+        }
+        
+        .form-control:focus {
+            border-color: #667eea;
+            box-shadow: 0 0 0 0.2rem rgba(102, 126, 234, 0.25);
+        }
+        
+        .btn-login {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            border: none;
+            border-radius: 10px;
+            padding: 12px;
+            font-weight: 600;
+            color: white;
+            width: 100%;
+            transition: transform 0.2s;
+        }
+        
+        .btn-login:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 5px 20px rgba(102, 126, 234, 0.4);
+        }
+        
+        .input-icon {
+            position: relative;
+        }
+        
+        .input-icon i {
+            position: absolute;
+            right: 15px;
+            top: 50%;
+            transform: translateY(-50%);
+            color: #aaa;
+        }
+        
+        .input-icon input {
+            padding-right: 45px;
+        }
+    </style>
+</head>
+<body>
+    <div class="login-container">
+        <div class="login-header">
+            <i class="fas fa-comments fa-3x mb-3"></i>
+            <h2>Catchy Bot CRM</h2>
+            <p>إدارة العملاء عبر WhatsApp</p>
+        </div>
+        
+        <div class="login-body">
+            <!-- Messages -->
+            {% if messages %}
+                {% for message in messages %}
+                <div class="alert alert-{{ message.tags }} alert-dismissible fade show" role="alert">
+                    {{ message }}
+                    <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
+                </div>
+                {% endfor %}
+            {% endif %}
+            
+            <!-- Login Form -->
+            <form method="POST">
+                {% csrf_token %}
+                
+                <div class="mb-3">
+                    <label class="form-label">البريد الإلكتروني</label>
+                    <div class="input-icon">
+                        <i class="fas fa-envelope"></i>
+                        <input type="email" 
+                               name="email" 
+                               class="form-control" 
+                               placeholder="example@clinic.com"
+                               required
+                               autofocus>
+                    </div>
+                </div>
+                
+                <div class="mb-3">
+                    <label class="form-label">كلمة المرور</label>
+                    <div class="input-icon">
+                        <i class="fas fa-lock"></i>
+                        <input type="password" 
+                               name="password" 
+                               class="form-control" 
+                               placeholder="••••••••"
+                               required>
+                    </div>
+                </div>
+                
+                <div class="mb-3 form-check">
+                    <input type="checkbox" name="remember" class="form-check-input" id="remember">
+                    <label class="form-check-label" for="remember">
+                        تذكرني
+                    </label>
+                </div>
+                
+                <button type="submit" class="btn btn-login">
+                    <i class="fas fa-sign-in-alt me-2"></i>
+                    تسجيل الدخول
+                </button>
+            </form>
+        </div>
+    </div>
+    
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+</body>
+</html>
+```
+
+### ✅ TEST 1.2: Login/Logout
+```
+1. Open: http://localhost:8008/accounts/login/
+2. Try wrong credentials → Should show error
+3. Try correct credentials → Should login
+4. Should redirect to dashboard (will create in Phase 2)
+5. Click logout → Should return to login
+
+Expected Result:
+✅ Login page loads with nice design
+✅ Wrong credentials show error message
+✅ Correct credentials login successfully
+✅ Logout works
+```
+
+**شرح بالعربي:**
+```
+إيه اللي عملناه؟
+- صفحة Login كاملة
+- View يتحقق من البيانات
+- Template جميل ومنظم
+- Messages للـ errors/success
+
+النتيجة:
+✅ نقدر ندخل النظام
+✅ نشوف صفحة حلوة
+✅ نتأكد إن Authentication شغال
+```
+
+### Step 1.9: Profile Template
+```html
+<!-- templates/accounts/profile.html -->
+
+{% extends 'base.html' %}
+
+{% block title %}الملف الشخصي{% endblock %}
+
+{% block content %}
+<div class="container-fluid">
+    <div class="row">
+        <div class="col-md-4">
+            <!-- User Info Card -->
+            <div class="card">
+                <div class="card-body text-center">
+                    {% if user.avatar %}
+                        <img src="{{ user.avatar.url }}" class="rounded-circle mb-3" width="150" height="150">
+                    {% else %}
+                        <div class="avatar-placeholder mb-3">
+                            <i class="fas fa-user fa-5x text-muted"></i>
+                        </div>
+                    {% endif %}
+                    
+                    <h4>{{ user.get_full_name }}</h4>
+                    <p class="text-muted">{{ user.get_role_display }}</p>
+                    <p class="text-muted">{{ user.company.name }}</p>
+                    
+                    <hr>
+                    
+                    <div class="d-grid gap-2">
+                        <a href="{% url 'accounts:profile_edit' %}" class="btn btn-primary">
+                            <i class="fas fa-edit"></i> تعديل الملف
+                        </a>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- Performance Card -->
+            <div class="card mt-3">
+                <div class="card-header">
+                    <h5><i class="fas fa-chart-line"></i> الأداء</h5>
+                </div>
+                <div class="card-body">
+                    <div class="mb-3">
+                        <div class="d-flex justify-content-between">
+                            <span>العملاء المسندين</span>
+                            <strong>{{ user.total_leads_assigned }}</strong>
+                        </div>
+                    </div>
+                    
+                    <div class="mb-3">
+                        <div class="d-flex justify-content-between">
+                            <span>تم التحويل</span>
+                            <strong>{{ user.total_leads_converted }}</strong>
+                        </div>
+                    </div>
+                    
+                    <div class="mb-3">
+                        <div class="d-flex justify-content-between">
+                            <span>تم الفوز</span>
+                            <strong>{{ user.total_leads_won }}</strong>
+                        </div>
+                    </div>
+                    
+                    <hr>
+                    
+                    <div class="mb-2">
+                        <div class="d-flex justify-content-between mb-1">
+                            <span>معدل التحويل</span>
+                            <strong>{{ conversion_rate|floatformat:1 }}%</strong>
+                        </div>
+                        <div class="progress">
+                            <div class="progress-bar bg-success" style="width: {{ conversion_rate }}%"></div>
+                        </div>
+                    </div>
+                    
+                    <div>
+                        <div class="d-flex justify-content-between mb-1">
+                            <span>معدل الفوز</span>
+                            <strong>{{ win_rate|floatformat:1 }}%</strong>
+                        </div>
+                        <div class="progress">
+                            <div class="progress-bar bg-primary" style="width: {{ win_rate }}%"></div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        
+        <div class="col-md-8">
+            <!-- Details Card -->
+            <div class="card">
+                <div class="card-header">
+                    <h5><i class="fas fa-info-circle"></i> التفاصيل</h5>
+                </div>
+                <div class="card-body">
+                    <div class="row mb-3">
+                        <div class="col-md-6">
+                            <label class="text-muted">البريد الإلكتروني</label>
+                            <p>{{ user.email }}</p>
+                        </div>
+                        <div class="col-md-6">
+                            <label class="text-muted">رقم الهاتف</label>
+                            <p>{{ user.phone|default:"غير محدد" }}</p>
+                        </div>
+                    </div>
+                    
+                    <div class="row mb-3">
+                        <div class="col-md-6">
+                            <label class="text-muted">المسمى الوظيفي</label>
+                            <p>{{ user.job_title|default:"غير محدد" }}</p>
+                        </div>
+                        <div class="col-md-6">
+                            <label class="text-muted">القسم</label>
+                            <p>{{ user.department|default:"غير محدد" }}</p>
+                        </div>
+                    </div>
+                    
+                    <div class="row mb-3">
+                        <div class="col-md-12">
+                            <label class="text-muted">نبذة</label>
+                            <p>{{ profile.bio|default:"لم يتم إضافة نبذة بعد" }}</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- Activity Card -->
+            <div class="card mt-3">
+                <div class="card-header">
+                    <h5><i class="fas fa-clock"></i> النشاط</h5>
+                </div>
+                <div class="card-body">
+                    <div class="row">
+                        <div class="col-md-4">
+                            <div class="text-center">
+                                <i class="fas fa-calendar-alt fa-2x text-primary mb-2"></i>
+                                <h6>تاريخ الانضمام</h6>
+                                <p>{{ user.date_joined|date:"Y/m/d" }}</p>
+                            </div>
+                        </div>
+                        <div class="col-md-4">
+                            <div class="text-center">
+                                <i class="fas fa-sign-in-alt fa-2x text-success mb-2"></i>
+                                <h6>آخر تسجيل دخول</h6>
+                                <p>{{ user.last_login|date:"Y/m/d H:i" }}</p>
+                            </div>
+                        </div>
+                        <div class="col-md-4">
+                            <div class="text-center">
+                                <i class="fas fa-history fa-2x text-info mb-2"></i>
+                                <h6>عدد مرات الدخول</h6>
+                                <p>{{ user.login_count }}</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}
+```
+
+### ✅ TEST 1.3: Profile Page
+```
+1. Login
+2. Go to: /accounts/profile/
+3. Should see:
+   - User avatar/placeholder
+   - Name, role, company
+   - Performance stats
+   - Contact details
+   - Activity info
+
+Expected Result:
+✅ Profile page loads
+✅ Shows user info correctly
+✅ Performance stats calculated
+✅ Activity tracking works
+```
+
+**شرح بالعربي:**
+```
+Phase 1 خلص!
+
+اللي عملناه:
+✅ Custom User Model
+✅ Login/Logout views
+✅ Profile page
+✅ Beautiful UI
+✅ Tests كلها نجحت
+
+النتيجة:
+- نقدر ندخل النظام
+- نشوف ملفنا الشخصي
+- نتتبع الأداء
+- كل حاجة شغالة ومتأكدين منها
+
+Next: Phase 2 - Core App + Dashboard
+```
+
+---
+
+===============================================================================
+# TESTING CHECKLIST (بعد كل Phase)
+===============================================================================
+
+## ✅ Manual Tests:
+```
+□ All pages load without errors
+□ Forms submit correctly
+□ Validation works (required fields, formats)
+□ Success/error messages appear
+□ Navigation works (links, redirects)
+□ UI looks good (no broken layout)
+□ Mobile responsive (test on phone)
+```
+
+## ✅ Database Tests:
+```
+□ Models save correctly
+□ Relationships work (ForeignKey, OneToOne)
+□ Signals fire (auto-create profile)
+□ Queries efficient (no N+1 problem)
+```
+
+## ✅ Functional Tests:
+```
+□ User can login/logout
+□ User can create/edit/delete records
+□ Permissions work (admin vs agent)
+□ Search/filter works
+□ Pagination works
+```
+
+## ✅ Integration Tests:
+```
+□ Webhook receives data correctly
+□ WebSocket messages deliver
+□ File uploads work
+□ API responses correct format
+```
+
+---
+
+**هذا الـ Prompt كامل - نبدأ Phase by Phase مع Testing بعد كل خطوة! 🚀**
+
+---
+
+## 🚀 START COMMAND
+
+```
+أنا عايز أبدأ مشروع Catchy Bot CRM من الصفر.
+
+القواعد:
+1. الكومنتات في الكود: إنجليزي
+2. الشرح: عربي
+3. بعد كل خطوة: Test + شرح النتيجة
+4. بعد كل Model: View + Template + URL + Test
+5. Migration Order: accounts → core → leads → others
+6. مفيش skip - كل حاجة لازم تتعمل بالترتيب
+
+المشروع:
+- CRM لإدارة الـ Leads من WhatsApp
+- WhatsApp Templates زي الواتساب بالظبط
+- Multi-tenancy
+- Real-time chat
+- Kanban board
+- Testing شامل
+
+ابدأ Phase 0: Project Setup
+```
+
+
+
+
+
+
+
+
+
+TESTING WHATSAPP WEBHOOK (Phase 4 - Critical!)
+===============================================================================
+🔴 Challenge: Testing Webhooks in Development
+Problem:
+- Woztell sends webhook to: https://yoursite.com/api/webhook/
+- We're running on: http://localhost:8008
+- Woztell CAN'T reach localhost!
+
+Solutions:
+1. Mock Testing (simulate webhook locally)
+2. Ngrok (expose localhost to internet)
+3. Production Testing (after deployment)
+
+✅ Solution 1: Mock Testing (Recommended for Development)
+Test 1.1: Unit Test (Django Test)
+python# apps/whatsapp/tests.py
+
+from django.test import TestCase, Client
+from django.urls import reverse
+from apps.core.models import Company, LeadSource
+from apps.accounts.models import User
+from apps.leads.models import Lead
+from apps.whatsapp.models import Message, Channel
+import json
+
+class WebhookTestCase(TestCase):
+    """
+    Test WhatsApp webhook functionality
+    
+    Tests:
+    1. Webhook receives data correctly
+    2. New lead created from webhook
+    3. Existing lead retrieved
+    4. Message saved
+    5. Channel created/updated
+    """
+    
+    def setUp(self):
+        """Setup test data"""
+        # Create company
+        self.company = Company.objects.create(
+            name='Test Clinic',
+            slug='test-clinic'
+        )
+        
+        # Create WhatsApp source
+        self.whatsapp_source = LeadSource.objects.create(
+            name='WhatsApp',
+            icon='fab fa-whatsapp',
+            color='#25D366'
+        )
+        
+        # Create Woztell config
+        self.config = WoztellConfig.objects.create(
+            company=self.company,
+            api_key='test_api_key_123',
+            channel_id='test_channel_123',
+            webhook_secret='test_secret_123',
+            is_active=True
+        )
+        
+        self.client = Client()
+    
+    def test_webhook_new_lead(self):
+        """
+        Test: Webhook creates new lead
+        
+        Flow:
+        1. Send webhook with new phone number
+        2. Check lead created
+        3. Check message saved
+        4. Check channel created
+        """
+        # Webhook payload (simulating Woztell)
+        payload = {
+            'phone': '+201234567890',
+            'name': 'Ahmed Test',
+            'message': 'Hello, I want to book an appointment',
+            'timestamp': '2024-12-05T10:30:00Z',
+            'channel_id': 'test_channel_123'
+        }
+        
+        # Send POST request to webhook
+        response = self.client.post(
+            reverse('whatsapp:webhook'),
+            data=json.dumps(payload),
+            content_type='application/json',
+            HTTP_AUTHORIZATION=f'Bearer {self.config.api_key}'
+        )
+        
+        # Assert response
+        self.assertEqual(response.status_code, 200)
+        data = response.json()
+        self.assertTrue(data['success'])
+        
+        # Assert lead created
+        lead = Lead.objects.filter(phone='+201234567890').first()
+        self.assertIsNotNone(lead)
+        self.assertEqual(lead.name, 'Ahmed Test')
+        self.assertEqual(lead.source, self.whatsapp_source)
+        self.assertEqual(lead.stage, 'lead')
+        self.assertEqual(lead.company, self.company)
+        
+        # Assert message saved
+        message = Message.objects.filter(lead=lead).first()
+        self.assertIsNotNone(message)
+        self.assertEqual(message.direction, 'incoming')
+        self.assertEqual(message.content, 'Hello, I want to book an appointment')
+        
+        # Assert channel created
+        channel = Channel.objects.filter(lead=lead).first()
+        self.assertIsNotNone(channel)
+        self.assertEqual(channel.channel_type, 'whatsapp')
+        self.assertEqual(channel.unread_count, 1)
+    
+    def test_webhook_existing_lead(self):
+        """
+        Test: Webhook with existing phone number
+        
+        Flow:
+        1. Create existing lead
+        2. Send webhook with same phone
+        3. Check NO new lead created
+        4. Check message added to existing lead
+        5. Check channel updated
+        """
+        # Create existing lead
+        existing_lead = Lead.objects.create(
+            company=self.company,
+            name='Ahmed Existing',
+            phone='+201234567890',
+            source=self.whatsapp_source,
+            stage='lead',
+            status='contacted'
+        )
+        
+        # Create existing channel
+        existing_channel = Channel.objects.create(
+            company=self.company,
+            lead=existing_lead,
+            channel_type='whatsapp',
+            unread_count=0
+        )
+        
+        # Webhook payload
+        payload = {
+            'phone': '+201234567890',
+            'name': 'Ahmed Test',
+            'message': 'Follow up message',
+            'timestamp': '2024-12-05T11:00:00Z',
+            'channel_id': 'test_channel_123'
+        }
+        
+        # Send webhook
+        response = self.client.post(
+            reverse('whatsapp:webhook'),
+            data=json.dumps(payload),
+            content_type='application/json',
+            HTTP_AUTHORIZATION=f'Bearer {self.config.api_key}'
+        )
+        
+        # Assert response
+        self.assertEqual(response.status_code, 200)
+        
+        # Assert NO new lead created (still 1 lead)
+        lead_count = Lead.objects.filter(phone='+201234567890').count()
+        self.assertEqual(lead_count, 1)
+        
+        # Assert message added
+        message_count = Message.objects.filter(lead=existing_lead).count()
+        self.assertEqual(message_count, 1)
+        
+        # Assert channel updated
+        existing_channel.refresh_from_db()
+        self.assertEqual(existing_channel.unread_count, 1)
+    
+    def test_webhook_authentication_fail(self):
+        """
+        Test: Webhook with wrong API key fails
+        """
+        payload = {
+            'phone': '+201234567890',
+            'message': 'Test'
+        }
+        
+        # Wrong API key
+        response = self.client.post(
+            reverse('whatsapp:webhook'),
+            data=json.dumps(payload),
+            content_type='application/json',
+            HTTP_AUTHORIZATION='Bearer wrong_api_key'
+        )
+        
+        # Should fail
+        self.assertEqual(response.status_code, 403)
+Run Tests:
+bash# Run specific test
+docker compose exec web python manage.py test apps.whatsapp.tests.WebhookTestCase
+
+# Run all WhatsApp tests
+docker compose exec web python manage.py test apps.whatsapp
+
+# Run with coverage
+docker compose exec web coverage run --source='apps.whatsapp' manage.py test apps.whatsapp
+docker compose exec web coverage report
+```
+
+**شرح بالعربي:**
+```
+Unit Test بيعمل إيه؟
+- بيعمل simulate للـ webhook
+- بيبعت POST request محلي
+- بيتحقق من كل حاجة اتعملت صح
+- مش محتاج Woztell الحقيقي
+
+المميزات:
+✅ سريع جداً
+✅ مفيش اتصال بالإنترنت
+✅ نقدر نعمله أي وقت
+✅ Automated (يشتغل في CI/CD)
+
+Expected Output:
+✅ test_webhook_new_lead ... ok
+✅ test_webhook_existing_lead ... ok
+✅ test_webhook_authentication_fail ... ok
+
+✅ Solution 2: Manual Testing with Postman/cURL
+Test 2.1: cURL Command
+bash# Test webhook endpoint manually
+
+# 1. Get your API key from database
+docker compose exec web python manage.py shell
+>>> from apps.whatsapp.models import WoztellConfig
+>>> config = WoztellConfig.objects.first()
+>>> print(config.api_key)
+# Copy the API key
+
+# 2. Send test webhook
+curl -X POST http://localhost:8008/api/webhook/woztell/ \
+  -H "Content-Type: application/json" \
+  -H "Authorization: Bearer YOUR_API_KEY_HERE" \
+  -d '{
+    "phone": "+201234567890",
+    "name": "Test User",
+    "message": "Test message from cURL",
+    "timestamp": "2024-12-05T10:30:00Z",
+    "channel_id": "test_channel"
+  }'
+
+# Expected Response:
+# {"success": true, "lead_id": 123, "message": "Lead created/updated"}
+Test 2.2: Postman Collection
+json{
+  "info": {
+    "name": "Catchy Bot - WhatsApp Webhook Tests",
+    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+  },
+  "item": [
+    {
+      "name": "Test New Lead",
+      "request": {
+        "method": "POST",
+        "header": [
+          {
+            "key": "Content-Type",
+            "value": "application/json"
+          },
+          {
+            "key": "Authorization",
+            "value": "Bearer {{api_key}}"
+          }
+        ],
+        "body": {
+          "mode": "raw",
+          "raw": "{\n  \"phone\": \"+201234567890\",\n  \"name\": \"Ahmed Ali\",\n  \"message\": \"السلام عليكم، عايز أحجز كشف\",\n  \"timestamp\": \"2024-12-05T10:30:00Z\"\n}"
+        },
+        "url": {
+          "raw": "http://localhost:8008/api/webhook/woztell/",
+          "protocol": "http",
+          "host": ["localhost"],
+          "port": "8008",
+          "path": ["api", "webhook", "woztell"]
+        }
+      }
+    },
+    {
+      "name": "Test Existing Lead",
+      "request": {
+        "method": "POST",
+        "header": [
+          {
+            "key": "Content-Type",
+            "value": "application/json"
+          },
+          {
+            "key": "Authorization",
+            "value": "Bearer {{api_key}}"
+          }
+        ],
+        "body": {
+          "mode": "raw",
+          "raw": "{\n  \"phone\": \"+201234567890\",\n  \"name\": \"Ahmed Ali\",\n  \"message\": \"رسالة تانية\",\n  \"timestamp\": \"2024-12-05T11:00:00Z\"\n}"
+        },
+        "url": {
+          "raw": "http://localhost:8008/api/webhook/woztell/",
+          "protocol": "http",
+          "host": ["localhost"],
+          "port": "8008",
+          "path": ["api", "webhook", "woztell"]
+        }
+      }
+    },
+    {
+      "name": "Test with Media",
+      "request": {
+        "method": "POST",
+        "header": [
+          {
+            "key": "Content-Type",
+            "value": "application/json"
+          },
+          {
+            "key": "Authorization",
+            "value": "Bearer {{api_key}}"
+          }
+        ],
+        "body": {
+          "mode": "raw",
+          "raw": "{\n  \"phone\": \"+201234567890\",\n  \"name\": \"Ahmed Ali\",\n  \"message\": \"شوف الصورة دي\",\n  \"media_url\": \"https://example.com/image.jpg\",\n  \"media_type\": \"image/jpeg\",\n  \"timestamp\": \"2024-12-05T11:30:00Z\"\n}"
+        },
+        "url": {
+          "raw": "http://localhost:8008/api/webhook/woztell/",
+          "protocol": "http",
+          "host": ["localhost"],
+          "port": "8008",
+          "path": ["api", "webhook", "woztell"]
+        }
+      }
+    }
+  ]
+}
+```
+
+**شرح بالعربي:**
+```
+Postman/cURL ليه؟
+- نجرب الـ webhook يدوي
+- نشوف الـ response مباشرة
+- نجرب scenarios مختلفة
+- سهل نعدل الـ payload
+
+الخطوات:
+1. Import collection في Postman
+2. Set variable: api_key
+3. Run requests
+4. Check database/UI
+
+Expected:
+✅ Lead created/updated
+✅ Message saved
+✅ Channel updated
+✅ Can see in chat UI
+
+✅ Solution 3: Ngrok (Real Webhook Testing)
+Test 3.1: Setup Ngrok
+bash# 1. Install ngrok
+# Download from: https://ngrok.com/download
+
+# 2. Start ngrok
+ngrok http 8008
+
+# Output:
+# Forwarding  https://abc123.ngrok.io -> http://localhost:8008
+
+# 3. Copy the HTTPS URL (https://abc123.ngrok.io)
+```
+
+### Test 3.2: Configure Woztell
+```
+1. Login to Woztell Dashboard
+2. Go to: Settings → Webhooks
+3. Add webhook URL: https://abc123.ngrok.io/api/webhook/woztell/
+4. Set Authentication: Bearer YOUR_API_KEY
+5. Save
+```
+
+### Test 3.3: Real Test Flow
+```
+1. Open WhatsApp
+2. Send message to your Woztell number
+3. Woztell receives message
+4. Woztell sends webhook to ngrok URL
+5. Ngrok forwards to localhost:8008
+6. Your webhook receives it
+7. Check:
+   - Terminal logs
+   - Database (lead created)
+   - Chat UI (message appears)
+Monitor Webhook:
+bash# Terminal 1: Django logs
+docker compose logs -f web
+
+# Terminal 2: Ngrok dashboard
+# Open: http://127.0.0.1:4040
+# Shows all incoming requests in real-time
+
+# Expected logs:
+# [INFO] Webhook received: phone=+201234567890
+# [INFO] Lead created: Ahmed Ali (ID: 123)
+# [INFO] Message saved (ID: 456)
+# [INFO] Channel updated (ID: 789)
+# [INFO] WebSocket notification sent
+```
+
+**شرح بالعربي:**
+```
+Ngrok بيعمل إيه؟
+- بيعمل tunnel من الإنترنت لـ localhost
+- Woztell يقدر يوصل لجهازك
+- Real webhook testing
+
+المميزات:
+✅ Test حقيقي 100%
+✅ نشوف الـ flow كامل
+✅ نتأكد من التكامل
+
+العيوب:
+❌ محتاج اتصال بالإنترنت
+❌ Ngrok free بيغير الـ URL كل مرة
+❌ مش automated
+
+✅ Solution 4: Test Sending Messages (Outgoing)
+Test 4.1: Mock Woztell API
+python# apps/whatsapp/tests.py
+
+from unittest.mock import patch, Mock
+
+class SendMessageTestCase(TestCase):
+    """Test sending messages via Woztell"""
+    
+    @patch('apps.whatsapp.woztell_api.requests.post')
+    def test_send_message_success(self, mock_post):
+        """
+        Test: Send message successfully
+        
+        Mocks Woztell API response
+        """
+        # Mock successful response
+        mock_response = Mock()
+        mock_response.status_code = 200
+        mock_response.json.return_value = {
+            'success': True,
+            'message_id': 'woztell_msg_123'
+        }
+        mock_post.return_value = mock_response
+        
+        # Create lead
+        lead = Lead.objects.create(
+            company=self.company,
+            phone='+201234567890',
+            name='Test User',
+            source=self.whatsapp_source
+        )
+        
+        # Send message
+        from apps.whatsapp.woztell_api import send_whatsapp_message
+        success, result = send_whatsapp_message(
+            lead=lead,
+            message='Test message',
+            user=self.user
+        )
+        
+        # Assert
+        self.assertTrue(success)
+        
+        # Assert message saved in database
+        message = Message.objects.filter(lead=lead, direction='outgoing').first()
+        self.assertIsNotNone(message)
+        self.assertEqual(message.status, 'sent')
+        
+        # Assert Woztell API was called
+        mock_post.assert_called_once()
+        call_args = mock_post.call_args
+        self.assertIn('phone', call_args[1]['json'])
+        self.assertEqual(call_args[1]['json']['phone'], '+201234567890')
+```
+
+**شرح بالعربي:**
+```
+Mock API بيعمل إيه؟
+- بيعمل fake للـ Woztell API
+- مش بنبعت رسائل حقيقية
+- بنتأكد إن الكود شغال صح
+
+المميزات:
+✅ مفيش تكلفة (مش بنبعت رسائل حقيقية)
+✅ سريع
+✅ Automated
+
+Test Checklist:
+✅ Message saved in database
+✅ Status = 'sent'
+✅ Woztell API called with correct data
+✅ Error handling works
+```
+
+---
+
+## 📋 Complete Testing Strategy for WhatsApp
+
+### Phase 4 Testing Checklist:
+```
+Day 1: Webhook Setup
+□ Model created (WoztellConfig, Message, etc.)
+□ Admin interface works
+□ Can create config in admin
+
+Day 2: Webhook Receiver
+□ Unit tests pass (new lead, existing lead)
+□ Postman tests work
+□ Authentication tested
+□ Error handling tested
+
+Day 3: Ngrok Real Testing
+□ Ngrok setup
+□ Woztell configured
+□ Real message received
+□ Lead created automatically
+□ Message appears in UI
+
+Day 4: Send Messages
+□ Mock tests pass
+□ Can send from UI
+□ Message status updates
+□ Error handling works
+
+Day 5: Integration Testing
+□ Full flow: Receive → Reply → Receive
+□ WebSocket notifications work
+□ Chat UI updates in real-time
+□ No errors in logs
+
+🎯 Testing Commands Summary
+bash# Unit Tests (Fast, Automated)
+docker compose exec web python manage.py test apps.whatsapp
+
+# Manual Test (Postman/cURL)
+curl -X POST http://localhost:8008/api/webhook/woztell/ \
+  -H "Content-Type: application/json" \
+  -H "Authorization: Bearer YOUR_KEY" \
+  -d '{"phone": "+201234567890", "message": "test"}'
+
+# Real Test (Ngrok)
+ngrok http 8008
+# Configure Woztell with ngrok URL
+# Send real WhatsApp message
+
+# Check Results
+docker compose exec web python manage.py shell
+>>> from apps.leads.models import Lead
+>>> Lead.objects.latest('created_at')
+>>> # Should see the new lead
+
+# Check Logs
+docker compose logs -f web | grep webhook
+```
+
+---
+
+## ✅ Success Criteria
+```
+✅ Unit tests: All pass (green)
+✅ Postman: Returns 200 with {"success": true}
+✅ Ngrok: Real message creates lead
+✅ UI: Message appears in chat
+✅ Database: Lead, Message, Channel created
+✅ WebSocket: Notification received
+✅ Logs: No errors

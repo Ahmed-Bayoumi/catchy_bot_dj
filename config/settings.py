@@ -52,12 +52,13 @@ INSTALLED_APPS = [
     'crispy_forms',  # Better form rendering
     'crispy_bootstrap5',  # Bootstrap 5 template pack
     'channels',  # WebSocket support
+    'taggit',  # Tags for categorizing leads
 
     # Our custom apps
     # IMPORTANT: accounts must be first (custom user model)
     'apps.accounts',  # User management & authentication
     'apps.core',  # Core functionality (Company, etc.)
- #   'apps.leads',  # Lead management
+    'apps.leads',  # Lead management
  #   'apps.whatsapp',  # WhatsApp integration
  #   'apps.chat',  # Real-time chat
  #   'apps.appointments',  # Appointment scheduling
@@ -165,26 +166,26 @@ AUTH_USER_MODEL = 'accounts.User'
 
 # Password validation
 # Ensures users create strong passwords
-AUTH_PASSWORD_VALIDATORS = [
-    {
-        'NAME': 'django.contrib.auth.password_validation.UserAttributeSimilarityValidator',
-        # Prevents password similar to username/email
-    },
-    {
-        'NAME': 'django.contrib.auth.password_validation.MinimumLengthValidator',
-        'OPTIONS': {
-            'min_length': 8,  # Minimum 8 characters
-        }
-    },
-    {
-        'NAME': 'django.contrib.auth.password_validation.CommonPasswordValidator',
-        # Prevents common passwords (123456, password, etc.)
-    },
-    {
-        'NAME': 'django.contrib.auth.password_validation.NumericPasswordValidator',
-        # Prevents all-numeric passwords
-    },
-]
+# AUTH_PASSWORD_VALIDATORS = [           #########################################
+#     {
+#         'NAME': 'django.contrib.auth.password_validation.UserAttributeSimilarityValidator',
+#         # Prevents password similar to username/email
+#     },
+#     {
+#         'NAME': 'django.contrib.auth.password_validation.MinimumLengthValidator',
+#         'OPTIONS': {
+#             'min_length': 8,  # Minimum 8 characters
+#         }
+#     },
+#     {
+#         'NAME': 'django.contrib.auth.password_validation.CommonPasswordValidator',
+#         # Prevents common passwords (123456, password, etc.)
+#     },
+#     {
+#         'NAME': 'django.contrib.auth.password_validation.NumericPasswordValidator',
+#         # Prevents all-numeric passwords
+#     },
+# ]
 
 # Login/Logout URLs
 LOGIN_URL = '/accounts/login/'  # Redirect here if not authenticated
@@ -405,6 +406,17 @@ SESSION_SAVE_EVERY_REQUEST = False  # Only save if modified
 # File upload settings
 FILE_UPLOAD_MAX_MEMORY_SIZE = 5 * 1024 * 1024  # 5 MB
 DATA_UPLOAD_MAX_MEMORY_SIZE = 10 * 1024 * 1024  # 10 MB
+
+# Lead Management Settings
+LEAD_IMPORT_MAX_FILE_SIZE = 5 * 1024 * 1024  # 5 MB for lead import files
+LEAD_REMINDER_OPTIONS = [
+    ('15min', '15 minutes before'),
+    ('30min', '30 minutes before'),
+    ('1hour', '1 hour before'),
+    ('2hours', '2 hours before'),
+    ('1day', '1 day before'),
+    ('2days', '2 days before'),
+]
 
 
 # SECURITY SETTINGS (Production)

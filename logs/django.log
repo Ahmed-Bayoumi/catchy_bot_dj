@@ -18963,3 +18963,24 @@ INFO 2025-12-08 02:21:01,917 runserver HTTP GET /static/admin/img/icon-changelin
 INFO 2025-12-08 02:31:56,203 autoreload /code/apps/core/admin.py changed, reloading.
 INFO 2025-12-08 02:32:00,713 autoreload Watching for file changes with StatReloader
 INFO 2025-12-08 14:52:36,031 autoreload Watching for file changes with StatReloader
+INFO 2025-12-08 18:44:03,320 autoreload Watching for file changes with StatReloader
+INFO 2025-12-08 22:22:26,242 autoreload /code/config/settings.py changed, reloading.
+INFO 2025-12-08 22:22:32,274 autoreload Watching for file changes with StatReloader
+INFO 2025-12-08 22:22:37,534 autoreload /code/config/settings.py changed, reloading.
+INFO 2025-12-08 22:22:39,135 autoreload Watching for file changes with StatReloader
+INFO 2025-12-08 22:42:21,439 autoreload /code/config/settings.py changed, reloading.
+INFO 2025-12-08 22:42:24,287 autoreload Watching for file changes with StatReloader
+INFO 2025-12-08 23:14:44,236 autoreload /code/config/settings.py changed, reloading.
+INFO 2025-12-08 23:14:48,257 autoreload Watching for file changes with StatReloader
+INFO 2025-12-08 23:24:17,538 autoreload /code/apps/leads/admin.py changed, reloading.
+INFO 2025-12-08 23:24:19,695 autoreload Watching for file changes with StatReloader
+INFO 2025-12-08 23:50:23,857 autoreload /code/config/urls.py changed, reloading.
+INFO 2025-12-08 23:50:29,146 autoreload Watching for file changes with StatReloader
+INFO 2025-12-08 23:50:34,227 autoreload /code/config/urls.py changed, reloading.
+INFO 2025-12-08 23:50:36,140 autoreload Watching for file changes with StatReloader
+INFO 2025-12-09 00:11:31,327 autoreload /code/apps/leads/models.py changed, reloading.
+INFO 2025-12-09 00:12:10,129 autoreload Watching for file changes with StatReloader
+INFO 2025-12-09 00:14:41,939 autoreload /code/config/settings.py changed, reloading.
+INFO 2025-12-09 00:14:43,959 autoreload Watching for file changes with StatReloader
+INFO 2025-12-09 00:16:35,429 autoreload /code/config/settings.py changed, reloading.
+INFO 2025-12-09 00:16:37,429 autoreload Watching for file changes with StatReloader
