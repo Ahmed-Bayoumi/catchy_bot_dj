@@ -10,7 +10,7 @@
         --secondary-purple: #764ba2;
         --dark-text: #333333;
         --input-border: #e1e8ed;
-        --focus-shadow: rgba(102, 126, 234, 0.25);
+        --focus-shadow: rgba(59, 130, 246, 0.25);
         --link-normal: #667eea;
         --link-hover: #764ba2;
         --alert-success-bg: #eeffee;
@@ -40,7 +40,7 @@
         border-radius: 10px;
         padding: 2rem;
         margin-bottom: 1.5rem;
-        box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+        box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
     }
 
     .lead-header-card .lead-avatar {
@@ -122,7 +122,7 @@
         border-radius: 10px;
         padding: 1.5rem;
         margin-bottom: 1.5rem;
-        box-shadow: 0 2px 4px rgba(0,0,0,0.05);
+        box-shadow: 0 2px 4px rgba(0, 0, 0, 0.05);
     }
 
     .info-card h5 {
@@ -328,7 +328,7 @@
     }
 
     .quick-stat .icon.blue {
-        background: rgba(102, 126, 234, 0.1);
+        background: rgba(59, 130, 246, 0.1);
         color: var(--primary-blue);
     }
 
@@ -356,7 +356,7 @@
     /* Dropdown Menu */
     .dropdown-menu {
         border: 1px solid var(--input-border);
-        box-shadow: 0 4px 8px rgba(0,0,0,0.1);
+        box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
         border-radius: 8px;
     }
 
@@ -367,7 +367,7 @@
     }
 
     .dropdown-item:hover {
-        background: rgba(102, 126, 234, 0.1);
+        background: rgba(59, 130, 246, 0.1);
         color: var(--primary-blue);
     }
 
@@ -408,7 +408,8 @@
     <!-- Breadcrumb -->
     <nav aria-label="breadcrumb">
         <ol class="breadcrumb">
-            <li class="breadcrumb-item"><a href="{% url 'core:dashboard' %}"><i class="fas fa-home"></i> Dashboard</a></li>
+            <li class="breadcrumb-item"><a href="{% url 'core:dashboard' %}"><i class="fas fa-home"></i> Dashboard</a>
+            </li>
             <li class="breadcrumb-item"><a href="{% url 'leads:lead_list' %}">Leads</a></li>
             <li class="breadcrumb-item active">{{ lead.name }}</li>
         </ol>
@@ -459,19 +460,21 @@
                     </button>
                     <ul class="dropdown-menu">
                         <li><a class="dropdown-item" href="#" data-bs-toggle="modal" data-bs-target="#assignModal">
-                            <i class="fas fa-user-plus"></i>Assign to Agent
-                        </a></li>
+                                <i class="fas fa-user-plus"></i>Assign to Agent
+                            </a></li>
                         <li><a class="dropdown-item" href="#" data-bs-toggle="modal" data-bs-target="#statusModal">
-                            <i class="fas fa-exchange-alt"></i>Change Status
-                        </a></li>
+                                <i class="fas fa-exchange-alt"></i>Change Status
+                            </a></li>
                         <li><a class="dropdown-item" href="#" data-bs-toggle="modal" data-bs-target="#stageModal">
-                            <i class="fas fa-layer-group"></i>Change Stage
-                        </a></li>
-                        <li><hr class="dropdown-divider"></li>
+                                <i class="fas fa-layer-group"></i>Change Stage
+                            </a></li>
+                        <li>
+                            <hr class="dropdown-divider">
+                        </li>
                         {% if can_delete %}
                         <li><a class="dropdown-item text-danger" href="#" onclick="confirmDelete()">
-                            <i class="fas fa-trash"></i>Delete Lead
-                        </a></li>
+                                <i class="fas fa-trash"></i>Delete Lead
+                            </a></li>
                         {% endif %}
                     </ul>
                 </div>
@@ -523,7 +526,8 @@
                             <div class="label">Phone</div>
                             <div class="value">
                                 <i class="fas fa-phone text-success me-2"></i>
-                                <a href="tel:{{ lead.phone }}" style="color: var(--link-normal); text-decoration: none;">
+                                <a href="tel:{{ lead.phone }}"
+                                    style="color: var(--link-normal); text-decoration: none;">
                                     {{ lead.phone }}
                                 </a>
                             </div>
@@ -534,7 +538,8 @@
                             <div class="value">
                                 {% if lead.email %}
                                 <i class="fas fa-envelope text-primary me-2"></i>
-                                <a href="mailto:{{ lead.email }}" style="color: var(--link-normal); text-decoration: none;">
+                                <a href="mailto:{{ lead.email }}"
+                                    style="color: var(--link-normal); text-decoration: none;">
                                     {{ lead.email }}
                                 </a>
                                 {% else %}
@@ -546,7 +551,8 @@
                         <div class="info-row">
                             <div class="label">Source</div>
                             <div class="value">
-                                <span class="badge-detail" style="background-color: {{ lead.source.color }}; color: white;">
+                                <span class="badge-detail"
+                                    style="background-color: {{ lead.source.color }}; color: white;">
                                     <i class="{{ lead.source.icon }} me-1"></i>{{ lead.source.name }}
                                 </span>
                             </div>
@@ -555,7 +561,8 @@
                         <div class="info-row">
                             <div class="label">Stage</div>
                             <div class="value">
-                                <span class="badge-detail" style="background-color: {{ lead.stage.color }}; color: white;">
+                                <span class="badge-detail"
+                                    style="background-color: {{ lead.stage.color }}; color: white;">
                                     <i class="{{ lead.stage.icon }} me-1"></i>{{ lead.stage.name }}
                                 </span>
                             </div>
@@ -564,7 +571,8 @@
                         <div class="info-row">
                             <div class="label">Status</div>
                             <div class="value">
-                                <span class="badge-detail {% if lead.status == 'new' %}bg-info{% elif lead.status == 'contacted' %}bg-warning{% elif lead.status == 'qualified' %}bg-success{% endif %}">
+                                <span
+                                    class="badge-detail {% if lead.status == 'new' %}bg-info{% elif lead.status == 'contacted' %}bg-warning{% elif lead.status == 'qualified' %}bg-success{% endif %}">
                                     {{ lead.get_status_display }}
                                 </span>
                             </div>
@@ -573,7 +581,8 @@
                         <div class="info-row">
                             <div class="label">Priority</div>
                             <div class="value">
-                                <span class="badge-detail {% if lead.priority == 'high' %}bg-danger{% elif lead.priority == 'medium' %}bg-warning{% else %}bg-secondary{% endif %}">
+                                <span
+                                    class="badge-detail {% if lead.priority == 'high' %}bg-danger{% elif lead.priority == 'medium' %}bg-warning{% else %}bg-secondary{% endif %}">
                                     {{ lead.get_priority_display }}
                                 </span>
                             </div>
@@ -583,7 +592,8 @@
                             <div class="label">Assigned To</div>
                             <div class="value">
                                 {% if lead.assigned_to %}
-                                <span style="background-color: var(--primary-blue); color: white; padding: 2px 8px; border-radius: 50%; font-size: 0.85rem; margin-right: 0.5rem;">
+                                <span
+                                    style="background-color: var(--primary-blue); color: white; padding: 2px 8px; border-radius: 50%; font-size: 0.85rem; margin-right: 0.5rem;">
                                     {{ lead.assigned_to.get_initials }}
                                 </span>
                                 {{ lead.assigned_to.get_full_name }}
@@ -613,12 +623,12 @@
                         </div>
                         {% endif %}
 
-                        {% if lead.tags %}
+                        {% if lead.tags.all %}
                         <div class="info-row">
                             <div class="label">Tags</div>
                             <div class="value">
-                                {% for tag in lead.tags %}
-                                <span class="badge bg-light text-dark me-1">{{ tag }}</span>
+                                {% for tag in lead.tags.all %}
+                                <span class="badge bg-light text-dark me-1">{{ tag.name }}</span>
                                 {% endfor %}
                             </div>
                         </div>
@@ -634,7 +644,8 @@
                         <!-- Add Note Form -->
                         <form method="POST" class="note-form mb-4">
                             {% csrf_token %}
-                            <textarea name="content" class="form-control" rows="3" placeholder="Add a note..." required></textarea>
+                            <textarea name="content" class="form-control" rows="3" placeholder="Add a note..."
+                                required></textarea>
                             <button type="submit" class="btn btn-submit-note mt-2">
                                 <i class="fas fa-plus me-2"></i>Add Note
                             </button>
@@ -679,7 +690,10 @@
                             <div class="timeline-item">
                                 <div class="time">{{ activity.created_at|date:"M d, Y - H:i" }}</div>
                                 <div class="content">
-                                    <strong>{% if activity.user %}{{ activity.user.get_full_name }}{% else %}System{% endif %}</strong>
+                                    <strong>{% if activity.user %}{{ activity.user.get_full_name }}
+                                        {% else %}
+                                        System
+                                        {% endif %}</strong>
                                     <div>{{ activity.description }}</div>
                                 </div>
                             </div>
@@ -766,10 +780,10 @@
 
 {% block extra_js %}
 <script>
-function confirmDelete() {
-    if (confirm('Are you sure you want to delete this lead? This action cannot be undone.')) {
-        document.getElementById('deleteForm').submit();
+    function confirmDelete() {
+        if (confirm('Are you sure you want to delete this lead? This action cannot be undone.')) {
+            document.getElementById('deleteForm').submit();
+        }
     }
-}
 </script>
 {% endblock %}

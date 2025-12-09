@@ -24,7 +24,7 @@
         padding: 2rem;
         border-radius: 10px;
         margin-bottom: 2rem;
-        box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+        box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
     }
 
     .page-header h1 {
@@ -45,7 +45,7 @@
         border: 1px solid var(--input-border);
         border-radius: 10px;
         padding: 2rem;
-        box-shadow: 0 2px 4px rgba(0,0,0,0.05);
+        box-shadow: 0 2px 4px rgba(0, 0, 0, 0.05);
         max-width: 900px;
         margin: 0 auto;
     }
@@ -89,7 +89,8 @@
     }
 
     /* Form Controls */
-    .form-control, .form-select {
+    .form-control,
+    .form-select {
         border: 2px solid var(--input-border);
         border-radius: 8px;
         padding: 0.65rem 1rem;
@@ -97,7 +98,8 @@
         font-size: 0.95rem;
     }
 
-    .form-control:focus, .form-select:focus {
+    .form-control:focus,
+    .form-select:focus {
         border-color: var(--primary-blue);
         box-shadow: 0 0 0 0.2rem var(--focus-shadow);
     }
@@ -193,7 +195,7 @@
         padding: 0.7rem 2rem;
         border-radius: 8px;
         font-weight: 600;
-        box-shadow: 0 2px 4px rgba(102, 126, 234, 0.3);
+        box-shadow: 0 2px 4px rgba(59, 130, 246, 0.3);
         transition: all 0.3s;
         min-width: 150px;
     }
@@ -218,7 +220,7 @@
     .btn-cancel:hover {
         border-color: var(--primary-blue);
         color: var(--primary-blue);
-        background: rgba(102, 126, 234, 0.05);
+        background: rgba(59, 130, 246, 0.05);
     }
 
     /* Info Box */
@@ -270,14 +272,16 @@
         width: 16px;
         height: 16px;
         margin-left: 0.5rem;
-        border: 2px solid rgba(255,255,255,0.3);
+        border: 2px solid rgba(255, 255, 255, 0.3);
         border-top-color: white;
         border-radius: 50%;
         animation: spin 0.6s linear infinite;
     }
 
     @keyframes spin {
-        to { transform: rotate(360deg); }
+        to {
+            transform: rotate(360deg);
+        }
     }
 
     /* Responsive */
@@ -296,7 +300,7 @@
 
 {% block content %}
 <div class="container-fluid">
-    
+
     <!-- Page Header -->
     <div class="page-header">
         <h1><i class="fas fa-user-plus me-2"></i>{{ form_title }}</h1>
@@ -311,7 +315,7 @@
 
     <!-- Form Container -->
     <div class="form-container">
-        
+
 
         <!-- Required Fields Legend -->
         <div class="required-legend">
@@ -325,7 +329,7 @@
             <!-- Basic Information Section -->
             <div class="form-section">
                 <h5><i class="fas fa-user-circle"></i>Basic Information</h5>
-                
+
                 <div class="row g-3">
                     <!-- Name -->
                     <div class="col-md-6">
@@ -338,11 +342,11 @@
                             {{ form.name }}
                         </div>
                         {% if form.name.errors %}
-                            <ul class="errorlist">
-                                {% for error in form.name.errors %}
-                                <li>{{ error }}</li>
-                                {% endfor %}
-                            </ul>
+                        <ul class="errorlist">
+                            {% for error in form.name.errors %}
+                            <li>{{ error }}</li>
+                            {% endfor %}
+                        </ul>
                         {% endif %}
                         {% if form.name.help_text %}
                         <small class="form-text">{{ form.name.help_text }}</small>
@@ -360,11 +364,11 @@
                             {{ form.phone }}
                         </div>
                         {% if form.phone.errors %}
-                            <ul class="errorlist">
-                                {% for error in form.phone.errors %}
-                                <li>{{ error }}</li>
-                                {% endfor %}
-                            </ul>
+                        <ul class="errorlist">
+                            {% for error in form.phone.errors %}
+                            <li>{{ error }}</li>
+                            {% endfor %}
+                        </ul>
                         {% endif %}
                         {% if form.phone.help_text %}
                         <small class="form-text">{{ form.phone.help_text }}</small>
@@ -379,11 +383,11 @@
                             {{ form.email }}
                         </div>
                         {% if form.email.errors %}
-                            <ul class="errorlist">
-                                {% for error in form.email.errors %}
-                                <li>{{ error }}</li>
-                                {% endfor %}
-                            </ul>
+                        <ul class="errorlist">
+                            {% for error in form.email.errors %}
+                            <li>{{ error }}</li>
+                            {% endfor %}
+                        </ul>
                         {% endif %}
                         {% if form.email.help_text %}
                         <small class="form-text">{{ form.email.help_text }}</small>
@@ -395,7 +399,7 @@
             <!-- Lead Classification Section -->
             <div class="form-section">
                 <h5><i class="fas fa-tags"></i>Lead Classification</h5>
-                
+
                 <div class="row g-3">
                     <!-- Source -->
                     <div class="col-md-6">
@@ -408,11 +412,11 @@
                             {{ form.source }}
                         </div>
                         {% if form.source.errors %}
-                            <ul class="errorlist">
-                                {% for error in form.source.errors %}
-                                <li>{{ error }}</li>
-                                {% endfor %}
-                            </ul>
+                        <ul class="errorlist">
+                            {% for error in form.source.errors %}
+                            <li>{{ error }}</li>
+                            {% endfor %}
+                        </ul>
                         {% endif %}
                         {% if form.source.help_text %}
                         <small class="form-text">{{ form.source.help_text }}</small>
@@ -430,11 +434,11 @@
                             {{ form.stage }}
                         </div>
                         {% if form.stage.errors %}
-                            <ul class="errorlist">
-                                {% for error in form.stage.errors %}
-                                <li>{{ error }}</li>
-                                {% endfor %}
-                            </ul>
+                        <ul class="errorlist">
+                            {% for error in form.stage.errors %}
+                            <li>{{ error }}</li>
+                            {% endfor %}
+                        </ul>
                         {% endif %}
                     </div>
 
@@ -449,11 +453,11 @@
                             {{ form.status }}
                         </div>
                         {% if form.status.errors %}
-                            <ul class="errorlist">
-                                {% for error in form.status.errors %}
-                                <li>{{ error }}</li>
-                                {% endfor %}
-                            </ul>
+                        <ul class="errorlist">
+                            {% for error in form.status.errors %}
+                            <li>{{ error }}</li>
+                            {% endfor %}
+                        </ul>
                         {% endif %}
                     </div>
 
@@ -465,11 +469,11 @@
                             {{ form.priority }}
                         </div>
                         {% if form.priority.errors %}
-                            <ul class="errorlist">
-                                {% for error in form.priority.errors %}
-                                <li>{{ error }}</li>
-                                {% endfor %}
-                            </ul>
+                        <ul class="errorlist">
+                            {% for error in form.priority.errors %}
+                            <li>{{ error }}</li>
+                            {% endfor %}
+                        </ul>
                         {% endif %}
                     </div>
                 </div>
@@ -478,7 +482,7 @@
             <!-- Assignment & Follow-up Section -->
             <div class="form-section">
                 <h5><i class="fas fa-user-friends"></i>Assignment & Follow-up</h5>
-                
+
                 <div class="row g-3">
                     <!-- Assigned To -->
                     <div class="col-md-6">
@@ -488,11 +492,11 @@
                             {{ form.assigned_to }}
                         </div>
                         {% if form.assigned_to.errors %}
-                            <ul class="errorlist">
-                                {% for error in form.assigned_to.errors %}
-                                <li>{{ error }}</li>
-                                {% endfor %}
-                            </ul>
+                        <ul class="errorlist">
+                            {% for error in form.assigned_to.errors %}
+                            <li>{{ error }}</li>
+                            {% endfor %}
+                        </ul>
                         {% endif %}
                         {% if form.assigned_to.help_text %}
                         <small class="form-text">{{ form.assigned_to.help_text }}</small>
@@ -507,11 +511,11 @@
                             {{ form.next_follow_up }}
                         </div>
                         {% if form.next_follow_up.errors %}
-                            <ul class="errorlist">
-                                {% for error in form.next_follow_up.errors %}
-                                <li>{{ error }}</li>
-                                {% endfor %}
-                            </ul>
+                        <ul class="errorlist">
+                            {% for error in form.next_follow_up.errors %}
+                            <li>{{ error }}</li>
+                            {% endfor %}
+                        </ul>
                         {% endif %}
                         {% if form.next_follow_up.help_text %}
                         <small class="form-text">{{ form.next_follow_up.help_text }}</small>
@@ -523,18 +527,18 @@
             <!-- Additional Information Section -->
             <div class="form-section">
                 <h5><i class="fas fa-clipboard"></i>Additional Information</h5>
-                
+
                 <div class="row g-3">
                     <!-- Notes -->
                     <div class="col-md-12">
                         <label class="form-label">Notes</label>
                         {{ form.notes }}
                         {% if form.notes.errors %}
-                            <ul class="errorlist">
-                                {% for error in form.notes.errors %}
-                                <li>{{ error }}</li>
-                                {% endfor %}
-                            </ul>
+                        <ul class="errorlist">
+                            {% for error in form.notes.errors %}
+                            <li>{{ error }}</li>
+                            {% endfor %}
+                        </ul>
                         {% endif %}
                         <small class="form-text">General notes about this lead</small>
                     </div>
@@ -547,11 +551,11 @@
                             {{ form.tags }}
                         </div>
                         {% if form.tags.errors %}
-                            <ul class="errorlist">
-                                {% for error in form.tags.errors %}
-                                <li>{{ error }}</li>
-                                {% endfor %}
-                            </ul>
+                        <ul class="errorlist">
+                            {% for error in form.tags.errors %}
+                            <li>{{ error }}</li>
+                            {% endfor %}
+                        </ul>
                         {% endif %}
                         <small class="form-text tags-input-help">
                             Separate tags with commas (e.g., vip, urgent, follow-up)
@@ -562,8 +566,13 @@
 
             <!-- Form Actions -->
             <div class="form-actions">
-                <a href="{% if cancel_url %}{% url cancel_url %}{% if cancel_url_kwargs %}?pk={{ cancel_url_kwargs.pk }}{% endif %}{% else %}{% url 'leads:lead_list' %}{% endif %}" 
-                   class="btn btn-cancel">
+                <a href="{% if cancel_url and cancel_url_kwargs %}
+                                 {% url cancel_url cancel_url_kwargs.pk %}
+                             {% elif cancel_url %}
+                                 {% url cancel_url %}
+                             {% else %}
+                                 {% url 'leads:lead_list' %}
+                             {% endif %}" class="btn btn-cancel">
                     <i class="fas fa-times me-2"></i>Cancel
                 </a>
                 <button type="submit" class="btn btn-submit" id="submitBtn">
@@ -580,51 +589,51 @@
 
 {% block extra_js %}
 <script>
-// Form submission with loading state
-document.getElementById('leadForm').addEventListener('submit', function(e) {
-    const submitBtn = document.getElementById('submitBtn');
-    submitBtn.disabled = true;
-    submitBtn.classList.add('loading');
-    submitBtn.innerHTML = '<i class="fas fa-spinner fa-spin me-2"></i>Saving...';
-});
+    // Form submission with loading state
+    document.getElementById('leadForm').addEventListener('submit', function (e) {
+        const submitBtn = document.getElementById('submitBtn');
+        submitBtn.disabled = true;
+        submitBtn.classList.add('loading');
+        submitBtn.innerHTML = '<i class="fas fa-spinner fa-spin me-2"></i>Saving...';
+    });
 
-// Phone number validation helper
-const phoneInput = document.querySelector('input[name="phone"]');
-if (phoneInput) {
-    phoneInput.addEventListener('blur', function() {
-        let value = this.value.trim();
-        
-        // Auto-add + if missing
-        if (value && !value.startsWith('+')) {
-            this.value = '+' + value;
+    // Phone number validation helper
+    const phoneInput = document.querySelector('input[name="phone"]');
+    if (phoneInput) {
+        phoneInput.addEventListener('blur', function () {
+            let value = this.value.trim();
+
+            // Auto-add + if missing
+            if (value && !value.startsWith('+')) {
+                this.value = '+' + value;
+            }
+        });
+    }
+
+    // Tags input helper
+    const tagsInput = document.querySelector('input[name="tags"]');
+    if (tagsInput) {
+        tagsInput.addEventListener('blur', function () {
+            // Clean up tags: trim spaces, remove duplicates
+            let tags = this.value.split(',')
+                .map(tag => tag.trim())
+                .filter(tag => tag.length > 0);
+
+            // Remove duplicates
+            tags = [...new Set(tags)];
+
+            this.value = tags.join(', ');
+        });
+    }
+
+    // Form validation feedback
+    const form = document.getElementById('leadForm');
+    form.addEventListener('submit', function (e) {
+        // Find first error field and scroll to it
+        const firstError = document.querySelector('.errorlist');
+        if (firstError) {
+            firstError.scrollIntoView({ behavior: 'smooth', block: 'center' });
         }
     });
-}
-
-// Tags input helper
-const tagsInput = document.querySelector('input[name="tags"]');
-if (tagsInput) {
-    tagsInput.addEventListener('blur', function() {
-        // Clean up tags: trim spaces, remove duplicates
-        let tags = this.value.split(',')
-            .map(tag => tag.trim())
-            .filter(tag => tag.length > 0);
-        
-        // Remove duplicates
-        tags = [...new Set(tags)];
-        
-        this.value = tags.join(', ');
-    });
-}
-
-// Form validation feedback
-const form = document.getElementById('leadForm');
-form.addEventListener('submit', function(e) {
-    // Find first error field and scroll to it
-    const firstError = document.querySelector('.errorlist');
-    if (firstError) {
-        firstError.scrollIntoView({ behavior: 'smooth', block: 'center' });
-    }
-});
 </script>
 {% endblock %}

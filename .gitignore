@@ -1,0 +1,402 @@
+# ==============================================================================
+# CATCHY BOT  - GIT IGNORE FILE
+# ==============================================================================
+# This file tells Git which files/folders to ignore (not track)
+# These files should NOT be committed to version control
+#
+# Why? They contain:
+# - Sensitive data (passwords, API keys)
+# - Generated files (can be recreated)
+# - Local configuration (different per developer)
+# - Large files (database dumps, media uploads)
+# ==============================================================================
+
+
+
+# ENVIRONMENT & SECRETS
+
+# Environment variables file (contains passwords, API keys, secrets)
+# THIS IS THE MOST IMPORTANT ONE!
+# Each developer has their own .env file
+.env
+.env.local
+.env.production
+.env.staging
+
+# Backup files
+*.bak
+*.backup
+
+
+# PYTHON
+
+# Byte-compiled / optimized Python files
+# Generated when Python runs code
+# Can be recreated automatically
+__pycache__/
+*.py[cod]
+*$py.class
+
+# C extensions (compiled Python modules)
+*.so
+
+# Distribution / packaging
+.Python
+build/
+develop-eggs/
+dist/
+downloads/
+eggs/
+.eggs/
+lib/
+lib64/
+parts/
+sdist/
+var/
+wheels/
+pip-wheel-metadata/
+share/python-wheels/
+*.egg-info/
+.installed.cfg
+*.egg
+MANIFEST
+
+# Virtual environments
+# Each developer creates their own
+venv/
+env/
+ENV/
+env.bak/
+venv.bak/
+.venv/
+
+# PyInstaller
+*.manifest
+*.spec
+
+# Unit test / coverage reports
+htmlcov/
+.tox/
+.nox/
+.coverage
+.coverage.*
+.cache
+nosetests.xml
+coverage.xml
+*.cover
+*.py,cover
+.hypothesis/
+.pytest_cache/
+
+# Translations (compiled)
+*.mo
+*.pot
+
+# Django stuff
+*.log
+local_settings.py
+db.sqlite3
+db.sqlite3-journal
+
+# Flask stuff (if we ever add Flask)
+instance/
+.webassets-cache
+
+# Scrapy stuff (if we ever use Scrapy)
+.scrapy
+
+# Sphinx documentation
+docs/_build/
+
+# PyBuilder
+target/
+
+# Jupyter Notebook
+.ipynb_checkpoints
+
+# IPython
+profile_default/
+ipython_config.py
+
+# pyenv
+.python-version
+
+# pipenv
+Pipfile.lock
+
+# PEP 582
+__pypackages__/
+
+# Celery stuff
+celerybeat-schedule
+celerybeat.pid
+
+# SageMath parsed files
+*.sage.py
+
+# Spyder project settings
+.spyderproject
+.spyproject
+
+# Rope project settings
+.ropeproject
+
+# mkdocs documentation
+/site
+
+# mypy
+.mypy_cache/
+.dmypy.json
+dmypy.json
+
+# Pyre type checker
+.pyre/
+
+
+
+# DJANGO SPECIFIC
+
+# Static files (will be collected in production)
+/staticfiles/
+/static_root/
+
+# Media files (user uploads)
+# In development, ignore these
+# In production, these should be on cloud storage (S3, etc.)
+/media/
+/media_root/
+
+# Local SQLite databases (if using SQLite for testing)
+*.sqlite3
+*.db
+
+# Django migrations (some teams ignore, we don't)
+# We TRACK migrations in Git
+# apps/*/migrations/*.py
+# !apps/*/migrations/__init__.py
+
+# Django secret key file (if generated separately)
+secret_key.txt
+
+# Django fixtures (database dumps)
+# *.json
+
+
+
+# DOCKER
+
+
+# Docker volumes data (created by docker-compose)
+# These are persistent storage, managed by Docker
+postgres_data/
+redis_data/
+
+# Docker override files (local customizations)
+docker-compose.override.yml
+
+
+
+# DATABASES
+
+# PostgreSQL dumps
+*.sql
+*.dump
+*.backup
+
+# Database IDE files
+.idea/dataSources/
+.idea/dataSources.ids
+.idea/dataSources.local.xml
+
+
+
+# IDEs & EDITORS
+
+# PyCharm
+.idea/
+*.iml
+*.iws
+*.ipr
+
+# VS Code
+.vscode/
+*.code-workspace
+
+# Sublime Text
+*.sublime-project
+*.sublime-workspace
+
+# Vim
+*.swp
+*.swo
+*~
+.vim/
+
+# Emacs
+*~
+\#*\#
+.\#*
+
+# Eclipse
+.project
+.pydevproject
+.settings/
+
+# NetBeans
+nbproject/
+
+
+
+# OPERATING SYSTEM
+
+
+# macOS
+.DS_Store
+.AppleDouble
+.LSOverride
+._*
+.DocumentRevisions-V100
+.fseventsd
+.Spotlight-V100
+.TemporaryItems
+.Trashes
+.VolumeIcon.icns
+.com.apple.timemachine.donotpresent
+.AppleDB
+.AppleDesktop
+Network Trash Folder
+Temporary Items
+.apdisk
+
+# Windows
+Thumbs.db
+Thumbs.db:encryptable
+ehthumbs.db
+ehthumbs_vista.db
+*.stackdump
+[Dd]esktop.ini
+$RECYCLE.BIN/
+*.cab
+*.msi
+*.msix
+*.msm
+*.msp
+*.lnk
+
+# Linux
+.directory
+.Trash-*
+.nfs*
+
+
+# LOGS & TEMPORARY FILES
+
+# Log files
+logs/
+*.log
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+lerna-debug.log*
+
+# Temporary files
+tmp/
+temp/
+*.tmp
+*.temp
+
+
+
+# NODE.JS (if using npm/webpack for frontend)
+
+# Dependencies
+node_modules/
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+package-lock.json
+yarn.lock
+
+# Production build
+/build
+
+
+
+# TESTING
+
+# Test coverage
+.coverage
+htmlcov/
+.pytest_cache/
+
+
+# DOCUMENTATION
+
+# Generated documentation
+docs/_build/
+docs/_static/
+docs/_templates/
+
+
+# BACKUPS
+
+# Backup files
+*.bak
+*.backup
+*.old
+*_backup
+
+
+
+# CUSTOM PROJECT FILES
+
+# Local development notes (each developer has their own)
+notes.txt
+TODO.txt
+NOTES.md
+
+# Local test data
+test_data/
+sample_data/
+
+# Screenshots (for documentation)
+# screenshots/
+
+
+
+# EXCEPTIONS (files we DO want to track)
+
+# Uncomment to track specific files that are normally ignored
+# !important_file.log
+# !specific_media_file.jpg
+
+
+
+# KEEP DIRECTORY STRUCTURE
+
+# Keep empty directories in Git
+# Create .gitkeep file in empty directories you want to track
+!.gitkeep
+
+
+
+
+
+# NOTES
+# ==============================================================================
+#
+# HOW TO USE:
+# 1. This file is already in effect once committed
+# 2. To stop tracking a file already committed:
+#    git rm --cached filename
+# 3. To check what's ignored:
+#    git status --ignored
+# 4. To add exception for ignored file:
+#    git add -f filename
+#
+# IMPORTANT:
+# - Always commit this file FIRST before any other files
+# - Review regularly and update as project grows
+# - Never remove .env from this list!
+#
+# ==============================================================================

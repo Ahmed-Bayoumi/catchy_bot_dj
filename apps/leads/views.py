@@ -24,11 +24,7 @@ from io import StringIO, TextIOWrapper
 @company_required
 def lead_list_view(request):
     company = request.user.company
-    leads = Lead.objects.filter(company=company).select_related(
-        'source',
-        'stage',
-        'assigned_to'
-    ).order_by('-created_at')  # Newest first
+    leads = Lead.objects.filter(company=company).exclude(status='deleted').select_related('source','stage','assigned_to').order_by('-created_at')
 
     search_query = request.GET.get('search', '').strip()
 
@@ -902,12 +898,7 @@ def lead_kanban_view(request):
     ).order_by('order')
 
     leads_queryset = Lead.objects.filter(
-        company=company
-    ).select_related(
-        'source',
-        'stage',
-        'assigned_to'
-    )
+        company=company).exclude(status='deleted').select_related('source','stage','assigned_to')
 
 
     search_query = request.GET.get('search', '').strip()

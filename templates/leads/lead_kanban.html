@@ -6,12 +6,12 @@
 {% block extra_css %}
 <style>
     :root {
-        --primary-blue: #667eea;
+        --primary-blue: #3b82f6;
         --secondary-purple: #764ba2;
         --dark-text: #333333;
         --input-border: #e1e8ed;
-        --focus-shadow: rgba(102, 126, 234, 0.25);
-        --link-normal: #667eea;
+        --focus-shadow: rgba(59, 130, 246, 0.25);
+        --link-normal: #3b82f6;
         --link-hover: #764ba2;
     }
 
@@ -22,7 +22,7 @@
         padding: 2rem;
         border-radius: 10px;
         margin-bottom: 2rem;
-        box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+        box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
     }
 
     .page-header h1 {
@@ -126,11 +126,11 @@
         padding: 1rem;
         cursor: grab;
         transition: all 0.2s;
-        box-shadow: 0 1px 3px rgba(0,0,0,0.05);
+        box-shadow: 0 1px 3px rgba(0, 0, 0, 0.05);
     }
 
     .kanban-card:hover {
-        box-shadow: 0 4px 8px rgba(0,0,0,0.1);
+        box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
         transform: translateY(-2px);
     }
 
@@ -142,7 +142,7 @@
 
     .kanban-card.drag-over {
         border: 2px dashed var(--primary-blue);
-        background: rgba(102, 126, 234, 0.05);
+        background: rgba(59, 130, 246, 0.05);
     }
 
     .kanban-card-header {
@@ -304,7 +304,7 @@
         left: 0;
         right: 0;
         bottom: 0;
-        background: rgba(0,0,0,0.5);
+        background: rgba(0, 0, 0, 0.5);
         display: none;
         align-items: center;
         justify-content: center;
@@ -329,7 +329,9 @@
     }
 
     @keyframes spin {
-        to { transform: rotate(360deg); }
+        to {
+            transform: rotate(360deg);
+        }
     }
 </style>
 {% endblock %}
@@ -365,11 +367,8 @@
         <form method="GET" id="kanbanFilterForm">
             <div class="row g-3">
                 <div class="col-md-3">
-                    <input type="text"
-                           name="search"
-                           class="form-control"
-                           placeholder="Search leads..."
-                           value="{{ search_query }}">
+                    <input type="text" name="search" class="form-control" placeholder="Search leads..."
+                        value="{{ search_query }}">
                 </div>
                 <div class="col-md-2">
                     {{ filter_form.source }}
@@ -399,7 +398,8 @@
             <!-- Column Header -->
             <div class="kanban-column-header">
                 <div class="kanban-column-title">
-                    <i class="{{ stage_data.stage.icon }}" style="background-color: {{ stage_data.stage.color }}; color: white;"></i>
+                    <i class="{{ stage_data.stage.icon }}"
+                        style="background-color: {{ stage_data.stage.color }}; color: white;"></i>
                     <span>{{ stage_data.stage.name }}</span>
                 </div>
                 <div class="kanban-column-count">{{ stage_data.count }}</div>
@@ -408,45 +408,44 @@
             <!-- Cards Container -->
             <div class="kanban-cards" data-stage-id="{{ stage_data.stage.id }}">
                 {% if stage_data.leads %}
-                    {% for lead in stage_data.leads %}
-                    <div class="kanban-card"
-                         draggable="true"
-                         data-lead-id="{{ lead.id }}"
-                         data-stage-id="{{ lead.stage.id }}">
+                {% for lead in stage_data.leads %}
+                <div class="kanban-card" draggable="true" data-lead-id="{{ lead.id }}"
+                    data-stage-id="{{ lead.stage.id }}">
 
-                        <!-- Card Header -->
-                        <div class="kanban-card-header">
-                            <div>
-                                <div class="kanban-card-title">
-                                    <a href="{% url 'leads:lead_detail' pk=lead.pk %}"
-                                       style="color: var(--dark-text); text-decoration: none;">
-                                        {{ lead.name }}
-                                    </a>
-                                </div>
-                                <div class="kanban-card-phone">
-                                    <i class="fas fa-phone"></i>
-                                    {{ lead.phone }}
-                                </div>
+                    <!-- Card Header -->
+                    <div class="kanban-card-header">
+                        <div>
+                            <div class="kanban-card-title">
+                                <a href="{% url 'leads:lead_detail' pk=lead.pk %}"
+                                    style="color: var(--dark-text); text-decoration: none;">
+                                    {{ lead.name }}
+                                </a>
                             </div>
-                            <div class="kanban-card-priority priority-{{ lead.priority }}">
-                                {{ lead.get_priority_display }}
+                            <div class="kanban-card-phone">
+                                <i class="fas fa-phone"></i>
+                                {{ lead.phone }}
                             </div>
                         </div>
-
-                        <!-- Card Meta -->
-                        <div class="kanban-card-meta">
-                            <div class="kanban-card-source" style="background-color: {{ lead.source.color }}20; color: {{ lead.source.color }};">
-                                <i class="{{ lead.source.icon }}"></i>
-                                <span>{{ lead.source.name }}</span>
-                            </div>
-                            {% if lead.assigned_to %}
-                            <div class="kanban-card-assigned">
-                                <div class="kanban-card-avatar">{{ lead.assigned_to.get_initials }}</div>
-                            </div>
-                            {% endif %}
+                        <div class="kanban-card-priority priority-{{ lead.priority }}">
+                            {{ lead.get_priority_display }}
                         </div>
                     </div>
-                    {% endfor %}
+
+                    <!-- Card Meta -->
+                    <div class="kanban-card-meta">
+                        <div class="kanban-card-source"
+                            style="background-color: {{ lead.source.color }}20; color: {{ lead.source.color }};">
+                            <i class="{{ lead.source.icon }}"></i>
+                            <span>{{ lead.source.name }}</span>
+                        </div>
+                        {% if lead.assigned_to %}
+                        <div class="kanban-card-assigned">
+                            <div class="kanban-card-avatar">{{ lead.assigned_to.get_initials }}</div>
+                        </div>
+                        {% endif %}
+                    </div>
+                </div>
+                {% endfor %}
                 {% else %}
                 <div class="kanban-empty">
                     <i class="fas fa-inbox"></i>
@@ -472,155 +471,155 @@
 
 {% block extra_js %}
 <script>
-// Drag and Drop Functionality
-let draggedElement = null;
-let sourceStageId = null;
+    // Drag and Drop Functionality
+    let draggedElement = null;
+    let sourceStageId = null;
 
-// Get CSRF Token
-function getCookie(name) {
-    let cookieValue = null;
-    if (document.cookie && document.cookie !== '') {
-        const cookies = document.cookie.split(';');
-        for (let i = 0; i < cookies.length; i++) {
-            const cookie = cookies[i].trim();
-            if (cookie.substring(0, name.length + 1) === (name + '=')) {
-                cookieValue = decodeURIComponent(cookie.substring(name.length + 1));
-                break;
+    // Get CSRF Token
+    function getCookie(name) {
+        let cookieValue = null;
+        if (document.cookie && document.cookie !== '') {
+            const cookies = document.cookie.split(';');
+            for (let i = 0; i < cookies.length; i++) {
+                const cookie = cookies[i].trim();
+                if (cookie.substring(0, name.length + 1) === (name + '=')) {
+                    cookieValue = decodeURIComponent(cookie.substring(name.length + 1));
+                    break;
+                }
             }
         }
+        return cookieValue;
     }
-    return cookieValue;
-}
 
-const csrftoken = getCookie('csrftoken');
+    const csrftoken = getCookie('csrftoken');
 
-// Drag Start
-document.querySelectorAll('.kanban-card').forEach(card => {
-    card.addEventListener('dragstart', function(e) {
-        draggedElement = this;
-        sourceStageId = this.dataset.stageId;
-        this.classList.add('dragging');
-        e.dataTransfer.effectAllowed = 'move';
-        e.dataTransfer.setData('text/html', this.innerHTML);
+    // Drag Start
+    document.querySelectorAll('.kanban-card').forEach(card => {
+        card.addEventListener('dragstart', function (e) {
+            draggedElement = this;
+            sourceStageId = this.dataset.stageId;
+            this.classList.add('dragging');
+            e.dataTransfer.effectAllowed = 'move';
+            e.dataTransfer.setData('text/html', this.innerHTML);
+        });
+
+        card.addEventListener('dragend', function (e) {
+            this.classList.remove('dragging');
+        });
     });
 
-    card.addEventListener('dragend', function(e) {
-        this.classList.remove('dragging');
-    });
-});
+    // Drag Over (on columns)
+    document.querySelectorAll('.kanban-cards').forEach(column => {
+        column.addEventListener('dragover', function (e) {
+            e.preventDefault();
+            e.dataTransfer.dropEffect = 'move';
 
-// Drag Over (on columns)
-document.querySelectorAll('.kanban-cards').forEach(column => {
-    column.addEventListener('dragover', function(e) {
-        e.preventDefault();
-        e.dataTransfer.dropEffect = 'move';
+            // Visual feedback
+            const cards = column.querySelectorAll('.kanban-card:not(.dragging)');
+            cards.forEach(card => card.classList.remove('drag-over'));
+        });
 
-        // Visual feedback
-        const cards = column.querySelectorAll('.kanban-card:not(.dragging)');
-        cards.forEach(card => card.classList.remove('drag-over'));
-    });
+        column.addEventListener('dragenter', function (e) {
+            e.preventDefault();
+        });
 
-    column.addEventListener('dragenter', function(e) {
-        e.preventDefault();
-    });
+        // Drop
+        column.addEventListener('drop', function (e) {
+            e.preventDefault();
 
-    // Drop
-    column.addEventListener('drop', function(e) {
-        e.preventDefault();
+            if (draggedElement) {
+                const targetStageId = this.dataset.stageId;
+                const leadId = draggedElement.dataset.leadId;
 
-        if (draggedElement) {
-            const targetStageId = this.dataset.stageId;
-            const leadId = draggedElement.dataset.leadId;
+                // Don't do anything if dropped in same column
+                if (sourceStageId === targetStageId) {
+                    return;
+                }
 
-            // Don't do anything if dropped in same column
-            if (sourceStageId === targetStageId) {
-                return;
+                // Move card visually
+                this.appendChild(draggedElement);
+
+                // Update stage via AJAX
+                updateLeadStage(leadId, targetStageId);
+
+                // Update counts
+                updateColumnCounts();
             }
-
-            // Move card visually
-            this.appendChild(draggedElement);
-
-            // Update stage via AJAX
-            updateLeadStage(leadId, targetStageId);
-
-            // Update counts
-            updateColumnCounts();
-        }
+        });
     });
-});
 
-// Update Lead Stage via AJAX
-function updateLeadStage(leadId, newStageId) {
-    // Show loading
-    document.getElementById('loadingOverlay').classList.add('active');
+    // Update Lead Stage via AJAX
+    function updateLeadStage(leadId, newStageId) {
+        // Show loading
+        document.getElementById('loadingOverlay').classList.add('active');
 
-    fetch(`/leads/${leadId}/change-stage/`, {
-        method: 'POST',
-        headers: {
-            'Content-Type': 'application/x-www-form-urlencoded',
-            'X-CSRFToken': csrftoken,
-            'X-Requested-With': 'XMLHttpRequest'
-        },
-        body: `stage=${newStageId}`
-    })
-    .then(response => response.json())
-    .then(data => {
-        // Hide loading
-        document.getElementById('loadingOverlay').classList.remove('active');
+        fetch(`/leads/${leadId}/change-stage/`, {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/x-www-form-urlencoded',
+                'X-CSRFToken': csrftoken,
+                'X-Requested-With': 'XMLHttpRequest'
+            },
+            body: `stage=${newStageId}`
+        })
+            .then(response => response.json())
+            .then(data => {
+                // Hide loading
+                document.getElementById('loadingOverlay').classList.remove('active');
 
-        if (data.success) {
-            // Update card's stage ID
-            draggedElement.dataset.stageId = newStageId;
+                if (data.success) {
+                    // Update card's stage ID
+                    draggedElement.dataset.stageId = newStageId;
 
-            // Show success message (optional)
-            console.log('Lead moved successfully');
-        } else {
-            alert('Error moving lead: ' + (data.error || 'Unknown error'));
-            // Revert visual change
-            location.reload();
-        }
-    })
-    .catch(error => {
-        document.getElementById('loadingOverlay').classList.remove('active');
-        alert('Error moving lead: ' + error);
-        location.reload();
-    });
-}
+                    // Show success message (optional)
+                    console.log('Lead moved successfully');
+                } else {
+                    alert('Error moving lead: ' + (data.error || 'Unknown error'));
+                    // Revert visual change
+                    location.reload();
+                }
+            })
+            .catch(error => {
+                document.getElementById('loadingOverlay').classList.remove('active');
+                alert('Error moving lead: ' + error);
+                location.reload();
+            });
+    }
 
-// Update Column Counts
-function updateColumnCounts() {
-    document.querySelectorAll('.kanban-column').forEach(column => {
-        const stageId = column.dataset.stageId;
-        const cardsContainer = column.querySelector('.kanban-cards');
-        const count = cardsContainer.querySelectorAll('.kanban-card').length;
-        const countBadge = column.querySelector('.kanban-column-count');
+    // Update Column Counts
+    function updateColumnCounts() {
+        document.querySelectorAll('.kanban-column').forEach(column => {
+            const stageId = column.dataset.stageId;
+            const cardsContainer = column.querySelector('.kanban-cards');
+            const count = cardsContainer.querySelectorAll('.kanban-card').length;
+            const countBadge = column.querySelector('.kanban-column-count');
 
-        countBadge.textContent = count;
+            countBadge.textContent = count;
 
-        // Show/hide empty state
-        const emptyState = cardsContainer.querySelector('.kanban-empty');
-        if (count === 0) {
-            if (!emptyState) {
-                cardsContainer.innerHTML = `
+            // Show/hide empty state
+            const emptyState = cardsContainer.querySelector('.kanban-empty');
+            if (count === 0) {
+                if (!emptyState) {
+                    cardsContainer.innerHTML = `
                     <div class="kanban-empty">
                         <i class="fas fa-inbox"></i>
                         <p>No leads</p>
                     </div>
                 `;
+                }
+            } else {
+                if (emptyState) {
+                    emptyState.remove();
+                }
             }
-        } else {
-            if (emptyState) {
-                emptyState.remove();
-            }
-        }
-    });
-}
+        });
+    }
 
-// Auto-submit filters on change
-document.querySelectorAll('#kanbanFilterForm select').forEach(select => {
-    select.addEventListener('change', function() {
-        document.getElementById('kanbanFilterForm').submit();
+    // Auto-submit filters on change
+    document.querySelectorAll('#kanbanFilterForm select').forEach(select => {
+        select.addEventListener('change', function () {
+            document.getElementById('kanbanFilterForm').submit();
+        });
     });
-});
 </script>
 {% endblock %}
