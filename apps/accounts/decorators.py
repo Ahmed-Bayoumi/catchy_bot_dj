@@ -161,40 +161,90 @@ def company_required(view_func):
     return wrapper
 
 
-def same_company_required(view_func):
+def same_company_required(model_class, pk_param='pk'):
     """
     Decorator: Verify accessed object belongs to user's company
 
     Multi-tenancy security: Users can only access their company's data
 
+    Args:
+        model_class: Model class to verify (e.g., Lead, Contact)
+        pk_param: URL parameter name for primary key (default: 'pk')
+
+    Usage:
+        @login_required
+        @company_required
+        @same_company_required(Lead, pk_param='pk')
+        def lead_detail_view(request, pk):
+            # Object is guaranteed to belong to user's company
+            lead = get_object_or_404(Lead, pk=pk)
+            return render(request, 'lead_detail.html', {'lead': lead})
 
     How it works:
-    1. View gets object from database
-    2. Decorator checks object.company == request.user.company
-    3. If not → 403 Forbidden
+    1. Gets pk from URL parameters
+    2. Verifies object exists AND belongs to user's company
+    3. If object from different company → 404 (not 403, to hide existence)
+    4. If object belongs to user's company → Allow access
 
-    Requirements:
-    - Object must have 'company' field
-    - View must pass object in context or return it
+    Security benefits:
+    - Prevents cross-company data access
+    - Returns 404 instead of 403 (hides existence of other company's data)
+    - Automatic multi-tenancy enforcement
 
-    Note: This is a simplified version
-    Full implementation would need object detection
+    Example:
+        Company A user tries to access Company B's lead:
+        GET /leads/123/ → Lead 123 belongs to Company B
+        → Decorator checks: lead.company == user.company?
+        → NO → Returns 404 (as if lead doesn't exist)
+        → Result: Company A user can't even know Lead 123 exists
     """
 
-    @wraps(view_func)
-    def wrapper(request, *args, **kwargs):
-        if not request.user.is_authenticated:
-            return redirect('accounts:login')
+    def decorator(view_func):
+        @wraps(view_func)
+        def wrapper(request, *args, **kwargs):
+            # Check authentication
+            if not request.user.is_authenticated:
+                messages.error(request, _('Please login to continue.'))
+                return redirect('accounts:login')
 
-        # Execute view
-        response = view_func(request, *args, **kwargs)
+            # Check company
+            if not request.user.company:
+                messages.error(
+                    request,
+                    _('You must be assigned to a company to access this page.')
+                )
+                return redirect('core:dashboard')
 
-        # TODO: Add company verification logic
-        # This would require inspecting the view's object
+            # Get object pk from URL parameters
+            pk = kwargs.get(pk_param)
+            
+            if not pk:
+                # No pk provided, let view handle it
+                return view_func(request, *args, **kwargs)
 
-        return response
+            try:
+                # Verify object exists AND belongs to user's company
+                # This is the key security check!
+                obj = model_class.objects.get(
+                    pk=pk,
+                    company=request.user.company  # ⭐ Multi-tenancy filter
+                )
+                
+                # Object belongs to user's company ✅
+                # Continue to view
+                return view_func(request, *args, **kwargs)
 
-    return wrapper
+            except model_class.DoesNotExist:
+                # Object doesn't exist OR belongs to different company
+                # Return 404 (not 403) to hide existence
+                from django.http import Http404
+                raise Http404(
+                    f"{model_class.__name__} not found or you don't have access to it."
+                )
+
+        return wrapper
+
+    return decorator
 
 
 # REQUEST TYPE DECORATORS
@@ -513,6 +563,37 @@ def view_lead_detail(request, pk):
     # Agents see only their leads
     lead = get_object_or_404(Lead, pk=pk)
     return render(request, 'lead_detail.html', {'lead': lead})
+
+
+EXAMPLE 7: Multi-tenancy security
+===================================
+from apps.leads.models import Lead
+
+@login_required
+@company_required
+@same_company_required(Lead, pk_param='pk')
+def lead_detail_view(request, pk):
+    # Automatic company verification
+    # If lead belongs to different company → 404
+    # If lead belongs to user's company → Allow
+    lead = get_object_or_404(Lead, pk=pk)
+    return render(request, 'lead_detail.html', {'lead': lead})
+
+
+EXAMPLE 8: Combined security layers
+=====================================
+@login_required                          # Layer 1: Authentication
+@company_required                        # Layer 2: Has company
+@same_company_required(Lead)             # Layer 3: Company match
+@admin_or_owner_required(Lead, 'assigned_to')  # Layer 4: Admin or assigned
+def lead_edit_view(request, pk):
+    # Maximum security:
+    # 1. ✅ User logged in
+    # 2. ✅ User has company
+    # 3. ✅ Lead belongs to user's company
+    # 4. ✅ User is admin OR assigned to lead
+    lead = get_object_or_404(Lead, pk=pk)
+    # ... edit logic
 """
 
 # ==============================================================================

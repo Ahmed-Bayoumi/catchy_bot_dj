@@ -1,5 +1,6 @@
 <!DOCTYPE html>
 <html lang="en" dir="ltr">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -55,7 +56,7 @@
             padding: 20px 0;
             overflow-y: auto;
             z-index: 1000;
-            box-shadow: 2px 0 10px rgba(0,0,0,0.1);
+            box-shadow: 2px 0 10px rgba(0, 0, 0, 0.1);
         }
 
         .sidebar::-webkit-scrollbar {
@@ -63,7 +64,7 @@
         }
 
         .sidebar::-webkit-scrollbar-thumb {
-            background: rgba(255,255,255,0.3);
+            background: rgba(255, 255, 255, 0.3);
             border-radius: 10px;
         }
 
@@ -71,7 +72,7 @@
         .sidebar-logo {
             text-align: center;
             padding: 0 20px 30px;
-            border-bottom: 1px solid rgba(255,255,255,0.1);
+            border-bottom: 1px solid rgba(255, 255, 255, 0.1);
             margin-bottom: 20px;
         }
 
@@ -109,7 +110,7 @@
             display: flex;
             align-items: center;
             padding: 12px 15px;
-            color: rgba(255,255,255,0.8);
+            color: rgba(255, 255, 255, 0.8);
             text-decoration: none;
             border-radius: 8px;
             transition: all 0.3s ease;
@@ -117,13 +118,13 @@
         }
 
         .sidebar-menu a:hover {
-            background: rgba(255,255,255,0.1);
+            background: rgba(255, 255, 255, 0.1);
             color: white;
             transform: translateX(5px);
         }
 
         .sidebar-menu a.active {
-            background: rgba(255,255,255,0.2);
+            background: rgba(255, 255, 255, 0.2);
             color: white;
             font-weight: 600;
         }
@@ -159,7 +160,7 @@
             display: flex;
             align-items: center;
             justify-content: space-between;
-            box-shadow: 0 2px 4px rgba(0,0,0,0.05);
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.05);
             position: sticky;
             top: 0;
             z-index: 999;
@@ -267,14 +268,14 @@
         .card {
             border: none;
             border-radius: 10px;
-            box-shadow: 0 2px 8px rgba(0,0,0,0.05);
+            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05);
             margin-bottom: 30px;
             transition: transform 0.3s, box-shadow 0.3s;
         }
 
         .card:hover {
             transform: translateY(-2px);
-            box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
         }
 
         .card-header {
@@ -294,13 +295,13 @@
             background: white;
             border-radius: 10px;
             padding: 25px;
-            box-shadow: 0 2px 8px rgba(0,0,0,0.05);
+            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05);
             transition: all 0.3s;
         }
 
         .stat-card:hover {
             transform: translateY(-5px);
-            box-shadow: 0 4px 15px rgba(0,0,0,0.1);
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
         }
 
         .stat-card .icon {
@@ -383,6 +384,7 @@
 
     {% block extra_css %}{% endblock %}
 </head>
+
 <body>
 
     {% if user.is_authenticated %}
@@ -404,16 +406,38 @@
                     <span>Dashboard</span>
                 </a>
             </li>
+        </ul>
+
+        <!-- Leads Section -->
+        <div class="sidebar-section">Leads</div>
+        <ul class="sidebar-menu">
             <li>
-                <a href="#" class="{% if active_page == 'leads' %}active{% endif %}">
-                    <i class="fas fa-users"></i>
-                    <span>Leads</span>
+                <a href="{% url 'leads:lead_list' %}" class="{% if active_page == 'lead_list' %}active{% endif %}">
+                    <i class="fas fa-list"></i>
+                    <span>All Leads</span>
                 </a>
             </li>
             <li>
+                <a href="{% url 'leads:lead_kanban' %}" class="{% if active_page == 'lead_kanban' %}active{% endif %}">
+                    <i class="fas fa-th"></i>
+                    <span>Kanban Board</span>
+                </a>
+            </li>
+            <li>
+                <a href="{% url 'leads:lead_create' %}" class="{% if active_page == 'lead_create' %}active{% endif %}">
+                    <i class="fas fa-plus-circle"></i>
+                    <span>New Lead</span>
+                </a>
+            </li>
+        </ul>
+
+        <!-- Communication Section -->
+        <div class="sidebar-section">Communication</div>
+        <ul class="sidebar-menu">
+            <li>
                 <a href="#" class="{% if active_page == 'chat' %}active{% endif %}">
                     <i class="fas fa-comments"></i>
-                    <span>Chat</span>
+                    <span>WhatsApp Chat</span>
                     <span class="badge bg-danger ms-auto">5</span>
                 </a>
             </li>
@@ -501,9 +525,9 @@
                 <div class="user-info" onclick="window.location='{% url 'accounts:profile' %}'">
                     <div class="user-avatar">
                         {% if user.avatar %}
-                            <img src="{{ user.avatar.url }}" alt="{{ user.get_full_name }}">
+                        <img src="{{ user.avatar.url }}" alt="{{ user.get_full_name }}">
                         {% else %}
-                            {{ user.get_initials }}
+                        {{ user.get_initials }}
                         {% endif %}
                     </div>
                     <div class="user-details">
@@ -520,12 +544,12 @@
 
             <!-- Messages -->
             {% if messages %}
-                {% for message in messages %}
-                <div class="alert alert-{{ message.tags }} alert-dismissible fade show" role="alert">
-                    {{ message }}
-                    <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
-                </div>
-                {% endfor %}
+            {% for message in messages %}
+            <div class="alert alert-{{ message.tags }} alert-dismissible fade show" role="alert">
+                {{ message }}
+                <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
+            </div>
+            {% endfor %}
             {% endif %}
 
             {% block content %}
@@ -549,9 +573,9 @@
     <!-- Custom JS -->
     <script>
         // Auto-hide alerts after 5 seconds
-        setTimeout(function() {
+        setTimeout(function () {
             let alerts = document.querySelectorAll('.alert');
-            alerts.forEach(function(alert) {
+            alerts.forEach(function (alert) {
                 let bsAlert = new bootstrap.Alert(alert);
                 bsAlert.close();
             });
@@ -560,4 +584,5 @@
 
     {% block extra_js %}{% endblock %}
 </body>
+
 </html>

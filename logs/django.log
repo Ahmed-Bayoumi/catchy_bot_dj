@@ -19220,3 +19220,202 @@ INFO 2025-12-09 14:52:55,143 runserver HTTP GET /admin/leads/lead/?created_at__m
 INFO 2025-12-09 14:52:55,208 runserver HTTP GET /admin/jsi18n/ 200 [0.02, 172.18.0.1:33178]
 INFO 2025-12-09 14:55:41,838 autoreload /code/apps/leads/signals.py changed, reloading.
 INFO 2025-12-09 14:55:43,972 autoreload Watching for file changes with StatReloader
+INFO 2025-12-09 16:00:25,356 autoreload /code/apps/accounts/decorators.py changed, reloading.
+INFO 2025-12-09 16:00:30,985 autoreload Watching for file changes with StatReloader
+INFO 2025-12-09 16:01:22,258 autoreload /code/apps/accounts/decorators.py changed, reloading.
+INFO 2025-12-09 16:01:24,820 autoreload Watching for file changes with StatReloader
+INFO 2025-12-09 16:11:34,997 runserver HTTP GET /admin/leads/lead/?created_at__month=12&created_at__year=2025&q= 200 [0.19, 172.18.0.1:50094]
+INFO 2025-12-09 16:36:38,034 runserver HTTP GET /admin/leads/lead/?created_at__month=12&created_at__year=2025&q= 200 [1.13, 172.18.0.1:50884]
+INFO 2025-12-09 16:36:39,394 runserver HTTP POST /admin/logout/ 302 [0.08, 172.18.0.1:50884]
+INFO 2025-12-09 16:36:39,451 runserver HTTP GET /accounts/login/ 200 [0.05, 172.18.0.1:50884]
+INFO 2025-12-09 16:36:42,093 runserver HTTP POST /accounts/login/ 302 [0.53, 172.18.0.1:50884]
+INFO 2025-12-09 16:36:42,154 runserver HTTP GET /dashboard/ 200 [0.06, 172.18.0.1:50884]
+INFO 2025-12-09 16:37:08,724 runserver HTTP GET /leads/ 200 [0.08, 172.18.0.1:50884]
+ERROR 2025-12-09 16:37:13,960 log Internal Server Error: /leads/1/
+Traceback (most recent call last):
+  File "/usr/local/lib/python3.11/site-packages/asgiref/sync.py", line 555, in thread_handler
+    raise exc_info[1]
+  File "/usr/local/lib/python3.11/site-packages/django/core/handlers/exception.py", line 42, in inner
+    response = await get_response(request)
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/local/lib/python3.11/site-packages/asgiref/sync.py", line 555, in thread_handler
+    raise exc_info[1]
+  File "/usr/local/lib/python3.11/site-packages/django/core/handlers/base.py", line 253, in _get_response_async
+    response = await wrapped_callback(
+               ^^^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/local/lib/python3.11/site-packages/asgiref/sync.py", line 504, in __call__
+    ret = await asyncio.shield(exec_coro)
+          ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/local/lib/python3.11/concurrent/futures/thread.py", line 58, in run
+    result = self.fn(*self.args, **self.kwargs)
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/local/lib/python3.11/site-packages/asgiref/sync.py", line 559, in thread_handler
+    return func(*args, **kwargs)
+           ^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/local/lib/python3.11/site-packages/django/contrib/auth/decorators.py", line 23, in _wrapper_view
+    return view_func(request, *args, **kwargs)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/code/apps/accounts/decorators.py", line 153, in wrapper
+    return view_func(request, *args, **kwargs)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/code/apps/leads/views.py", line 185, in lead_detail_view
+    return render(request, 'leads/lead_detail.html', context)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/local/lib/python3.11/site-packages/django/shortcuts.py", line 24, in render
+    content = loader.render_to_string(template_name, context, request, using=using)
+              ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/local/lib/python3.11/site-packages/django/template/loader.py", line 61, in render_to_string
+    template = get_template(template_name, using=using)
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/local/lib/python3.11/site-packages/django/template/loader.py", line 19, in get_template
+    raise TemplateDoesNotExist(template_name, chain=chain)
+django.template.exceptions.TemplateDoesNotExist: leads/lead_detail.html
+ERROR 2025-12-09 16:37:13,989 runserver HTTP GET /leads/1/ 500 [0.20, 172.18.0.1:50884]
+INFO 2025-12-09 16:37:59,500 runserver HTTP GET /leads/create/ 200 [0.06, 172.18.0.1:50884]
+INFO 2025-12-09 16:39:18,186 runserver HTTP GET /leads/create/ 200 [0.04, 172.18.0.1:34294]
+INFO 2025-12-09 16:39:19,413 runserver HTTP GET /leads/create/ 200 [0.04, 172.18.0.1:34294]
+INFO 2025-12-09 16:39:20,058 runserver HTTP GET /leads/create/ 200 [0.03, 172.18.0.1:34294]
+INFO 2025-12-09 16:39:20,460 runserver HTTP GET /leads/create/ 200 [0.06, 172.18.0.1:34294]
+INFO 2025-12-09 16:39:20,606 runserver HTTP GET /leads/create/ 200 [0.04, 172.18.0.1:34294]
+INFO 2025-12-09 16:39:20,771 runserver HTTP GET /leads/create/ 200 [0.04, 172.18.0.1:34294]
+INFO 2025-12-09 16:39:21,326 runserver HTTP GET /leads/create/ 200 [0.04, 172.18.0.1:34294]
+INFO 2025-12-09 16:39:37,475 runserver HTTP GET /leads/create/ 200 [0.06, 172.18.0.1:45328]
+INFO 2025-12-09 16:40:31,888 runserver HTTP GET /accounts/profile/ 200 [0.05, 172.18.0.1:42344]
+ERROR 2025-12-09 16:40:33,600 log Internal Server Error: /accounts/profile/edit/
+Traceback (most recent call last):
+  File "/usr/local/lib/python3.11/site-packages/asgiref/sync.py", line 555, in thread_handler
+    raise exc_info[1]
+  File "/usr/local/lib/python3.11/site-packages/django/core/handlers/exception.py", line 42, in inner
+    response = await get_response(request)
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/local/lib/python3.11/site-packages/asgiref/sync.py", line 555, in thread_handler
+    raise exc_info[1]
+  File "/usr/local/lib/python3.11/site-packages/django/core/handlers/base.py", line 253, in _get_response_async
+    response = await wrapped_callback(
+               ^^^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/local/lib/python3.11/site-packages/asgiref/sync.py", line 504, in __call__
+    ret = await asyncio.shield(exec_coro)
+          ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/local/lib/python3.11/concurrent/futures/thread.py", line 58, in run
+    result = self.fn(*self.args, **self.kwargs)
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/local/lib/python3.11/site-packages/asgiref/sync.py", line 559, in thread_handler
+    return func(*args, **kwargs)
+           ^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/local/lib/python3.11/site-packages/django/contrib/auth/decorators.py", line 23, in _wrapper_view
+    return view_func(request, *args, **kwargs)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/code/apps/accounts/views.py", line 285, in profile_edit_view
+    return render(request, 'accounts/profile_edit.html', context)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/local/lib/python3.11/site-packages/django/shortcuts.py", line 24, in render
+    content = loader.render_to_string(template_name, context, request, using=using)
+              ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/local/lib/python3.11/site-packages/django/template/loader.py", line 61, in render_to_string
+    template = get_template(template_name, using=using)
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/local/lib/python3.11/site-packages/django/template/loader.py", line 19, in get_template
+    raise TemplateDoesNotExist(template_name, chain=chain)
+django.template.exceptions.TemplateDoesNotExist: accounts/profile_edit.html
+ERROR 2025-12-09 16:40:33,614 runserver HTTP GET /accounts/profile/edit/ 500 [0.09, 172.18.0.1:42344]
+INFO 2025-12-09 16:45:56,189 runserver HTTP GET /leads/create/ 200 [0.88, 172.18.0.1:52178]
+INFO 2025-12-09 16:45:59,757 runserver HTTP GET /leads/ 200 [0.07, 172.18.0.1:52186]
+INFO 2025-12-09 16:46:04,358 runserver HTTP GET /leads/kanban/ 200 [0.08, 172.18.0.1:52186]
+INFO 2025-12-09 16:46:10,334 runserver HTTP POST /leads/1/change-stage/ 200 [0.06, 172.18.0.1:38906]
+INFO 2025-12-09 16:46:16,386 runserver HTTP GET /leads/kanban/ 200 [0.06, 172.18.0.1:38906]
+INFO 2025-12-09 16:46:18,495 runserver HTTP GET /leads/ 200 [0.05, 172.18.0.1:56614]
+ERROR 2025-12-09 16:46:21,220 log Internal Server Error: /leads/1/
+Traceback (most recent call last):
+  File "/usr/local/lib/python3.11/site-packages/asgiref/sync.py", line 555, in thread_handler
+    raise exc_info[1]
+  File "/usr/local/lib/python3.11/site-packages/django/core/handlers/exception.py", line 42, in inner
+    response = await get_response(request)
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/local/lib/python3.11/site-packages/asgiref/sync.py", line 555, in thread_handler
+    raise exc_info[1]
+  File "/usr/local/lib/python3.11/site-packages/django/core/handlers/base.py", line 253, in _get_response_async
+    response = await wrapped_callback(
+               ^^^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/local/lib/python3.11/site-packages/asgiref/sync.py", line 504, in __call__
+    ret = await asyncio.shield(exec_coro)
+          ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/local/lib/python3.11/concurrent/futures/thread.py", line 58, in run
+    result = self.fn(*self.args, **self.kwargs)
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/local/lib/python3.11/site-packages/asgiref/sync.py", line 559, in thread_handler
+    return func(*args, **kwargs)
+           ^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/local/lib/python3.11/site-packages/django/contrib/auth/decorators.py", line 23, in _wrapper_view
+    return view_func(request, *args, **kwargs)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/code/apps/accounts/decorators.py", line 153, in wrapper
+    return view_func(request, *args, **kwargs)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/code/apps/leads/views.py", line 185, in lead_detail_view
+    return render(request, 'leads/lead_detail.html', context)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/local/lib/python3.11/site-packages/django/shortcuts.py", line 24, in render
+    content = loader.render_to_string(template_name, context, request, using=using)
+              ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/local/lib/python3.11/site-packages/django/template/loader.py", line 61, in render_to_string
+    template = get_template(template_name, using=using)
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/local/lib/python3.11/site-packages/django/template/loader.py", line 19, in get_template
+    raise TemplateDoesNotExist(template_name, chain=chain)
+django.template.exceptions.TemplateDoesNotExist: leads/lead_detail.html
+ERROR 2025-12-09 16:46:21,234 runserver HTTP GET /leads/1/ 500 [0.13, 172.18.0.1:56614]
+INFO 2025-12-09 16:46:29,504 runserver HTTP POST /leads/1/change-stage/ 200 [0.04, 172.18.0.1:40586]
+INFO 2025-12-09 16:46:33,393 runserver HTTP GET /leads/ 200 [0.06, 172.18.0.1:40586]
+INFO 2025-12-09 16:46:58,963 runserver HTTP GET /leads/ 200 [0.05, 172.18.0.1:58776]
+INFO 2025-12-09 16:46:59,830 runserver HTTP GET /leads/kanban/ 200 [0.06, 172.18.0.1:58776]
+INFO 2025-12-09 16:47:01,449 runserver HTTP GET /leads/ 200 [0.06, 172.18.0.1:58776]
+INFO 2025-12-09 16:47:03,428 runserver HTTP GET /leads/create/ 200 [0.04, 172.18.0.1:58776]
+INFO 2025-12-09 16:47:10,658 runserver HTTP GET /leads/create/ 200 [0.04, 172.18.0.1:49876]
+INFO 2025-12-09 16:47:15,352 runserver HTTP GET /leads/create/ 200 [0.04, 172.18.0.1:49876]
+INFO 2025-12-09 16:47:16,329 runserver HTTP GET /leads/create/ 200 [0.04, 172.18.0.1:49876]
+INFO 2025-12-09 16:47:21,244 runserver HTTP GET /dashboard/settings/company/ 200 [0.04, 172.18.0.1:46104]
+INFO 2025-12-09 16:47:21,291 runserver HTTP GET /media/companies/logos/clinic-logo.png 304 [0.02, 172.18.0.1:46104]
+INFO 2025-12-09 16:47:25,708 runserver HTTP GET /accounts/users/ 200 [0.04, 172.18.0.1:46104]
+INFO 2025-12-09 16:47:30,118 runserver HTTP GET /dashboard/ 200 [0.03, 172.18.0.1:33872]
+INFO 2025-12-09 16:47:51,867 runserver HTTP GET /leads/create/ 200 [0.04, 172.18.0.1:54518]
+INFO 2025-12-09 16:48:41,065 runserver HTTP POST /leads/create/ 302 [0.06, 172.18.0.1:55190]
+ERROR 2025-12-09 16:48:41,190 log Internal Server Error: /leads/2/
+Traceback (most recent call last):
+  File "/usr/local/lib/python3.11/site-packages/asgiref/sync.py", line 555, in thread_handler
+    raise exc_info[1]
+  File "/usr/local/lib/python3.11/site-packages/django/core/handlers/exception.py", line 42, in inner
+    response = await get_response(request)
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/local/lib/python3.11/site-packages/asgiref/sync.py", line 555, in thread_handler
+    raise exc_info[1]
+  File "/usr/local/lib/python3.11/site-packages/django/core/handlers/base.py", line 253, in _get_response_async
+    response = await wrapped_callback(
+               ^^^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/local/lib/python3.11/site-packages/asgiref/sync.py", line 504, in __call__
+    ret = await asyncio.shield(exec_coro)
+          ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/local/lib/python3.11/concurrent/futures/thread.py", line 58, in run
+    result = self.fn(*self.args, **self.kwargs)
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/local/lib/python3.11/site-packages/asgiref/sync.py", line 559, in thread_handler
+    return func(*args, **kwargs)
+           ^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/local/lib/python3.11/site-packages/django/contrib/auth/decorators.py", line 23, in _wrapper_view
+    return view_func(request, *args, **kwargs)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/code/apps/accounts/decorators.py", line 153, in wrapper
+    return view_func(request, *args, **kwargs)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/code/apps/leads/views.py", line 185, in lead_detail_view
+    return render(request, 'leads/lead_detail.html', context)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/local/lib/python3.11/site-packages/django/shortcuts.py", line 24, in render
+    content = loader.render_to_string(template_name, context, request, using=using)
+              ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/local/lib/python3.11/site-packages/django/template/loader.py", line 61, in render_to_string
+    template = get_template(template_name, using=using)
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/local/lib/python3.11/site-packages/django/template/loader.py", line 19, in get_template
+    raise TemplateDoesNotExist(template_name, chain=chain)
+django.template.exceptions.TemplateDoesNotExist: leads/lead_detail.html
+ERROR 2025-12-09 16:48:41,207 runserver HTTP GET /leads/2/ 500 [0.13, 172.18.0.1:55190]
