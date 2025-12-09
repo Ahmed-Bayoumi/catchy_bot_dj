@@ -30,14 +30,17 @@ class ActivityInline(admin.TabularInline):
     fields = ['created_at', 'user', 'activity_type', 'description']
     classes = ['collapse']
     can_delete = False
-    max_num = 10
+    max_num = 10  # Limit to 10 activities displayed
+    show_change_link = True  # Add link to view full activity
     
     def has_add_permission(self, request, obj=None):
         return False
     
     def get_queryset(self, request):
         qs = super().get_queryset(request)
-        return qs.select_related('user').order_by('-created_at')[:10]
+        # Remove the slice [:10] - use max_num instead to limit displayed items
+        # Slicing prevents Django from filtering the queryset later
+        return qs.select_related('user').order_by('-created_at')
 
 
 @admin.register(Lead)

@@ -54,7 +54,6 @@ INSTALLED_APPS = [
     'channels',  # WebSocket support
     'taggit',  # Tags for categorizing leads
 
-    # Our custom apps
     # IMPORTANT: accounts must be first (custom user model)
     'apps.accounts',  # User management & authentication
     'apps.core',  # Core functionality (Company, etc.)

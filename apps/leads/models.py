@@ -42,7 +42,7 @@ class Lead(models.Model):
     
     # Additional Information
     notes = models.TextField(blank=True, help_text='General notes about this lead')
-    tags = TaggableManager()
+    tags = TaggableManager(blank=True)
     
     # Timestamps
     created_at = models.DateTimeField(auto_now_add=True, db_index=True, help_text='When was this lead created')

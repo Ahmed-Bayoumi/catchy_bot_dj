@@ -18984,3 +18984,239 @@ INFO 2025-12-09 00:14:41,939 autoreload /code/config/settings.py changed, reload
 INFO 2025-12-09 00:14:43,959 autoreload Watching for file changes with StatReloader
 INFO 2025-12-09 00:16:35,429 autoreload /code/config/settings.py changed, reloading.
 INFO 2025-12-09 00:16:37,429 autoreload Watching for file changes with StatReloader
+INFO 2025-12-09 11:31:17,584 autoreload Watching for file changes with StatReloader
+INFO 2025-12-09 13:34:23,753 autoreload /code/config/settings.py changed, reloading.
+INFO 2025-12-09 13:34:27,678 autoreload Watching for file changes with StatReloader
+INFO 2025-12-09 14:34:23,897 autoreload Watching for file changes with StatReloader
+INFO 2025-12-09 14:34:24,924 runserver HTTP GET /admin/ 302 [0.06, 172.18.0.1:53526]
+INFO 2025-12-09 14:34:25,040 runserver HTTP GET /admin/login/?next=/admin/ 200 [0.11, 172.18.0.1:53526]
+INFO 2025-12-09 14:34:25,103 runserver HTTP GET /static/admin/css/nav_sidebar.css 304 [0.01, 172.18.0.1:53542]
+INFO 2025-12-09 14:34:25,111 runserver HTTP GET /static/admin/css/dark_mode.css 304 [0.02, 172.18.0.1:53526]
+INFO 2025-12-09 14:34:25,139 runserver HTTP GET /static/admin/css/login.css 304 [0.04, 172.18.0.1:53550]
+INFO 2025-12-09 14:34:25,161 runserver HTTP GET /static/admin/css/base.css 304 [0.06, 172.18.0.1:53558]
+INFO 2025-12-09 14:34:25,164 runserver HTTP GET /static/admin/css/responsive.css 304 [0.05, 172.18.0.1:53574]
+INFO 2025-12-09 14:34:25,192 runserver HTTP GET /static/admin/js/nav_sidebar.js 304 [0.02, 172.18.0.1:53526]
+INFO 2025-12-09 14:34:25,196 runserver HTTP GET /static/admin/js/theme.js 304 [0.03, 172.18.0.1:53550]
+WARNING 2025-12-09 14:34:25,285 log Not Found: /favicon.ico
+WARNING 2025-12-09 14:34:25,296 runserver HTTP GET /favicon.ico 404 [0.04, 172.18.0.1:53550]
+INFO 2025-12-09 14:34:29,082 runserver HTTP POST /admin/login/?next=/admin/ 302 [0.54, 172.18.0.1:53550]
+INFO 2025-12-09 14:34:29,138 runserver HTTP GET /admin/ 200 [0.05, 172.18.0.1:53550]
+INFO 2025-12-09 14:34:29,171 runserver HTTP GET /static/admin/css/dashboard.css 304 [0.00, 172.18.0.1:53550]
+INFO 2025-12-09 14:34:29,186 runserver HTTP GET /static/admin/img/icon-viewlink.svg 304 [0.01, 172.18.0.1:53526]
+INFO 2025-12-09 14:34:29,190 runserver HTTP GET /static/admin/img/icon-addlink.svg 304 [0.01, 172.18.0.1:53550]
+INFO 2025-12-09 14:34:29,198 runserver HTTP GET /static/admin/img/icon-changelink.svg 304 [0.02, 172.18.0.1:53574]
+INFO 2025-12-09 14:34:31,633 runserver HTTP GET /admin/leads/lead/ 200 [0.16, 172.18.0.1:53574]
+INFO 2025-12-09 14:34:31,705 runserver HTTP GET /static/admin/js/core.js 304 [0.02, 172.18.0.1:53542]
+INFO 2025-12-09 14:34:31,711 runserver HTTP GET /static/admin/css/changelists.css 304 [0.03, 172.18.0.1:53550]
+INFO 2025-12-09 14:34:31,719 runserver HTTP GET /static/admin/js/jquery.init.js 304 [0.04, 172.18.0.1:53558]
+INFO 2025-12-09 14:34:31,723 runserver HTTP GET /static/admin/js/vendor/jquery/jquery.js 304 [0.04, 172.18.0.1:53526]
+INFO 2025-12-09 14:34:31,737 runserver HTTP GET /static/admin/js/admin/RelatedObjectLookups.js 304 [0.04, 172.18.0.1:52366]
+INFO 2025-12-09 14:34:31,763 runserver HTTP GET /static/admin/js/actions.js 304 [0.05, 172.18.0.1:53542]
+INFO 2025-12-09 14:34:31,769 runserver HTTP GET /static/admin/js/urlify.js 304 [0.04, 172.18.0.1:53550]
+INFO 2025-12-09 14:34:31,786 runserver HTTP GET /static/admin/js/prepopulate.js 304 [0.04, 172.18.0.1:53558]
+INFO 2025-12-09 14:34:31,789 runserver HTTP GET /static/admin/js/vendor/xregexp/xregexp.js 304 [0.03, 172.18.0.1:53526]
+INFO 2025-12-09 14:34:31,809 runserver HTTP GET /static/admin/img/search.svg 304 [0.00, 172.18.0.1:53526]
+INFO 2025-12-09 14:34:31,828 runserver HTTP GET /static/admin/js/filters.js 304 [0.01, 172.18.0.1:53526]
+INFO 2025-12-09 14:34:31,835 runserver HTTP GET /admin/jsi18n/ 200 [0.15, 172.18.0.1:53574]
+INFO 2025-12-09 14:34:31,869 runserver HTTP GET /static/admin/img/tooltag-add.svg 304 [0.00, 172.18.0.1:53574]
+INFO 2025-12-09 14:34:34,060 runserver HTTP GET /admin/leads/lead/add/ 200 [0.12, 172.18.0.1:53574]
+INFO 2025-12-09 14:34:34,116 runserver HTTP GET /static/admin/js/calendar.js 304 [0.01, 172.18.0.1:52406]
+INFO 2025-12-09 14:34:34,118 runserver HTTP GET /static/admin/js/inlines.js 304 [0.01, 172.18.0.1:52436]
+INFO 2025-12-09 14:34:34,121 runserver HTTP GET /static/admin/css/forms.css 304 [0.02, 172.18.0.1:52390]
+INFO 2025-12-09 14:34:34,125 runserver HTTP GET /static/admin/js/collapse.js 304 [0.01, 172.18.0.1:52450]
+INFO 2025-12-09 14:34:34,133 runserver HTTP GET /static/admin/js/admin/DateTimeShortcuts.js 304 [0.03, 172.18.0.1:52422]
+INFO 2025-12-09 14:34:34,172 runserver HTTP GET /admin/jsi18n/ 200 [0.07, 172.18.0.1:52380]
+INFO 2025-12-09 14:34:34,199 runserver HTTP GET /static/admin/css/widgets.css 304 [0.05, 172.18.0.1:52450]
+INFO 2025-12-09 14:34:34,345 runserver HTTP GET /static/admin/js/prepopulate_init.js 304 [0.15, 172.18.0.1:52422]
+INFO 2025-12-09 14:34:34,477 runserver HTTP GET /static/admin/js/change_form.js 304 [0.04, 172.18.0.1:52380]
+INFO 2025-12-09 14:34:34,519 runserver HTTP GET /static/admin/img/icon-deletelink.svg 200 [0.10, 172.18.0.1:52422]
+INFO 2025-12-09 14:34:34,529 runserver HTTP GET /static/admin/img/icon-unknown.svg 200 [0.09, 172.18.0.1:52450]
+INFO 2025-12-09 14:34:34,537 runserver HTTP GET /static/admin/img/inline-delete.svg 304 [0.02, 172.18.0.1:52390]
+INFO 2025-12-09 14:34:34,571 runserver HTTP GET /static/admin/img/icon-calendar.svg 304 [0.01, 172.18.0.1:52390]
+INFO 2025-12-09 14:34:34,582 runserver HTTP GET /static/admin/img/icon-clock.svg 200 [0.02, 172.18.0.1:52450]
+INFO 2025-12-09 14:35:08,254 runserver HTTP GET /admin/leads/note/ 200 [0.05, 172.18.0.1:36920]
+INFO 2025-12-09 14:35:08,302 runserver HTTP GET /admin/jsi18n/ 200 [0.02, 172.18.0.1:36920]
+INFO 2025-12-09 14:35:10,020 runserver HTTP GET /admin/leads/note/add/ 200 [0.06, 172.18.0.1:36928]
+INFO 2025-12-09 14:35:10,074 runserver HTTP GET /admin/jsi18n/ 200 [0.02, 172.18.0.1:36928]
+INFO 2025-12-09 14:35:14,337 runserver HTTP GET /admin/taggit/tag/ 200 [0.05, 172.18.0.1:36928]
+INFO 2025-12-09 14:35:14,385 runserver HTTP GET /admin/jsi18n/ 200 [0.02, 172.18.0.1:36928]
+INFO 2025-12-09 14:35:15,953 runserver HTTP GET /admin/taggit/tag/add/ 200 [0.07, 172.18.0.1:36928]
+INFO 2025-12-09 14:35:16,005 runserver HTTP GET /admin/jsi18n/ 200 [0.02, 172.18.0.1:36928]
+INFO 2025-12-09 14:35:51,591 runserver HTTP GET /admin/taggit/tag/ 200 [0.03, 172.18.0.1:34984]
+INFO 2025-12-09 14:35:51,641 runserver HTTP GET /admin/jsi18n/ 200 [0.02, 172.18.0.1:34984]
+INFO 2025-12-09 14:35:52,912 runserver HTTP GET /admin/taggit/tag/add/ 200 [0.05, 172.18.0.1:34984]
+INFO 2025-12-09 14:35:52,961 runserver HTTP GET /admin/jsi18n/ 200 [0.02, 172.18.0.1:34984]
+INFO 2025-12-09 14:35:54,481 runserver HTTP GET /admin/taggit/tag/ 200 [0.05, 172.18.0.1:34984]
+INFO 2025-12-09 14:35:54,535 runserver HTTP GET /admin/jsi18n/ 200 [0.02, 172.18.0.1:34984]
+INFO 2025-12-09 14:35:55,699 runserver HTTP GET /admin/ 200 [0.03, 172.18.0.1:34984]
+INFO 2025-12-09 14:37:57,390 runserver HTTP GET /admin/leads/lead/ 200 [0.05, 172.18.0.1:33390]
+INFO 2025-12-09 14:37:57,433 runserver HTTP GET /admin/jsi18n/ 200 [0.02, 172.18.0.1:33390]
+INFO 2025-12-09 14:37:59,850 runserver HTTP GET /admin/leads/lead/add/ 200 [0.06, 172.18.0.1:43350]
+INFO 2025-12-09 14:37:59,895 runserver HTTP GET /admin/jsi18n/ 200 [0.02, 172.18.0.1:43350]
+INFO 2025-12-09 14:38:10,994 runserver HTTP GET /admin/ 200 [0.04, 172.18.0.1:48454]
+INFO 2025-12-09 14:43:49,864 runserver HTTP GET /admin/leads/lead/ 200 [0.05, 172.18.0.1:44320]
+INFO 2025-12-09 14:43:49,920 runserver HTTP GET /admin/jsi18n/ 200 [0.02, 172.18.0.1:44320]
+INFO 2025-12-09 14:43:51,420 runserver HTTP GET /admin/leads/lead/add/ 200 [0.09, 172.18.0.1:44320]
+INFO 2025-12-09 14:43:51,492 runserver HTTP GET /admin/jsi18n/ 200 [0.03, 172.18.0.1:44320]
+INFO 2025-12-09 14:44:56,900 runserver HTTP POST /admin/leads/lead/add/ 200 [0.39, 172.18.0.1:53532]
+INFO 2025-12-09 14:44:56,959 runserver HTTP GET /admin/jsi18n/ 200 [0.03, 172.18.0.1:53532]
+INFO 2025-12-09 14:45:30,835 runserver HTTP GET /admin/taggit/tag/ 200 [0.04, 172.18.0.1:53158]
+INFO 2025-12-09 14:45:30,945 runserver HTTP GET /admin/jsi18n/ 200 [0.02, 172.18.0.1:53158]
+INFO 2025-12-09 14:45:33,800 runserver HTTP GET /admin/taggit/tag/add/ 200 [0.06, 172.18.0.1:53158]
+INFO 2025-12-09 14:45:33,848 runserver HTTP GET /admin/jsi18n/ 200 [0.02, 172.18.0.1:53158]
+INFO 2025-12-09 14:47:25,569 autoreload /code/apps/leads/models.py changed, reloading.
+INFO 2025-12-09 14:47:28,055 autoreload Watching for file changes with StatReloader
+INFO 2025-12-09 14:47:31,213 runserver HTTP POST /admin/leads/lead/add/ 302 [0.24, 172.18.0.1:56808]
+INFO 2025-12-09 14:47:31,420 runserver HTTP GET /admin/leads/lead/ 200 [0.20, 172.18.0.1:56808]
+INFO 2025-12-09 14:47:31,667 runserver HTTP GET /admin/jsi18n/ 200 [0.04, 172.18.0.1:56808]
+INFO 2025-12-09 14:47:31,734 runserver HTTP GET /static/admin/img/icon-yes.svg 304 [0.00, 172.18.0.1:56808]
+ERROR 2025-12-09 14:47:53,343 log Internal Server Error: /leads/
+Traceback (most recent call last):
+  File "/usr/local/lib/python3.11/site-packages/asgiref/sync.py", line 555, in thread_handler
+    raise exc_info[1]
+  File "/usr/local/lib/python3.11/site-packages/django/core/handlers/exception.py", line 42, in inner
+    response = await get_response(request)
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/local/lib/python3.11/site-packages/asgiref/sync.py", line 555, in thread_handler
+    raise exc_info[1]
+  File "/usr/local/lib/python3.11/site-packages/django/core/handlers/base.py", line 253, in _get_response_async
+    response = await wrapped_callback(
+               ^^^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/local/lib/python3.11/site-packages/asgiref/sync.py", line 504, in __call__
+    ret = await asyncio.shield(exec_coro)
+          ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/local/lib/python3.11/concurrent/futures/thread.py", line 58, in run
+    result = self.fn(*self.args, **self.kwargs)
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/local/lib/python3.11/site-packages/asgiref/sync.py", line 559, in thread_handler
+    return func(*args, **kwargs)
+           ^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/local/lib/python3.11/site-packages/django/contrib/auth/decorators.py", line 23, in _wrapper_view
+    return view_func(request, *args, **kwargs)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/code/apps/accounts/decorators.py", line 153, in wrapper
+    return view_func(request, *args, **kwargs)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/code/apps/leads/views.py", line 115, in lead_list_view
+    return render(request, 'leads/lead_list.html', context)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/local/lib/python3.11/site-packages/django/shortcuts.py", line 24, in render
+    content = loader.render_to_string(template_name, context, request, using=using)
+              ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/local/lib/python3.11/site-packages/django/template/loader.py", line 61, in render_to_string
+    template = get_template(template_name, using=using)
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/local/lib/python3.11/site-packages/django/template/loader.py", line 19, in get_template
+    raise TemplateDoesNotExist(template_name, chain=chain)
+django.template.exceptions.TemplateDoesNotExist: leads/lead_list.html
+ERROR 2025-12-09 14:47:53,361 runserver HTTP GET /leads/ 500 [0.13, 172.18.0.1:44676]
+ERROR 2025-12-09 14:48:18,885 log Internal Server Error: /admin/leads/lead/1/change/
+Traceback (most recent call last):
+  File "/usr/local/lib/python3.11/site-packages/asgiref/sync.py", line 555, in thread_handler
+    raise exc_info[1]
+  File "/usr/local/lib/python3.11/site-packages/django/core/handlers/exception.py", line 42, in inner
+    response = await get_response(request)
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/local/lib/python3.11/site-packages/asgiref/sync.py", line 555, in thread_handler
+    raise exc_info[1]
+  File "/usr/local/lib/python3.11/site-packages/django/core/handlers/base.py", line 253, in _get_response_async
+    response = await wrapped_callback(
+               ^^^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/local/lib/python3.11/site-packages/asgiref/sync.py", line 504, in __call__
+    ret = await asyncio.shield(exec_coro)
+          ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/local/lib/python3.11/concurrent/futures/thread.py", line 58, in run
+    result = self.fn(*self.args, **self.kwargs)
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/local/lib/python3.11/site-packages/asgiref/sync.py", line 559, in thread_handler
+    return func(*args, **kwargs)
+           ^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/local/lib/python3.11/site-packages/django/contrib/admin/options.py", line 714, in wrapper
+    return self.admin_site.admin_view(view)(*args, **kwargs)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/local/lib/python3.11/site-packages/django/utils/decorators.py", line 188, in _view_wrapper
+    result = _process_exception(request, e)
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/local/lib/python3.11/site-packages/django/utils/decorators.py", line 186, in _view_wrapper
+    response = view_func(request, *args, **kwargs)
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/local/lib/python3.11/site-packages/django/views/decorators/cache.py", line 80, in _view_wrapper
+    response = view_func(request, *args, **kwargs)
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/local/lib/python3.11/site-packages/django/contrib/admin/sites.py", line 240, in inner
+    return view(request, *args, **kwargs)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/local/lib/python3.11/site-packages/django/contrib/admin/options.py", line 1944, in change_view
+    return self.changeform_view(request, object_id, form_url, extra_context)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/local/lib/python3.11/site-packages/django/utils/decorators.py", line 48, in _wrapper
+    return bound_method(*args, **kwargs)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/local/lib/python3.11/site-packages/django/utils/decorators.py", line 188, in _view_wrapper
+    result = _process_exception(request, e)
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/local/lib/python3.11/site-packages/django/utils/decorators.py", line 186, in _view_wrapper
+    response = view_func(request, *args, **kwargs)
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/local/lib/python3.11/site-packages/django/contrib/admin/options.py", line 1802, in changeform_view
+    return self._changeform_view(request, object_id, form_url, extra_context)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/local/lib/python3.11/site-packages/django/contrib/admin/options.py", line 1875, in _changeform_view
+    formsets, inline_instances = self._create_formsets(
+                                 ^^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/local/lib/python3.11/site-packages/django/contrib/admin/options.py", line 2318, in _create_formsets
+    formset = FormSet(**formset_params)
+              ^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/local/lib/python3.11/site-packages/django/forms/models.py", line 1101, in __init__
+    qs = queryset.filter(**{self.fk.name: self.instance})
+         ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/local/lib/python3.11/site-packages/django/db/models/query.py", line 1476, in filter
+    return self._filter_or_exclude(False, args, kwargs)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/local/lib/python3.11/site-packages/django/db/models/query.py", line 1488, in _filter_or_exclude
+    raise TypeError("Cannot filter a query once a slice has been taken.")
+TypeError: Cannot filter a query once a slice has been taken.
+ERROR 2025-12-09 14:48:18,896 runserver HTTP GET /admin/leads/lead/1/change/ 500 [0.10, 172.18.0.1:52028]
+INFO 2025-12-09 14:49:21,736 autoreload /code/apps/leads/admin.py changed, reloading.
+INFO 2025-12-09 14:49:24,042 autoreload Watching for file changes with StatReloader
+INFO 2025-12-09 14:50:20,642 runserver HTTP GET /admin/leads/lead/1/change/ 200 [0.18, 172.18.0.1:42884]
+INFO 2025-12-09 14:50:20,694 runserver HTTP GET /admin/jsi18n/ 200 [0.03, 172.18.0.1:42884]
+INFO 2025-12-09 14:50:20,725 runserver HTTP GET /static/admin/img/tooltag-arrowright.svg 200 [0.01, 172.18.0.1:42884]
+INFO 2025-12-09 14:50:37,818 runserver HTTP GET /admin/leads/lead/ 200 [0.10, 172.18.0.1:39494]
+INFO 2025-12-09 14:50:37,869 runserver HTTP GET /admin/jsi18n/ 200 [0.02, 172.18.0.1:39494]
+INFO 2025-12-09 14:50:51,016 runserver HTTP GET /admin/leads/lead/1/change/ 200 [0.08, 172.18.0.1:37158]
+INFO 2025-12-09 14:50:51,067 runserver HTTP GET /admin/jsi18n/ 200 [0.02, 172.18.0.1:37158]
+INFO 2025-12-09 14:51:01,938 runserver HTTP POST /admin/leads/lead/1/change/ 302 [0.08, 172.18.0.1:60292]
+INFO 2025-12-09 14:51:01,997 runserver HTTP GET /admin/leads/lead/ 200 [0.05, 172.18.0.1:60292]
+INFO 2025-12-09 14:51:02,050 runserver HTTP GET /admin/jsi18n/ 200 [0.03, 172.18.0.1:60292]
+INFO 2025-12-09 14:51:04,798 runserver HTTP GET /admin/leads/lead/1/change/ 200 [0.08, 172.18.0.1:60292]
+INFO 2025-12-09 14:51:04,843 runserver HTTP GET /admin/jsi18n/ 200 [0.02, 172.18.0.1:60292]
+INFO 2025-12-09 14:51:24,419 runserver HTTP GET /admin/leads/lead/ 200 [0.05, 172.18.0.1:45890]
+INFO 2025-12-09 14:51:43,013 runserver HTTP GET /admin/leads/lead/1/change/ 200 [0.08, 172.18.0.1:53196]
+INFO 2025-12-09 14:51:43,063 runserver HTTP GET /admin/jsi18n/ 200 [0.02, 172.18.0.1:53196]
+INFO 2025-12-09 14:51:53,337 runserver HTTP POST /admin/leads/lead/1/change/ 302 [0.07, 172.18.0.1:60526]
+INFO 2025-12-09 14:51:53,397 runserver HTTP GET /admin/leads/lead/ 200 [0.05, 172.18.0.1:60526]
+INFO 2025-12-09 14:51:53,442 runserver HTTP GET /admin/jsi18n/ 200 [0.02, 172.18.0.1:60526]
+INFO 2025-12-09 14:51:57,995 runserver HTTP GET /admin/leads/lead/1/change/ 200 [0.08, 172.18.0.1:60526]
+INFO 2025-12-09 14:51:58,042 runserver HTTP GET /admin/jsi18n/ 200 [0.02, 172.18.0.1:60526]
+INFO 2025-12-09 14:52:04,325 runserver HTTP GET /admin/leads/ 200 [0.04, 172.18.0.1:57044]
+INFO 2025-12-09 14:52:05,650 runserver HTTP GET /admin/leads/lead/ 200 [0.05, 172.18.0.1:57044]
+INFO 2025-12-09 14:52:05,698 runserver HTTP GET /admin/jsi18n/ 200 [0.03, 172.18.0.1:57044]
+INFO 2025-12-09 14:52:29,589 runserver HTTP GET /admin/leads/lead/?q=new 200 [0.06, 172.18.0.1:40324]
+INFO 2025-12-09 14:52:29,640 runserver HTTP GET /admin/jsi18n/ 200 [0.02, 172.18.0.1:40324]
+INFO 2025-12-09 14:52:36,286 runserver HTTP GET /admin/leads/lead/?q=contacted 200 [0.06, 172.18.0.1:40340]
+INFO 2025-12-09 14:52:36,344 runserver HTTP GET /admin/jsi18n/ 200 [0.02, 172.18.0.1:40340]
+INFO 2025-12-09 14:52:43,334 runserver HTTP GET /admin/leads/lead/?q=test 200 [0.05, 172.18.0.1:55988]
+INFO 2025-12-09 14:52:43,385 runserver HTTP GET /admin/jsi18n/ 200 [0.02, 172.18.0.1:55988]
+INFO 2025-12-09 14:52:47,592 runserver HTTP GET /admin/leads/lead/?q= 200 [0.09, 172.18.0.1:55988]
+INFO 2025-12-09 14:52:47,641 runserver HTTP GET /admin/jsi18n/ 200 [0.02, 172.18.0.1:55988]
+INFO 2025-12-09 14:52:49,403 runserver HTTP GET /admin/leads/lead/?created_at__year=2025&q= 200 [0.06, 172.18.0.1:55988]
+INFO 2025-12-09 14:52:49,452 runserver HTTP GET /admin/jsi18n/ 200 [0.02, 172.18.0.1:55988]
+INFO 2025-12-09 14:52:50,800 runserver HTTP GET /admin/leads/lead/?q= 200 [0.05, 172.18.0.1:33178]
+INFO 2025-12-09 14:52:50,850 runserver HTTP GET /admin/jsi18n/ 200 [0.02, 172.18.0.1:33178]
+INFO 2025-12-09 14:52:51,665 runserver HTTP GET /admin/leads/lead/?created_at__day=9&created_at__month=12&created_at__year=2025&q= 200 [0.05, 172.18.0.1:33178]
+INFO 2025-12-09 14:52:51,710 runserver HTTP GET /admin/jsi18n/ 200 [0.02, 172.18.0.1:33178]
+INFO 2025-12-09 14:52:55,143 runserver HTTP GET /admin/leads/lead/?created_at__month=12&created_at__year=2025&q= 200 [0.07, 172.18.0.1:33178]
+INFO 2025-12-09 14:52:55,208 runserver HTTP GET /admin/jsi18n/ 200 [0.02, 172.18.0.1:33178]
+INFO 2025-12-09 14:55:41,838 autoreload /code/apps/leads/signals.py changed, reloading.
+INFO 2025-12-09 14:55:43,972 autoreload Watching for file changes with StatReloader

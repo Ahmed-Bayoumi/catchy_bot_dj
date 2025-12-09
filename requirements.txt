@@ -80,6 +80,16 @@ djangorestframework==3.14.0
 # Required if using React/Vue/Angular frontend
 django-cors-headers==4.3.1
 
+# Django Taggit: Tags for categorizing leads
+# Allows adding/removing tags dynamically
+# Used in Lead model for flexible categorization
+django-taggit==5.0.1
+
+# OpenPyXL: Read/write Excel files
+# Required for lead import/export functionality
+# Supports .xlsx and .xls formats
+openpyxl==3.1.2
+
 
 # DEVELOPMENT TOOLS (Optional - for development only)
 

@@ -13,7 +13,7 @@ def create_lead_activity(sender, instance, created, **kwargs):
             lead=instance,
             user=None,  # System-generated (no specific user)
             activity_type='created',
-            description=f'تم إنشاء العميل المحتمل'
+            description=f'Lead created'
         )
 
 
@@ -56,17 +56,17 @@ def log_lead_status_change(sender, instance, created, **kwargs):
                 lead=instance,
                 user=None,
                 activity_type='status_changed',
-                description=f'تم تغيير الحالة من "{instance._old_status}" إلى "{instance.status}"'
+                description=f'Status changed from "{instance._old_status}" to "{instance.status}"'
             )
 
         # Stage changed
         if hasattr(instance, '_old_stage') and instance._old_stage != instance.stage:
-            old_stage_name = instance._old_stage.name if instance._old_stage else 'غير محدد'
+            old_stage_name = instance._old_stage.name if instance._old_stage else 'Not specified'
             Activity.objects.create(
                 lead=instance,
                 user=None,
                 activity_type='stage_changed',
-                description=f'تم تغيير المرحلة من "{old_stage_name}" إلى "{instance.stage.name}"'
+                description=f'Stage changed from "{old_stage_name}" to "{instance.stage.name}"'
             )
 
         # Assignment changed
@@ -76,14 +76,14 @@ def log_lead_status_change(sender, instance, created, **kwargs):
                     lead=instance,
                     user=None,
                     activity_type='assigned',
-                    description=f'تم إسناد العميل إلى {instance.assigned_to.get_full_name()}'
+                    description=f'Lead assigned to {instance.assigned_to.get_full_name()}'
                 )
             else:
                 Activity.objects.create(
                     lead=instance,
                     user=None,
                     activity_type='assigned',
-                    description='تم إلغاء إسناد العميل'
+                    description='Lead assignment removed'
                 )
 """
 
@@ -109,5 +109,5 @@ def log_note_creation(sender, instance, created, **kwargs):
                 lead=instance.lead,
                 user=instance.user,
                 activity_type='note_added',
-                description=f'أضاف ملاحظة'
+                description=f'Added a note'
             )
