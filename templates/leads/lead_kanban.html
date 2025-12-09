@@ -1,0 +1,626 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block title %}Kanban Board - Leads{% endblock %}
+
+{% block extra_css %}
+<style>
+    :root {
+        --primary-blue: #667eea;
+        --secondary-purple: #764ba2;
+        --dark-text: #333333;
+        --input-border: #e1e8ed;
+        --focus-shadow: rgba(102, 126, 234, 0.25);
+        --link-normal: #667eea;
+        --link-hover: #764ba2;
+    }
+
+    /* Page Header */
+    .page-header {
+        background: linear-gradient(135deg, var(--primary-blue) 0%, var(--secondary-purple) 100%);
+        color: white;
+        padding: 2rem;
+        border-radius: 10px;
+        margin-bottom: 2rem;
+        box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+    }
+
+    .page-header h1 {
+        margin: 0;
+        font-size: 1.8rem;
+        font-weight: 600;
+    }
+
+    /* View Toggle */
+    .view-toggle {
+        display: flex;
+        gap: 0.5rem;
+    }
+
+    .view-toggle .btn {
+        padding: 0.5rem 1rem;
+        border: 2px solid white;
+        background: rgba(255, 255, 255, 0.2);
+        color: white;
+        transition: all 0.3s;
+    }
+
+    .view-toggle .btn.active {
+        background: white;
+        color: var(--primary-blue);
+    }
+
+    .view-toggle .btn:hover {
+        background: rgba(255, 255, 255, 0.3);
+    }
+
+    /* Kanban Board */
+    .kanban-board {
+        display: flex;
+        gap: 1rem;
+        overflow-x: auto;
+        padding-bottom: 1rem;
+        min-height: calc(100vh - 300px);
+    }
+
+    /* Kanban Column */
+    .kanban-column {
+        flex: 0 0 320px;
+        background: #f8f9fa;
+        border-radius: 10px;
+        padding: 1rem;
+        display: flex;
+        flex-direction: column;
+        max-height: calc(100vh - 250px);
+    }
+
+    .kanban-column-header {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        margin-bottom: 1rem;
+        padding-bottom: 0.75rem;
+        border-bottom: 2px solid var(--input-border);
+    }
+
+    .kanban-column-title {
+        display: flex;
+        align-items: center;
+        gap: 0.5rem;
+        font-weight: 600;
+        color: var(--dark-text);
+    }
+
+    .kanban-column-title i {
+        width: 24px;
+        height: 24px;
+        border-radius: 6px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        font-size: 0.9rem;
+    }
+
+    .kanban-column-count {
+        background: var(--primary-blue);
+        color: white;
+        padding: 0.25rem 0.6rem;
+        border-radius: 12px;
+        font-size: 0.85rem;
+        font-weight: 600;
+    }
+
+    .kanban-cards {
+        flex: 1;
+        overflow-y: auto;
+        display: flex;
+        flex-direction: column;
+        gap: 0.75rem;
+    }
+
+    /* Kanban Card */
+    .kanban-card {
+        background: white;
+        border: 1px solid var(--input-border);
+        border-radius: 8px;
+        padding: 1rem;
+        cursor: grab;
+        transition: all 0.2s;
+        box-shadow: 0 1px 3px rgba(0,0,0,0.05);
+    }
+
+    .kanban-card:hover {
+        box-shadow: 0 4px 8px rgba(0,0,0,0.1);
+        transform: translateY(-2px);
+    }
+
+    .kanban-card.dragging {
+        opacity: 0.5;
+        cursor: grabbing;
+        transform: rotate(5deg);
+    }
+
+    .kanban-card.drag-over {
+        border: 2px dashed var(--primary-blue);
+        background: rgba(102, 126, 234, 0.05);
+    }
+
+    .kanban-card-header {
+        display: flex;
+        justify-content: space-between;
+        align-items: start;
+        margin-bottom: 0.75rem;
+    }
+
+    .kanban-card-title {
+        font-weight: 600;
+        color: var(--dark-text);
+        font-size: 0.95rem;
+        margin-bottom: 0.25rem;
+    }
+
+    .kanban-card-phone {
+        color: #666;
+        font-size: 0.85rem;
+        display: flex;
+        align-items: center;
+        gap: 0.35rem;
+    }
+
+    .kanban-card-phone i {
+        font-size: 0.75rem;
+        color: #28a745;
+    }
+
+    .kanban-card-priority {
+        padding: 0.2rem 0.5rem;
+        border-radius: 4px;
+        font-size: 0.75rem;
+        font-weight: 500;
+    }
+
+    .priority-high {
+        background: #dc3545;
+        color: white;
+    }
+
+    .priority-medium {
+        background: #ffc107;
+        color: var(--dark-text);
+    }
+
+    .priority-low {
+        background: #6c757d;
+        color: white;
+    }
+
+    .kanban-card-meta {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        padding-top: 0.75rem;
+        border-top: 1px solid #f0f0f0;
+        font-size: 0.8rem;
+    }
+
+    .kanban-card-source {
+        display: flex;
+        align-items: center;
+        gap: 0.35rem;
+        padding: 0.25rem 0.5rem;
+        border-radius: 4px;
+        font-size: 0.75rem;
+    }
+
+    .kanban-card-assigned {
+        display: flex;
+        align-items: center;
+        gap: 0.35rem;
+    }
+
+    .kanban-card-avatar {
+        width: 24px;
+        height: 24px;
+        border-radius: 50%;
+        background: var(--primary-blue);
+        color: white;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        font-size: 0.7rem;
+        font-weight: 600;
+    }
+
+    /* Empty Column */
+    .kanban-empty {
+        text-align: center;
+        padding: 2rem 1rem;
+        color: #999;
+    }
+
+    .kanban-empty i {
+        font-size: 2rem;
+        margin-bottom: 0.5rem;
+        opacity: 0.3;
+    }
+
+    /* Filters (Mini) */
+    .kanban-filters {
+        background: white;
+        border: 1px solid var(--input-border);
+        border-radius: 10px;
+        padding: 1rem;
+        margin-bottom: 1.5rem;
+    }
+
+    .kanban-filters .row {
+        align-items: center;
+    }
+
+    .kanban-filters .form-select {
+        border: 2px solid var(--input-border);
+        border-radius: 8px;
+        font-size: 0.9rem;
+    }
+
+    .kanban-filters .form-select:focus {
+        border-color: var(--primary-blue);
+        box-shadow: 0 0 0 0.2rem var(--focus-shadow);
+    }
+
+    /* Scroll Styling */
+    .kanban-cards::-webkit-scrollbar {
+        width: 6px;
+    }
+
+    .kanban-cards::-webkit-scrollbar-track {
+        background: #f0f0f0;
+        border-radius: 3px;
+    }
+
+    .kanban-cards::-webkit-scrollbar-thumb {
+        background: var(--primary-blue);
+        border-radius: 3px;
+    }
+
+    .kanban-board::-webkit-scrollbar {
+        height: 8px;
+    }
+
+    .kanban-board::-webkit-scrollbar-track {
+        background: #f0f0f0;
+        border-radius: 4px;
+    }
+
+    .kanban-board::-webkit-scrollbar-thumb {
+        background: var(--primary-blue);
+        border-radius: 4px;
+    }
+
+    /* Loading Overlay */
+    .loading-overlay {
+        position: fixed;
+        top: 0;
+        left: 0;
+        right: 0;
+        bottom: 0;
+        background: rgba(0,0,0,0.5);
+        display: none;
+        align-items: center;
+        justify-content: center;
+        z-index: 9999;
+    }
+
+    .loading-overlay.active {
+        display: flex;
+    }
+
+    .loading-spinner {
+        background: white;
+        padding: 2rem;
+        border-radius: 10px;
+        text-align: center;
+    }
+
+    .loading-spinner i {
+        font-size: 2rem;
+        color: var(--primary-blue);
+        animation: spin 1s linear infinite;
+    }
+
+    @keyframes spin {
+        to { transform: rotate(360deg); }
+    }
+</style>
+{% endblock %}
+
+{% block content %}
+<div class="container-fluid">
+
+    <!-- Page Header -->
+    <div class="page-header">
+        <div class="d-flex justify-content-between align-items-start">
+            <div>
+                <h1><i class="fas fa-th me-2"></i>Kanban Board</h1>
+                <div style="margin-top: 0.5rem; opacity: 0.9;">
+                    Drag and drop leads between stages
+                </div>
+            </div>
+            <div class="d-flex gap-2">
+                <!-- View Toggle -->
+                <div class="view-toggle">
+                    <a href="{% url 'leads:lead_list' %}" class="btn">
+                        <i class="fas fa-list"></i>
+                    </a>
+                    <a href="{% url 'leads:lead_kanban' %}" class="btn active">
+                        <i class="fas fa-th"></i>
+                    </a>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Filters -->
+    <div class="kanban-filters">
+        <form method="GET" id="kanbanFilterForm">
+            <div class="row g-3">
+                <div class="col-md-3">
+                    <input type="text"
+                           name="search"
+                           class="form-control"
+                           placeholder="Search leads..."
+                           value="{{ search_query }}">
+                </div>
+                <div class="col-md-2">
+                    {{ filter_form.source }}
+                </div>
+                <div class="col-md-2">
+                    {{ filter_form.priority }}
+                </div>
+                <div class="col-md-2">
+                    {{ filter_form.assigned_to }}
+                </div>
+                <div class="col-md-3 text-end">
+                    <button type="submit" class="btn btn-primary">
+                        <i class="fas fa-filter me-2"></i>Apply Filters
+                    </button>
+                    <a href="{% url 'leads:lead_kanban' %}" class="btn btn-outline-secondary">
+                        <i class="fas fa-redo"></i>
+                    </a>
+                </div>
+            </div>
+        </form>
+    </div>
+
+    <!-- Kanban Board -->
+    <div class="kanban-board" id="kanbanBoard">
+        {% for stage_data in stages_data %}
+        <div class="kanban-column" data-stage-id="{{ stage_data.stage.id }}">
+            <!-- Column Header -->
+            <div class="kanban-column-header">
+                <div class="kanban-column-title">
+                    <i class="{{ stage_data.stage.icon }}" style="background-color: {{ stage_data.stage.color }}; color: white;"></i>
+                    <span>{{ stage_data.stage.name }}</span>
+                </div>
+                <div class="kanban-column-count">{{ stage_data.count }}</div>
+            </div>
+
+            <!-- Cards Container -->
+            <div class="kanban-cards" data-stage-id="{{ stage_data.stage.id }}">
+                {% if stage_data.leads %}
+                    {% for lead in stage_data.leads %}
+                    <div class="kanban-card"
+                         draggable="true"
+                         data-lead-id="{{ lead.id }}"
+                         data-stage-id="{{ lead.stage.id }}">
+
+                        <!-- Card Header -->
+                        <div class="kanban-card-header">
+                            <div>
+                                <div class="kanban-card-title">
+                                    <a href="{% url 'leads:lead_detail' pk=lead.pk %}"
+                                       style="color: var(--dark-text); text-decoration: none;">
+                                        {{ lead.name }}
+                                    </a>
+                                </div>
+                                <div class="kanban-card-phone">
+                                    <i class="fas fa-phone"></i>
+                                    {{ lead.phone }}
+                                </div>
+                            </div>
+                            <div class="kanban-card-priority priority-{{ lead.priority }}">
+                                {{ lead.get_priority_display }}
+                            </div>
+                        </div>
+
+                        <!-- Card Meta -->
+                        <div class="kanban-card-meta">
+                            <div class="kanban-card-source" style="background-color: {{ lead.source.color }}20; color: {{ lead.source.color }};">
+                                <i class="{{ lead.source.icon }}"></i>
+                                <span>{{ lead.source.name }}</span>
+                            </div>
+                            {% if lead.assigned_to %}
+                            <div class="kanban-card-assigned">
+                                <div class="kanban-card-avatar">{{ lead.assigned_to.get_initials }}</div>
+                            </div>
+                            {% endif %}
+                        </div>
+                    </div>
+                    {% endfor %}
+                {% else %}
+                <div class="kanban-empty">
+                    <i class="fas fa-inbox"></i>
+                    <p>No leads</p>
+                </div>
+                {% endif %}
+            </div>
+        </div>
+        {% endfor %}
+    </div>
+
+</div>
+
+<!-- Loading Overlay -->
+<div class="loading-overlay" id="loadingOverlay">
+    <div class="loading-spinner">
+        <i class="fas fa-spinner fa-spin"></i>
+        <p style="margin-top: 1rem; color: var(--dark-text);">Moving lead...</p>
+    </div>
+</div>
+
+{% endblock %}
+
+{% block extra_js %}
+<script>
+// Drag and Drop Functionality
+let draggedElement = null;
+let sourceStageId = null;
+
+// Get CSRF Token
+function getCookie(name) {
+    let cookieValue = null;
+    if (document.cookie && document.cookie !== '') {
+        const cookies = document.cookie.split(';');
+        for (let i = 0; i < cookies.length; i++) {
+            const cookie = cookies[i].trim();
+            if (cookie.substring(0, name.length + 1) === (name + '=')) {
+                cookieValue = decodeURIComponent(cookie.substring(name.length + 1));
+                break;
+            }
+        }
+    }
+    return cookieValue;
+}
+
+const csrftoken = getCookie('csrftoken');
+
+// Drag Start
+document.querySelectorAll('.kanban-card').forEach(card => {
+    card.addEventListener('dragstart', function(e) {
+        draggedElement = this;
+        sourceStageId = this.dataset.stageId;
+        this.classList.add('dragging');
+        e.dataTransfer.effectAllowed = 'move';
+        e.dataTransfer.setData('text/html', this.innerHTML);
+    });
+
+    card.addEventListener('dragend', function(e) {
+        this.classList.remove('dragging');
+    });
+});
+
+// Drag Over (on columns)
+document.querySelectorAll('.kanban-cards').forEach(column => {
+    column.addEventListener('dragover', function(e) {
+        e.preventDefault();
+        e.dataTransfer.dropEffect = 'move';
+
+        // Visual feedback
+        const cards = column.querySelectorAll('.kanban-card:not(.dragging)');
+        cards.forEach(card => card.classList.remove('drag-over'));
+    });
+
+    column.addEventListener('dragenter', function(e) {
+        e.preventDefault();
+    });
+
+    // Drop
+    column.addEventListener('drop', function(e) {
+        e.preventDefault();
+
+        if (draggedElement) {
+            const targetStageId = this.dataset.stageId;
+            const leadId = draggedElement.dataset.leadId;
+
+            // Don't do anything if dropped in same column
+            if (sourceStageId === targetStageId) {
+                return;
+            }
+
+            // Move card visually
+            this.appendChild(draggedElement);
+
+            // Update stage via AJAX
+            updateLeadStage(leadId, targetStageId);
+
+            // Update counts
+            updateColumnCounts();
+        }
+    });
+});
+
+// Update Lead Stage via AJAX
+function updateLeadStage(leadId, newStageId) {
+    // Show loading
+    document.getElementById('loadingOverlay').classList.add('active');
+
+    fetch(`/leads/${leadId}/change-stage/`, {
+        method: 'POST',
+        headers: {
+            'Content-Type': 'application/x-www-form-urlencoded',
+            'X-CSRFToken': csrftoken,
+            'X-Requested-With': 'XMLHttpRequest'
+        },
+        body: `stage=${newStageId}`
+    })
+    .then(response => response.json())
+    .then(data => {
+        // Hide loading
+        document.getElementById('loadingOverlay').classList.remove('active');
+
+        if (data.success) {
+            // Update card's stage ID
+            draggedElement.dataset.stageId = newStageId;
+
+            // Show success message (optional)
+            console.log('Lead moved successfully');
+        } else {
+            alert('Error moving lead: ' + (data.error || 'Unknown error'));
+            // Revert visual change
+            location.reload();
+        }
+    })
+    .catch(error => {
+        document.getElementById('loadingOverlay').classList.remove('active');
+        alert('Error moving lead: ' + error);
+        location.reload();
+    });
+}
+
+// Update Column Counts
+function updateColumnCounts() {
+    document.querySelectorAll('.kanban-column').forEach(column => {
+        const stageId = column.dataset.stageId;
+        const cardsContainer = column.querySelector('.kanban-cards');
+        const count = cardsContainer.querySelectorAll('.kanban-card').length;
+        const countBadge = column.querySelector('.kanban-column-count');
+
+        countBadge.textContent = count;
+
+        // Show/hide empty state
+        const emptyState = cardsContainer.querySelector('.kanban-empty');
+        if (count === 0) {
+            if (!emptyState) {
+                cardsContainer.innerHTML = `
+                    <div class="kanban-empty">
+                        <i class="fas fa-inbox"></i>
+                        <p>No leads</p>
+                    </div>
+                `;
+            }
+        } else {
+            if (emptyState) {
+                emptyState.remove();
+            }
+        }
+    });
+}
+
+// Auto-submit filters on change
+document.querySelectorAll('#kanbanFilterForm select').forEach(select => {
+    select.addEventListener('change', function() {
+        document.getElementById('kanbanFilterForm').submit();
+    });
+});
+</script>
+{% endblock %}

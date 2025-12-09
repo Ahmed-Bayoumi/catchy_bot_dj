@@ -1,0 +1,630 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block title %}{{ form_title }}{% endblock %}
+
+{% block extra_css %}
+<style>
+    :root {
+        --primary-blue: #667eea;
+        --secondary-purple: #764ba2;
+        --dark-text: #333333;
+        --input-border: #e1e8ed;
+        --focus-shadow: rgba(102, 126, 234, 0.25);
+        --link-normal: #667eea;
+        --link-hover: #764ba2;
+        --alert-danger-bg: #ffeeee;
+        --alert-danger-text: #cc3333;
+    }
+
+    /* Page Header */
+    .page-header {
+        background: linear-gradient(135deg, var(--primary-blue) 0%, var(--secondary-purple) 100%);
+        color: white;
+        padding: 2rem;
+        border-radius: 10px;
+        margin-bottom: 2rem;
+        box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+    }
+
+    .page-header h1 {
+        margin: 0;
+        font-size: 1.8rem;
+        font-weight: 600;
+    }
+
+    .page-header .subtitle {
+        margin-top: 0.5rem;
+        opacity: 0.9;
+        font-size: 0.95rem;
+    }
+
+    /* Form Container */
+    .form-container {
+        background: white;
+        border: 1px solid var(--input-border);
+        border-radius: 10px;
+        padding: 2rem;
+        box-shadow: 0 2px 4px rgba(0,0,0,0.05);
+        max-width: 900px;
+        margin: 0 auto;
+    }
+
+    /* Form Section Headers */
+    .form-section {
+        margin-bottom: 2rem;
+        padding-bottom: 1.5rem;
+        border-bottom: 2px solid var(--input-border);
+    }
+
+    .form-section:last-child {
+        border-bottom: none;
+    }
+
+    .form-section h5 {
+        color: var(--dark-text);
+        font-size: 1.1rem;
+        font-weight: 600;
+        margin-bottom: 1.5rem;
+        display: flex;
+        align-items: center;
+        gap: 0.5rem;
+    }
+
+    .form-section h5 i {
+        color: var(--primary-blue);
+    }
+
+    /* Form Labels */
+    .form-label {
+        color: var(--dark-text);
+        font-weight: 600;
+        margin-bottom: 0.5rem;
+        font-size: 0.9rem;
+    }
+
+    .form-label .required {
+        color: #dc3545;
+        margin-left: 0.25rem;
+    }
+
+    /* Form Controls */
+    .form-control, .form-select {
+        border: 2px solid var(--input-border);
+        border-radius: 8px;
+        padding: 0.65rem 1rem;
+        transition: all 0.3s;
+        font-size: 0.95rem;
+    }
+
+    .form-control:focus, .form-select:focus {
+        border-color: var(--primary-blue);
+        box-shadow: 0 0 0 0.2rem var(--focus-shadow);
+    }
+
+    /* Input with Icon */
+    .input-with-icon {
+        position: relative;
+    }
+
+    .input-with-icon i {
+        position: absolute;
+        left: 1rem;
+        top: 50%;
+        transform: translateY(-50%);
+        color: #999;
+    }
+
+    .input-with-icon input,
+    .input-with-icon select {
+        padding-left: 2.75rem;
+    }
+
+    /* Help Text */
+    .form-text {
+        color: #6c757d;
+        font-size: 0.85rem;
+        margin-top: 0.35rem;
+    }
+
+    /* Error Messages */
+    .errorlist {
+        list-style: none;
+        padding: 0;
+        margin: 0.5rem 0 0 0;
+    }
+
+    .errorlist li {
+        color: var(--alert-danger-text);
+        background: var(--alert-danger-bg);
+        padding: 0.5rem 0.75rem;
+        border-radius: 6px;
+        font-size: 0.85rem;
+        margin-bottom: 0.25rem;
+        display: flex;
+        align-items: center;
+        gap: 0.5rem;
+    }
+
+    .errorlist li::before {
+        content: '\f06a';
+        font-family: 'Font Awesome 5 Free';
+        font-weight: 900;
+    }
+
+    /* Form Field with Error */
+    .form-control.is-invalid,
+    .form-select.is-invalid {
+        border-color: var(--alert-danger-text);
+    }
+
+    /* Textarea */
+    textarea.form-control {
+        resize: vertical;
+        min-height: 100px;
+    }
+
+    /* Tags Input */
+    .tags-input-help {
+        font-size: 0.85rem;
+        color: #6c757d;
+        font-style: italic;
+    }
+
+    /* Date/Time Input */
+    input[type="datetime-local"] {
+        position: relative;
+    }
+
+    /* Action Buttons */
+    .form-actions {
+        display: flex;
+        gap: 1rem;
+        justify-content: flex-end;
+        margin-top: 2rem;
+        padding-top: 1.5rem;
+        border-top: 2px solid var(--input-border);
+    }
+
+    .btn-submit {
+        background: linear-gradient(135deg, var(--primary-blue) 0%, var(--secondary-purple) 100%);
+        border: none;
+        color: white;
+        padding: 0.7rem 2rem;
+        border-radius: 8px;
+        font-weight: 600;
+        box-shadow: 0 2px 4px rgba(102, 126, 234, 0.3);
+        transition: all 0.3s;
+        min-width: 150px;
+    }
+
+    .btn-submit:hover {
+        transform: translateY(-2px);
+        box-shadow: 0 4px 8px rgba(102, 126, 234, 0.4);
+        color: white;
+    }
+
+    .btn-cancel {
+        background: white;
+        border: 2px solid var(--input-border);
+        color: var(--dark-text);
+        padding: 0.7rem 2rem;
+        border-radius: 8px;
+        font-weight: 600;
+        transition: all 0.3s;
+        min-width: 150px;
+    }
+
+    .btn-cancel:hover {
+        border-color: var(--primary-blue);
+        color: var(--primary-blue);
+        background: rgba(102, 126, 234, 0.05);
+    }
+
+    /* Info Box */
+    .info-box {
+        background: rgba(102, 126, 234, 0.1);
+        border-left: 4px solid var(--primary-blue);
+        padding: 1rem;
+        border-radius: 8px;
+        margin-bottom: 1.5rem;
+    }
+
+    .info-box i {
+        color: var(--primary-blue);
+        margin-right: 0.5rem;
+    }
+
+    .info-box p {
+        margin: 0;
+        color: var(--dark-text);
+        font-size: 0.9rem;
+    }
+
+    /* Required Fields Legend */
+    .required-legend {
+        text-align: right;
+        color: #6c757d;
+        font-size: 0.85rem;
+        margin-bottom: 1.5rem;
+        padding: 0.75rem;
+        background: #f8f9fa;
+        border-radius: 6px;
+    }
+
+    .required-legend .required-mark {
+        color: #dc3545;
+        font-weight: bold;
+        margin-left: 0.25rem;
+    }
+
+    /* Loading State */
+    .btn-submit:disabled {
+        opacity: 0.6;
+        cursor: not-allowed;
+    }
+
+    .btn-submit.loading::after {
+        content: '';
+        display: inline-block;
+        width: 16px;
+        height: 16px;
+        margin-left: 0.5rem;
+        border: 2px solid rgba(255,255,255,0.3);
+        border-top-color: white;
+        border-radius: 50%;
+        animation: spin 0.6s linear infinite;
+    }
+
+    @keyframes spin {
+        to { transform: rotate(360deg); }
+    }
+
+    /* Responsive */
+    @media (max-width: 768px) {
+        .form-actions {
+            flex-direction: column-reverse;
+        }
+
+        .btn-submit,
+        .btn-cancel {
+            width: 100%;
+        }
+    }
+</style>
+{% endblock %}
+
+{% block content %}
+<div class="container-fluid">
+    
+    <!-- Page Header -->
+    <div class="page-header">
+        <h1><i class="fas fa-user-plus me-2"></i>{{ form_title }}</h1>
+        <div class="subtitle">
+            {% if lead %}
+            Update lead information and details
+            {% else %}
+            Fill in the form below to create a new lead
+            {% endif %}
+        </div>
+    </div>
+
+    <!-- Form Container -->
+    <div class="form-container">
+        
+
+        <!-- Required Fields Legend -->
+        <div class="required-legend">
+            <span class="required-mark">*</span> Required fields
+        </div>
+
+        <!-- Form -->
+        <form method="POST" id="leadForm">
+            {% csrf_token %}
+
+            <!-- Basic Information Section -->
+            <div class="form-section">
+                <h5><i class="fas fa-user-circle"></i>Basic Information</h5>
+                
+                <div class="row g-3">
+                    <!-- Name -->
+                    <div class="col-md-6">
+                        <label class="form-label">
+                            Full Name
+                            <span class="required">*</span>
+                        </label>
+                        <div class="input-with-icon">
+                            <i class="fas fa-user"></i>
+                            {{ form.name }}
+                        </div>
+                        {% if form.name.errors %}
+                            <ul class="errorlist">
+                                {% for error in form.name.errors %}
+                                <li>{{ error }}</li>
+                                {% endfor %}
+                            </ul>
+                        {% endif %}
+                        {% if form.name.help_text %}
+                        <small class="form-text">{{ form.name.help_text }}</small>
+                        {% endif %}
+                    </div>
+
+                    <!-- Phone -->
+                    <div class="col-md-6">
+                        <label class="form-label">
+                            Phone Number
+                            <span class="required">*</span>
+                        </label>
+                        <div class="input-with-icon">
+                            <i class="fas fa-phone"></i>
+                            {{ form.phone }}
+                        </div>
+                        {% if form.phone.errors %}
+                            <ul class="errorlist">
+                                {% for error in form.phone.errors %}
+                                <li>{{ error }}</li>
+                                {% endfor %}
+                            </ul>
+                        {% endif %}
+                        {% if form.phone.help_text %}
+                        <small class="form-text">{{ form.phone.help_text }}</small>
+                        {% endif %}
+                    </div>
+
+                    <!-- Email -->
+                    <div class="col-md-12">
+                        <label class="form-label">Email Address</label>
+                        <div class="input-with-icon">
+                            <i class="fas fa-envelope"></i>
+                            {{ form.email }}
+                        </div>
+                        {% if form.email.errors %}
+                            <ul class="errorlist">
+                                {% for error in form.email.errors %}
+                                <li>{{ error }}</li>
+                                {% endfor %}
+                            </ul>
+                        {% endif %}
+                        {% if form.email.help_text %}
+                        <small class="form-text">{{ form.email.help_text }}</small>
+                        {% endif %}
+                    </div>
+                </div>
+            </div>
+
+            <!-- Lead Classification Section -->
+            <div class="form-section">
+                <h5><i class="fas fa-tags"></i>Lead Classification</h5>
+                
+                <div class="row g-3">
+                    <!-- Source -->
+                    <div class="col-md-6">
+                        <label class="form-label">
+                            Source
+                            <span class="required">*</span>
+                        </label>
+                        <div class="input-with-icon">
+                            <i class="fas fa-flag"></i>
+                            {{ form.source }}
+                        </div>
+                        {% if form.source.errors %}
+                            <ul class="errorlist">
+                                {% for error in form.source.errors %}
+                                <li>{{ error }}</li>
+                                {% endfor %}
+                            </ul>
+                        {% endif %}
+                        {% if form.source.help_text %}
+                        <small class="form-text">{{ form.source.help_text }}</small>
+                        {% endif %}
+                    </div>
+
+                    <!-- Stage -->
+                    <div class="col-md-6">
+                        <label class="form-label">
+                            Stage
+                            <span class="required">*</span>
+                        </label>
+                        <div class="input-with-icon">
+                            <i class="fas fa-layer-group"></i>
+                            {{ form.stage }}
+                        </div>
+                        {% if form.stage.errors %}
+                            <ul class="errorlist">
+                                {% for error in form.stage.errors %}
+                                <li>{{ error }}</li>
+                                {% endfor %}
+                            </ul>
+                        {% endif %}
+                    </div>
+
+                    <!-- Status -->
+                    <div class="col-md-6">
+                        <label class="form-label">
+                            Status
+                            <span class="required">*</span>
+                        </label>
+                        <div class="input-with-icon">
+                            <i class="fas fa-info-circle"></i>
+                            {{ form.status }}
+                        </div>
+                        {% if form.status.errors %}
+                            <ul class="errorlist">
+                                {% for error in form.status.errors %}
+                                <li>{{ error }}</li>
+                                {% endfor %}
+                            </ul>
+                        {% endif %}
+                    </div>
+
+                    <!-- Priority -->
+                    <div class="col-md-6">
+                        <label class="form-label">Priority</label>
+                        <div class="input-with-icon">
+                            <i class="fas fa-exclamation-circle"></i>
+                            {{ form.priority }}
+                        </div>
+                        {% if form.priority.errors %}
+                            <ul class="errorlist">
+                                {% for error in form.priority.errors %}
+                                <li>{{ error }}</li>
+                                {% endfor %}
+                            </ul>
+                        {% endif %}
+                    </div>
+                </div>
+            </div>
+
+            <!-- Assignment & Follow-up Section -->
+            <div class="form-section">
+                <h5><i class="fas fa-user-friends"></i>Assignment & Follow-up</h5>
+                
+                <div class="row g-3">
+                    <!-- Assigned To -->
+                    <div class="col-md-6">
+                        <label class="form-label">Assign To</label>
+                        <div class="input-with-icon">
+                            <i class="fas fa-user-tag"></i>
+                            {{ form.assigned_to }}
+                        </div>
+                        {% if form.assigned_to.errors %}
+                            <ul class="errorlist">
+                                {% for error in form.assigned_to.errors %}
+                                <li>{{ error }}</li>
+                                {% endfor %}
+                            </ul>
+                        {% endif %}
+                        {% if form.assigned_to.help_text %}
+                        <small class="form-text">{{ form.assigned_to.help_text }}</small>
+                        {% endif %}
+                    </div>
+
+                    <!-- Next Follow-up -->
+                    <div class="col-md-6">
+                        <label class="form-label">Next Follow-up</label>
+                        <div class="input-with-icon">
+                            <i class="fas fa-calendar-alt"></i>
+                            {{ form.next_follow_up }}
+                        </div>
+                        {% if form.next_follow_up.errors %}
+                            <ul class="errorlist">
+                                {% for error in form.next_follow_up.errors %}
+                                <li>{{ error }}</li>
+                                {% endfor %}
+                            </ul>
+                        {% endif %}
+                        {% if form.next_follow_up.help_text %}
+                        <small class="form-text">{{ form.next_follow_up.help_text }}</small>
+                        {% endif %}
+                    </div>
+                </div>
+            </div>
+
+            <!-- Additional Information Section -->
+            <div class="form-section">
+                <h5><i class="fas fa-clipboard"></i>Additional Information</h5>
+                
+                <div class="row g-3">
+                    <!-- Notes -->
+                    <div class="col-md-12">
+                        <label class="form-label">Notes</label>
+                        {{ form.notes }}
+                        {% if form.notes.errors %}
+                            <ul class="errorlist">
+                                {% for error in form.notes.errors %}
+                                <li>{{ error }}</li>
+                                {% endfor %}
+                            </ul>
+                        {% endif %}
+                        <small class="form-text">General notes about this lead</small>
+                    </div>
+
+                    <!-- Tags -->
+                    <div class="col-md-12">
+                        <label class="form-label">Tags</label>
+                        <div class="input-with-icon">
+                            <i class="fas fa-tags"></i>
+                            {{ form.tags }}
+                        </div>
+                        {% if form.tags.errors %}
+                            <ul class="errorlist">
+                                {% for error in form.tags.errors %}
+                                <li>{{ error }}</li>
+                                {% endfor %}
+                            </ul>
+                        {% endif %}
+                        <small class="form-text tags-input-help">
+                            Separate tags with commas (e.g., vip, urgent, follow-up)
+                        </small>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Form Actions -->
+            <div class="form-actions">
+                <a href="{% if cancel_url %}{% url cancel_url %}{% if cancel_url_kwargs %}?pk={{ cancel_url_kwargs.pk }}{% endif %}{% else %}{% url 'leads:lead_list' %}{% endif %}" 
+                   class="btn btn-cancel">
+                    <i class="fas fa-times me-2"></i>Cancel
+                </a>
+                <button type="submit" class="btn btn-submit" id="submitBtn">
+                    <i class="fas fa-save me-2"></i>{{ submit_text|default:"Save" }}
+                </button>
+            </div>
+
+        </form>
+
+    </div>
+
+</div>
+{% endblock %}
+
+{% block extra_js %}
+<script>
+// Form submission with loading state
+document.getElementById('leadForm').addEventListener('submit', function(e) {
+    const submitBtn = document.getElementById('submitBtn');
+    submitBtn.disabled = true;
+    submitBtn.classList.add('loading');
+    submitBtn.innerHTML = '<i class="fas fa-spinner fa-spin me-2"></i>Saving...';
+});
+
+// Phone number validation helper
+const phoneInput = document.querySelector('input[name="phone"]');
+if (phoneInput) {
+    phoneInput.addEventListener('blur', function() {
+        let value = this.value.trim();
+        
+        // Auto-add + if missing
+        if (value && !value.startsWith('+')) {
+            this.value = '+' + value;
+        }
+    });
+}
+
+// Tags input helper
+const tagsInput = document.querySelector('input[name="tags"]');
+if (tagsInput) {
+    tagsInput.addEventListener('blur', function() {
+        // Clean up tags: trim spaces, remove duplicates
+        let tags = this.value.split(',')
+            .map(tag => tag.trim())
+            .filter(tag => tag.length > 0);
+        
+        // Remove duplicates
+        tags = [...new Set(tags)];
+        
+        this.value = tags.join(', ');
+    });
+}
+
+// Form validation feedback
+const form = document.getElementById('leadForm');
+form.addEventListener('submit', function(e) {
+    // Find first error field and scroll to it
+    const firstError = document.querySelector('.errorlist');
+    if (firstError) {
+        firstError.scrollIntoView({ behavior: 'smooth', block: 'center' });
+    }
+});
+</script>
+{% endblock %}

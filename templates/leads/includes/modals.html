@@ -1,0 +1,798 @@
+{% load static %}
+
+<!--
+Lead Modals
+===========
+
+This file contains all modal dialogs used in lead management.
+Include this file in any template that needs these modals.
+
+Modals included:
+1. Assign Modal - Assign lead to agent
+2. Status Modal - Change lead status
+3. Stage Modal - Change lead stage
+4. Follow-up Modal - Set next follow-up date
+5. Bulk Actions Modal - Perform bulk operations
+
+Usage:
+    {% include 'leads/includes/modals.html' %}
+
+Requirements:
+- Bootstrap 5
+- jQuery (optional, but recommended)
+- CSRF token in page
+-->
+
+
+<!-- 1. ASSIGN MODAL - Assign Lead to Agent -->
+<div class="modal fade" id="assignModal" tabindex="-1" aria-labelledby="assignModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="assignModalLabel">
+                    <i class="fas fa-user-plus me-2"></i>Assign Lead
+                </h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <form id="assignForm" method="POST">
+                {% csrf_token %}
+                <div class="modal-body">
+                    <p class="text-muted mb-3">
+                        Select the agent to assign this lead to
+                    </p>
+
+                    <div class="mb-3">
+                        <label for="assignedTo" class="form-label">Agent</label>
+                        <select class="form-select" id="assignedTo" name="assigned_to" required>
+                            <option value="">Select agent...</option>
+                            <!-- Will be populated dynamically via JavaScript -->
+                        </select>
+                    </div>
+
+                    <!-- Display current assignment if exists -->
+                    <div id="currentAssignment" class="alert alert-info" style="display: none;">
+                        <i class="fas fa-info-circle me-2"></i>
+                        <strong>Current Assignment:</strong> <span id="currentAssignedName"></span>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">
+                        <i class="fas fa-times me-2"></i>Cancel
+                    </button>
+                    <button type="submit" class="btn btn-primary" id="assignSubmitBtn">
+                        <i class="fas fa-check me-2"></i>Assign
+                    </button>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+
+
+
+<!-- 2. STATUS MODAL - Change Lead Status -->
+<div class="modal fade" id="statusModal" tabindex="-1" aria-labelledby="statusModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="statusModalLabel">
+                    <i class="fas fa-exchange-alt me-2"></i>Change Status
+                </h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <form id="statusForm" method="POST">
+                {% csrf_token %}
+                <div class="modal-body">
+                    <p class="text-muted mb-3">
+                        Select the new status for this lead
+                    </p>
+
+                    <div class="mb-3">
+                        <label for="leadStatus" class="form-label">Status</label>
+                        <select class="form-select" id="leadStatus" name="status" required>
+                            <option value="">Select status...</option>
+                            <option value="new">New</option>
+                            <option value="contacted">Contacted</option>
+                            <option value="qualified">Qualified</option>
+                            <option value="converted">Converted</option>
+                            <option value="won">Won</option>
+                            <option value="lost">Lost</option>
+                        </select>
+                    </div>
+
+                    <!-- Status descriptions -->
+                    <div class="status-descriptions">
+                        <div class="status-desc alert alert-info" data-status="new" style="display: none;">
+                            <strong>New:</strong> Fresh lead, not contacted yet
+                        </div>
+                        <div class="status-desc alert alert-warning" data-status="contacted" style="display: none;">
+                            <strong>Contacted:</strong> Lead has been contacted
+                        </div>
+                        <div class="status-desc alert alert-success" data-status="qualified" style="display: none;">
+                            <strong>Qualified:</strong> Lead is qualified and interested
+                        </div>
+                        <div class="status-desc alert alert-primary" data-status="converted" style="display: none;">
+                            <strong>Converted:</strong> Lead became a patient
+                        </div>
+                        <div class="status-desc alert alert-success" data-status="won" style="display: none;">
+                            <strong>Won:</strong> Successfully converted and paid
+                        </div>
+                        <div class="status-desc alert alert-danger" data-status="lost" style="display: none;">
+                            <strong>Lost:</strong> Lead is lost (rejected/no response)
+                        </div>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">
+                        <i class="fas fa-times me-2"></i>Cancel
+                    </button>
+                    <button type="submit" class="btn btn-primary" id="statusSubmitBtn">
+                        <i class="fas fa-check me-2"></i>Change Status
+                    </button>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+
+
+
+<!-- 3. STAGE MODAL - Change Lead Stage -->
+<div class="modal fade" id="stageModal" tabindex="-1" aria-labelledby="stageModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="stageModalLabel">
+                    <i class="fas fa-layer-group me-2"></i>Change Stage
+                </h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <form id="stageForm" method="POST">
+                {% csrf_token %}
+                <div class="modal-body">
+                    <p class="text-muted mb-3">
+                        Move this lead to a different stage
+                    </p>
+
+                    <div class="mb-3">
+                        <label for="leadStage" class="form-label">Stage</label>
+                        <select class="form-select" id="leadStage" name="stage" required>
+                            <option value="">Select stage...</option>
+                            <!-- Will be populated dynamically via JavaScript -->
+                        </select>
+                    </div>
+
+                    <!-- Stage info -->
+                    <div id="stageInfo" class="alert alert-info" style="display: none;">
+                        <i class="fas fa-info-circle me-2"></i>
+                        <span id="stageInfoText"></span>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">
+                        <i class="fas fa-times me-2"></i>Cancel
+                    </button>
+                    <button type="submit" class="btn btn-primary" id="stageSubmitBtn">
+                        <i class="fas fa-check me-2"></i>Change Stage
+                    </button>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+
+
+
+<!-- 4. FOLLOW-UP MODAL - Set Next Follow-up Date -->
+<div class="modal fade" id="followUpModal" tabindex="-1" aria-labelledby="followUpModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="followUpModalLabel">
+                    <i class="fas fa-calendar-check me-2"></i>Set Follow-up
+                </h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <form id="followUpForm" method="POST">
+                {% csrf_token %}
+                <div class="modal-body">
+                    <p class="text-muted mb-3">
+                        Schedule the next follow-up for this lead
+                    </p>
+
+                    <div class="mb-3">
+                        <label for="followUpDate" class="form-label">Follow-up Date & Time</label>
+                        <input type="datetime-local"
+                               class="form-control"
+                               id="followUpDate"
+                               name="next_follow_up"
+                               required>
+                        <small class="form-text text-muted">
+                            When should we follow up with this lead?
+                        </small>
+                    </div>
+
+                    <!-- Quick options -->
+                    <div class="mb-3">
+                        <label class="form-label">Quick Options:</label>
+                        <div class="btn-group-vertical w-100" role="group">
+                            <button type="button" class="btn btn-outline-secondary btn-sm quick-follow-up" data-hours="1">
+                                <i class="fas fa-clock me-2"></i>In 1 Hour
+                            </button>
+                            <button type="button" class="btn btn-outline-secondary btn-sm quick-follow-up" data-hours="3">
+                                <i class="fas fa-clock me-2"></i>In 3 Hours
+                            </button>
+                            <button type="button" class="btn btn-outline-secondary btn-sm quick-follow-up" data-hours="24">
+                                <i class="fas fa-calendar me-2"></i>Tomorrow (Same Time)
+                            </button>
+                            <button type="button" class="btn btn-outline-secondary btn-sm quick-follow-up" data-hours="168">
+                                <i class="fas fa-calendar-week me-2"></i>Next Week
+                            </button>
+                        </div>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">
+                        <i class="fas fa-times me-2"></i>Cancel
+                    </button>
+                    <button type="submit" class="btn btn-primary" id="followUpSubmitBtn">
+                        <i class="fas fa-check me-2"></i>Set Follow-up
+                    </button>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+
+
+
+<!-- 5. BULK ACTIONS MODAL - Perform Bulk Operations -->
+<div class="modal fade" id="bulkActionsModal" tabindex="-1" aria-labelledby="bulkActionsModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="bulkActionsModalLabel">
+                    <i class="fas fa-tasks me-2"></i>Bulk Actions
+                </h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <form id="bulkActionsForm" method="POST">
+                {% csrf_token %}
+                <input type="hidden" name="lead_ids" id="bulkLeadIds">
+
+                <div class="modal-body">
+                    <p class="text-muted mb-3">
+                        <strong id="bulkSelectedCount">0</strong> leads selected
+                    </p>
+
+                    <div class="mb-3">
+                        <label for="bulkAction" class="form-label">Action</label>
+                        <select class="form-select" id="bulkAction" name="action" required>
+                            <option value="">Select action...</option>
+                            <option value="assign">Assign to Agent</option>
+                            <option value="change_status">Change Status</option>
+                            <option value="change_stage">Change Stage</option>
+                            <option value="set_priority">Set Priority</option>
+                            <option value="delete">Delete Leads</option>
+                        </select>
+                    </div>
+
+                    <!-- Dynamic fields based on action -->
+                    <div id="bulkActionFields">
+                        <!-- Assign fields -->
+                        <div class="bulk-field" data-action="assign" style="display: none;">
+                            <label for="bulkAssignTo" class="form-label">Assign To</label>
+                            <select class="form-select" id="bulkAssignTo" name="user_id">
+                                <option value="">Select agent...</option>
+                            </select>
+                        </div>
+
+                        <!-- Status fields -->
+                        <div class="bulk-field" data-action="change_status" style="display: none;">
+                            <label for="bulkStatus" class="form-label">New Status</label>
+                            <select class="form-select" id="bulkStatus" name="status">
+                                <option value="">Select status...</option>
+                                <option value="new">New</option>
+                                <option value="contacted">Contacted</option>
+                                <option value="qualified">Qualified</option>
+                                <option value="converted">Converted</option>
+                                <option value="won">Won</option>
+                                <option value="lost">Lost</option>
+                            </select>
+                        </div>
+
+                        <!-- Stage fields -->
+                        <div class="bulk-field" data-action="change_stage" style="display: none;">
+                            <label for="bulkStage" class="form-label">New Stage</label>
+                            <select class="form-select" id="bulkStage" name="stage_id">
+                                <option value="">Select stage...</option>
+                            </select>
+                        </div>
+
+                        <!-- Priority fields -->
+                        <div class="bulk-field" data-action="set_priority" style="display: none;">
+                            <label for="bulkPriority" class="form-label">Priority</label>
+                            <select class="form-select" id="bulkPriority" name="priority">
+                                <option value="">Select priority...</option>
+                                <option value="low">Low</option>
+                                <option value="medium">Medium</option>
+                                <option value="high">High</option>
+                            </select>
+                        </div>
+
+                        <!-- Delete confirmation -->
+                        <div class="bulk-field" data-action="delete" style="display: none;">
+                            <div class="alert alert-danger">
+                                <i class="fas fa-exclamation-triangle me-2"></i>
+                                <strong>Warning:</strong> This will delete all selected leads. This action cannot be undone.
+                            </div>
+                            <div class="form-check">
+                                <input class="form-check-input" type="checkbox" id="bulkDeleteConfirm" required>
+                                <label class="form-check-label" for="bulkDeleteConfirm">
+                                    I understand and want to delete these leads
+                                </label>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">
+                        <i class="fas fa-times me-2"></i>Cancel
+                    </button>
+                    <button type="submit" class="btn btn-primary" id="bulkSubmitBtn">
+                        <i class="fas fa-check me-2"></i>Apply Action
+                    </button>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+
+
+
+<!-- MODAL JAVASCRIPT - Handles all modal functionality -->
+<script>
+// Global variables
+let currentLeadId = null;
+let selectedLeadIds = [];
+
+// ============================================================
+// UTILITY FUNCTIONS
+// ============================================================
+
+// Get CSRF token
+function getCookie(name) {
+    let cookieValue = null;
+    if (document.cookie && document.cookie !== '') {
+        const cookies = document.cookie.split(';');
+        for (let i = 0; i < cookies.length; i++) {
+            const cookie = cookies[i].trim();
+            if (cookie.substring(0, name.length + 1) === (name + '=')) {
+                cookieValue = decodeURIComponent(cookie.substring(name.length + 1));
+                break;
+            }
+        }
+    }
+    return cookieValue;
+}
+
+const csrftoken = getCookie('csrftoken');
+
+// Show loading state on button
+function setButtonLoading(btnId, loading = true) {
+    const btn = document.getElementById(btnId);
+    if (!btn) return;
+
+    if (loading) {
+        btn.disabled = true;
+        btn.innerHTML = '<i class="fas fa-spinner fa-spin me-2"></i>Processing...';
+    } else {
+        btn.disabled = false;
+    }
+}
+
+// ============================================================
+// 1. ASSIGN MODAL
+// ============================================================
+
+// Open assign modal
+function openAssignModal(leadId) {
+    currentLeadId = leadId;
+    const modal = new bootstrap.Modal(document.getElementById('assignModal'));
+
+    // Load agents list
+    loadAgents();
+
+    // Load current assignment if on detail page
+    if (typeof lead !== 'undefined' && lead.assigned_to) {
+        document.getElementById('currentAssignment').style.display = 'block';
+        document.getElementById('currentAssignedName').textContent = lead.assigned_to.name;
+    }
+
+    modal.show();
+}
+
+// Load agents for assignment
+function loadAgents() {
+    // This would normally fetch from API
+    // For now, populate from page data if available
+    const select = document.getElementById('assignedTo');
+
+    // Clear existing options except first
+    while (select.options.length > 1) {
+        select.remove(1);
+    }
+
+    // Add agents (would come from AJAX in real implementation)
+    // For now, this will be populated by the template
+}
+
+// Handle assign form submission
+document.getElementById('assignForm')?.addEventListener('submit', function(e) {
+    e.preventDefault();
+
+    const formData = new FormData(this);
+    const assignedTo = formData.get('assigned_to');
+
+    if (!currentLeadId || !assignedTo) {
+        alert('Please select an agent');
+        return;
+    }
+
+    setButtonLoading('assignSubmitBtn', true);
+
+    // Submit via AJAX
+    fetch(`/leads/${currentLeadId}/assign/`, {
+        method: 'POST',
+        headers: {
+            'X-CSRFToken': csrftoken,
+            'X-Requested-With': 'XMLHttpRequest'
+        },
+        body: formData
+    })
+    .then(response => response.json())
+    .then(data => {
+        if (data.success) {
+            // Close modal
+            bootstrap.Modal.getInstance(document.getElementById('assignModal')).hide();
+
+            // Show success message
+            alert('Lead assigned successfully');
+
+            // Reload page
+            location.reload();
+        } else {
+            alert('Error: ' + (data.error || 'Failed to assign lead'));
+        }
+    })
+    .catch(error => {
+        alert('Error: ' + error);
+    })
+    .finally(() => {
+        setButtonLoading('assignSubmitBtn', false);
+    });
+});
+
+// ============================================================
+// 2. STATUS MODAL
+// ============================================================
+
+// Open status modal
+function openStatusModal(leadId) {
+    currentLeadId = leadId;
+    const modal = new bootstrap.Modal(document.getElementById('statusModal'));
+    modal.show();
+}
+
+// Show status description on change
+document.getElementById('leadStatus')?.addEventListener('change', function() {
+    // Hide all descriptions
+    document.querySelectorAll('.status-desc').forEach(desc => {
+        desc.style.display = 'none';
+    });
+
+    // Show selected status description
+    const selected = this.value;
+    if (selected) {
+        const desc = document.querySelector(`.status-desc[data-status="${selected}"]`);
+        if (desc) desc.style.display = 'block';
+    }
+});
+
+// Handle status form submission
+document.getElementById('statusForm')?.addEventListener('submit', function(e) {
+    e.preventDefault();
+
+    const formData = new FormData(this);
+    const status = formData.get('status');
+
+    if (!currentLeadId || !status) {
+        alert('Please select a status');
+        return;
+    }
+
+    setButtonLoading('statusSubmitBtn', true);
+
+    fetch(`/leads/${currentLeadId}/change-status/`, {
+        method: 'POST',
+        headers: {
+            'X-CSRFToken': csrftoken,
+            'X-Requested-With': 'XMLHttpRequest'
+        },
+        body: formData
+    })
+    .then(response => response.json())
+    .then(data => {
+        if (data.success) {
+            bootstrap.Modal.getInstance(document.getElementById('statusModal')).hide();
+            alert('Status changed successfully');
+            location.reload();
+        } else {
+            alert('Error: ' + (data.error || 'Failed to change status'));
+        }
+    })
+    .catch(error => {
+        alert('Error: ' + error);
+    })
+    .finally(() => {
+        setButtonLoading('statusSubmitBtn', false);
+    });
+});
+
+// ============================================================
+// 3. STAGE MODAL
+// ============================================================
+
+// Open stage modal
+function openStageModal(leadId) {
+    currentLeadId = leadId;
+    const modal = new bootstrap.Modal(document.getElementById('stageModal'));
+
+    // Load stages list
+    loadStages();
+
+    modal.show();
+}
+
+// Load stages
+function loadStages() {
+    // Would fetch from API in real implementation
+    // For now, populate from page data
+}
+
+// Handle stage form submission
+document.getElementById('stageForm')?.addEventListener('submit', function(e) {
+    e.preventDefault();
+
+    const formData = new FormData(this);
+    const stage = formData.get('stage');
+
+    if (!currentLeadId || !stage) {
+        alert('Please select a stage');
+        return;
+    }
+
+    setButtonLoading('stageSubmitBtn', true);
+
+    fetch(`/leads/${currentLeadId}/change-stage/`, {
+        method: 'POST',
+        headers: {
+            'X-CSRFToken': csrftoken,
+            'X-Requested-With': 'XMLHttpRequest'
+        },
+        body: formData
+    })
+    .then(response => response.json())
+    .then(data => {
+        if (data.success) {
+            bootstrap.Modal.getInstance(document.getElementById('stageModal')).hide();
+            alert('Stage changed successfully');
+            location.reload();
+        } else {
+            alert('Error: ' + (data.error || 'Failed to change stage'));
+        }
+    })
+    .catch(error => {
+        alert('Error: ' + error);
+    })
+    .finally(() => {
+        setButtonLoading('stageSubmitBtn', false);
+    });
+});
+
+// ============================================================
+// 4. FOLLOW-UP MODAL
+// ============================================================
+
+// Open follow-up modal
+function openFollowUpModal(leadId) {
+    currentLeadId = leadId;
+    const modal = new bootstrap.Modal(document.getElementById('followUpModal'));
+
+    // Set minimum date to now
+    const now = new Date();
+    now.setMinutes(now.getMinutes() - now.getTimezoneOffset());
+    document.getElementById('followUpDate').min = now.toISOString().slice(0, 16);
+
+    modal.show();
+}
+
+// Quick follow-up buttons
+document.querySelectorAll('.quick-follow-up').forEach(btn => {
+    btn.addEventListener('click', function() {
+        const hours = parseInt(this.dataset.hours);
+        const date = new Date();
+        date.setHours(date.getHours() + hours);
+        date.setMinutes(date.getMinutes() - date.getTimezoneOffset());
+        document.getElementById('followUpDate').value = date.toISOString().slice(0, 16);
+    });
+});
+
+// Handle follow-up form submission
+document.getElementById('followUpForm')?.addEventListener('submit', function(e) {
+    e.preventDefault();
+
+    const formData = new FormData(this);
+    const followUp = formData.get('next_follow_up');
+
+    if (!currentLeadId || !followUp) {
+        alert('Please select a date and time');
+        return;
+    }
+
+    setButtonLoading('followUpSubmitBtn', true);
+
+    fetch(`/leads/${currentLeadId}/set-follow-up/`, {
+        method: 'POST',
+        headers: {
+            'X-CSRFToken': csrftoken
+        },
+        body: formData
+    })
+    .then(response => {
+        if (response.ok) {
+            bootstrap.Modal.getInstance(document.getElementById('followUpModal')).hide();
+            alert('Follow-up set successfully');
+            location.reload();
+        } else {
+            alert('Error: Failed to set follow-up');
+        }
+    })
+    .catch(error => {
+        alert('Error: ' + error);
+    })
+    .finally(() => {
+        setButtonLoading('followUpSubmitBtn', false);
+    });
+});
+
+// ============================================================
+// 5. BULK ACTIONS MODAL
+// ============================================================
+
+// Open bulk actions modal
+function openBulkActionsModal() {
+    const selected = getSelectedLeads();
+    if (selected.length === 0) {
+        alert('Please select at least one lead');
+        return;
+    }
+
+    selectedLeadIds = selected;
+    document.getElementById('bulkSelectedCount').textContent = selected.length;
+    document.getElementById('bulkLeadIds').value = selected.join(',');
+
+    const modal = new bootstrap.Modal(document.getElementById('bulkActionsModal'));
+    modal.show();
+}
+
+// Get selected leads (from checkboxes)
+function getSelectedLeads() {
+    const checkboxes = document.querySelectorAll('.lead-checkbox:checked');
+    return Array.from(checkboxes).map(cb => cb.dataset.leadId);
+}
+
+// Show/hide bulk action fields
+document.getElementById('bulkAction')?.addEventListener('change', function() {
+    // Hide all fields
+    document.querySelectorAll('.bulk-field').forEach(field => {
+        field.style.display = 'none';
+    });
+
+    // Show selected action field
+    const selected = this.value;
+    if (selected) {
+        const field = document.querySelector(`.bulk-field[data-action="${selected}"]`);
+        if (field) field.style.display = 'block';
+    }
+});
+
+// Handle bulk actions form submission
+document.getElementById('bulkActionsForm')?.addEventListener('submit', function(e) {
+    e.preventDefault();
+
+    const formData = new FormData(this);
+    const action = formData.get('action');
+
+    if (!action) {
+        alert('Please select an action');
+        return;
+    }
+
+    // Confirm delete action
+    if (action === 'delete') {
+        if (!document.getElementById('bulkDeleteConfirm').checked) {
+            alert('Please confirm deletion');
+            return;
+        }
+        if (!confirm(`Are you sure you want to delete ${selectedLeadIds.length} leads?`)) {
+            return;
+        }
+    }
+
+    setButtonLoading('bulkSubmitBtn', true);
+
+    fetch('/leads/bulk-actions/', {
+        method: 'POST',
+        headers: {
+            'X-CSRFToken': csrftoken,
+            'Content-Type': 'application/x-www-form-urlencoded'
+        },
+        body: new URLSearchParams(formData)
+    })
+    .then(response => response.json())
+    .then(data => {
+        if (data.success) {
+            bootstrap.Modal.getInstance(document.getElementById('bulkActionsModal')).hide();
+            alert(data.message || 'Action completed successfully');
+            location.reload();
+        } else {
+            alert('Error: ' + (data.error || 'Failed to perform action'));
+        }
+    })
+    .catch(error => {
+        alert('Error: ' + error);
+    })
+    .finally(() => {
+        setButtonLoading('bulkSubmitBtn', false);
+    });
+});
+</script>
+
+<style>
+/* Modal styling overrides */
+.modal-header {
+    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+    color: white;
+    border-bottom: none;
+}
+
+.modal-header .btn-close {
+    filter: brightness(0) invert(1);
+}
+
+.modal-title {
+    font-weight: 600;
+}
+
+.modal-footer {
+    border-top: 1px solid #e1e8ed;
+}
+
+/* Status descriptions styling */
+.status-desc {
+    margin-top: 1rem;
+    border-radius: 8px;
+}
+
+/* Quick follow-up buttons */
+.quick-follow-up {
+    text-align: left;
+    margin-bottom: 0.25rem;
+}
+
+/* Bulk action fields */
+.bulk-field {
+    margin-top: 1rem;
+}
+</style>

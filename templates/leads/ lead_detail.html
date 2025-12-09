@@ -1,0 +1,775 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block title %}{{ lead.name }} - Lead Details{% endblock %}
+
+{% block extra_css %}
+<style>
+    :root {
+        --primary-blue: #667eea;
+        --secondary-purple: #764ba2;
+        --dark-text: #333333;
+        --input-border: #e1e8ed;
+        --focus-shadow: rgba(102, 126, 234, 0.25);
+        --link-normal: #667eea;
+        --link-hover: #764ba2;
+        --alert-success-bg: #eeffee;
+        --alert-success-text: #33cc33;
+    }
+
+    /* Breadcrumb */
+    .breadcrumb {
+        background: none;
+        padding: 0;
+        margin-bottom: 1.5rem;
+    }
+
+    .breadcrumb-item a {
+        color: var(--link-normal);
+        text-decoration: none;
+    }
+
+    .breadcrumb-item a:hover {
+        color: var(--link-hover);
+    }
+
+    /* Lead Header Card */
+    .lead-header-card {
+        background: linear-gradient(135deg, var(--primary-blue) 0%, var(--secondary-purple) 100%);
+        color: white;
+        border-radius: 10px;
+        padding: 2rem;
+        margin-bottom: 1.5rem;
+        box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+    }
+
+    .lead-header-card .lead-avatar {
+        width: 80px;
+        height: 80px;
+        border-radius: 50%;
+        background: rgba(255, 255, 255, 0.2);
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        font-size: 2rem;
+        font-weight: bold;
+        border: 3px solid white;
+    }
+
+    .lead-header-card h2 {
+        margin: 0;
+        font-size: 1.8rem;
+        font-weight: 600;
+    }
+
+    .lead-header-card .lead-meta {
+        display: flex;
+        gap: 2rem;
+        margin-top: 1rem;
+        font-size: 0.95rem;
+    }
+
+    .lead-header-card .lead-meta i {
+        margin-right: 0.5rem;
+    }
+
+    /* Action Buttons */
+    .action-buttons {
+        display: flex;
+        gap: 0.5rem;
+        flex-wrap: wrap;
+    }
+
+    .btn-action {
+        background: white;
+        color: var(--primary-blue);
+        border: 2px solid white;
+        padding: 0.5rem 1.2rem;
+        border-radius: 8px;
+        font-weight: 500;
+        transition: all 0.3s;
+    }
+
+    .btn-action:hover {
+        background: rgba(255, 255, 255, 0.9);
+        transform: translateY(-2px);
+    }
+
+    .btn-action i {
+        margin-right: 0.5rem;
+    }
+
+    /* Main Content Area */
+    .main-content {
+        display: flex;
+        gap: 1.5rem;
+    }
+
+    /* Left Column - Main Info */
+    .left-column {
+        flex: 1;
+    }
+
+    /* Right Column - Sidebar */
+    .right-column {
+        width: 350px;
+    }
+
+    /* Card Styling */
+    .info-card {
+        background: white;
+        border: 1px solid var(--input-border);
+        border-radius: 10px;
+        padding: 1.5rem;
+        margin-bottom: 1.5rem;
+        box-shadow: 0 2px 4px rgba(0,0,0,0.05);
+    }
+
+    .info-card h5 {
+        color: var(--dark-text);
+        font-size: 1.1rem;
+        font-weight: 600;
+        margin-bottom: 1.5rem;
+        padding-bottom: 0.75rem;
+        border-bottom: 2px solid var(--input-border);
+        display: flex;
+        align-items: center;
+        gap: 0.5rem;
+    }
+
+    /* Nav Tabs */
+    .nav-tabs {
+        border-bottom: 2px solid var(--input-border);
+        margin-bottom: 1.5rem;
+    }
+
+    .nav-tabs .nav-link {
+        color: var(--dark-text);
+        border: none;
+        border-bottom: 3px solid transparent;
+        padding: 0.75rem 1.5rem;
+        font-weight: 500;
+        transition: all 0.3s;
+    }
+
+    .nav-tabs .nav-link:hover {
+        color: var(--primary-blue);
+        border-bottom-color: var(--input-border);
+    }
+
+    .nav-tabs .nav-link.active {
+        color: var(--primary-blue);
+        border-bottom-color: var(--primary-blue);
+        background: none;
+    }
+
+    /* Info Row */
+    .info-row {
+        display: flex;
+        padding: 0.75rem 0;
+        border-bottom: 1px solid #f0f0f0;
+    }
+
+    .info-row:last-child {
+        border-bottom: none;
+    }
+
+    .info-row .label {
+        font-weight: 600;
+        color: var(--dark-text);
+        width: 150px;
+        flex-shrink: 0;
+    }
+
+    .info-row .value {
+        color: #666;
+        flex: 1;
+    }
+
+    /* Badges in Detail */
+    .badge-detail {
+        padding: 0.4rem 0.8rem;
+        border-radius: 6px;
+        font-size: 0.85rem;
+        font-weight: 500;
+        display: inline-block;
+    }
+
+    /* Timeline (Activities) */
+    .timeline {
+        position: relative;
+        padding-left: 2rem;
+    }
+
+    .timeline::before {
+        content: '';
+        position: absolute;
+        left: 0.5rem;
+        top: 0;
+        bottom: 0;
+        width: 2px;
+        background: var(--input-border);
+    }
+
+    .timeline-item {
+        position: relative;
+        padding-bottom: 1.5rem;
+    }
+
+    .timeline-item::before {
+        content: '';
+        position: absolute;
+        left: -1.5rem;
+        top: 0.25rem;
+        width: 10px;
+        height: 10px;
+        border-radius: 50%;
+        background: var(--primary-blue);
+        border: 2px solid white;
+        box-shadow: 0 0 0 2px var(--primary-blue);
+    }
+
+    .timeline-item .time {
+        color: #999;
+        font-size: 0.85rem;
+        margin-bottom: 0.25rem;
+    }
+
+    .timeline-item .content {
+        background: #f8f9fa;
+        padding: 0.75rem 1rem;
+        border-radius: 8px;
+        border-left: 3px solid var(--primary-blue);
+    }
+
+    .timeline-item .content strong {
+        color: var(--dark-text);
+    }
+
+    /* Notes Section */
+    .note-item {
+        background: #f8f9fa;
+        border-left: 3px solid var(--primary-blue);
+        padding: 1rem;
+        border-radius: 8px;
+        margin-bottom: 1rem;
+    }
+
+    .note-item .note-header {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        margin-bottom: 0.5rem;
+    }
+
+    .note-item .note-author {
+        font-weight: 600;
+        color: var(--dark-text);
+    }
+
+    .note-item .note-time {
+        color: #999;
+        font-size: 0.85rem;
+    }
+
+    .note-item .note-content {
+        color: #666;
+        line-height: 1.6;
+    }
+
+    /* Note Form */
+    .note-form textarea {
+        border: 2px solid var(--input-border);
+        border-radius: 8px;
+        padding: 0.75rem;
+        transition: all 0.3s;
+        resize: vertical;
+    }
+
+    .note-form textarea:focus {
+        border-color: var(--primary-blue);
+        box-shadow: 0 0 0 0.2rem var(--focus-shadow);
+    }
+
+    .btn-submit-note {
+        background: var(--primary-blue);
+        color: white;
+        border: none;
+        padding: 0.6rem 1.5rem;
+        border-radius: 8px;
+        font-weight: 500;
+        transition: all 0.3s;
+    }
+
+    .btn-submit-note:hover {
+        background: var(--secondary-purple);
+        transform: translateY(-1px);
+    }
+
+    /* Quick Stats in Sidebar */
+    .quick-stat {
+        display: flex;
+        align-items: center;
+        gap: 1rem;
+        padding: 1rem;
+        background: #f8f9fa;
+        border-radius: 8px;
+        margin-bottom: 0.75rem;
+    }
+
+    .quick-stat .icon {
+        width: 50px;
+        height: 50px;
+        border-radius: 10px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        font-size: 1.5rem;
+    }
+
+    .quick-stat .icon.blue {
+        background: rgba(102, 126, 234, 0.1);
+        color: var(--primary-blue);
+    }
+
+    .quick-stat .icon.green {
+        background: rgba(40, 167, 69, 0.1);
+        color: #28a745;
+    }
+
+    .quick-stat .icon.orange {
+        background: rgba(255, 193, 7, 0.1);
+        color: #ffc107;
+    }
+
+    .quick-stat .info .label {
+        font-size: 0.85rem;
+        color: #999;
+    }
+
+    .quick-stat .info .value {
+        font-size: 1.1rem;
+        font-weight: 600;
+        color: var(--dark-text);
+    }
+
+    /* Dropdown Menu */
+    .dropdown-menu {
+        border: 1px solid var(--input-border);
+        box-shadow: 0 4px 8px rgba(0,0,0,0.1);
+        border-radius: 8px;
+    }
+
+    .dropdown-item {
+        padding: 0.6rem 1rem;
+        color: var(--dark-text);
+        transition: all 0.2s;
+    }
+
+    .dropdown-item:hover {
+        background: rgba(102, 126, 234, 0.1);
+        color: var(--primary-blue);
+    }
+
+    .dropdown-item i {
+        margin-right: 0.5rem;
+        width: 20px;
+    }
+
+    /* Empty States */
+    .empty-state-small {
+        text-align: center;
+        padding: 2rem;
+        color: #999;
+    }
+
+    .empty-state-small i {
+        font-size: 2.5rem;
+        margin-bottom: 1rem;
+        opacity: 0.3;
+    }
+
+    /* Responsive */
+    @media (max-width: 992px) {
+        .main-content {
+            flex-direction: column;
+        }
+
+        .right-column {
+            width: 100%;
+        }
+    }
+</style>
+{% endblock %}
+
+{% block content %}
+<div class="container-fluid">
+
+    <!-- Breadcrumb -->
+    <nav aria-label="breadcrumb">
+        <ol class="breadcrumb">
+            <li class="breadcrumb-item"><a href="{% url 'core:dashboard' %}"><i class="fas fa-home"></i> Dashboard</a></li>
+            <li class="breadcrumb-item"><a href="{% url 'leads:lead_list' %}">Leads</a></li>
+            <li class="breadcrumb-item active">{{ lead.name }}</li>
+        </ol>
+    </nav>
+
+    <!-- Lead Header Card -->
+    <div class="lead-header-card">
+        <div class="d-flex justify-content-between align-items-start">
+            <div class="d-flex gap-3">
+                <!-- Avatar -->
+                <div class="lead-avatar">
+                    {{ lead.get_initials }}
+                </div>
+
+                <!-- Lead Info -->
+                <div>
+                    <h2>{{ lead.name }}</h2>
+                    <div class="lead-meta">
+                        <div>
+                            <i class="fas fa-phone"></i>
+                            {{ lead.phone }}
+                        </div>
+                        {% if lead.email %}
+                        <div>
+                            <i class="fas fa-envelope"></i>
+                            {{ lead.email }}
+                        </div>
+                        {% endif %}
+                        <div>
+                            <i class="fas fa-clock"></i>
+                            {{ lead.time_since_created }}
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Action Buttons -->
+            <div class="action-buttons">
+                {% if can_edit %}
+                <a href="{% url 'leads:lead_edit' pk=lead.pk %}" class="btn btn-action">
+                    <i class="fas fa-edit"></i>Edit
+                </a>
+                {% endif %}
+
+                <div class="dropdown">
+                    <button class="btn btn-action dropdown-toggle" type="button" data-bs-toggle="dropdown">
+                        <i class="fas fa-ellipsis-v"></i>More
+                    </button>
+                    <ul class="dropdown-menu">
+                        <li><a class="dropdown-item" href="#" data-bs-toggle="modal" data-bs-target="#assignModal">
+                            <i class="fas fa-user-plus"></i>Assign to Agent
+                        </a></li>
+                        <li><a class="dropdown-item" href="#" data-bs-toggle="modal" data-bs-target="#statusModal">
+                            <i class="fas fa-exchange-alt"></i>Change Status
+                        </a></li>
+                        <li><a class="dropdown-item" href="#" data-bs-toggle="modal" data-bs-target="#stageModal">
+                            <i class="fas fa-layer-group"></i>Change Stage
+                        </a></li>
+                        <li><hr class="dropdown-divider"></li>
+                        {% if can_delete %}
+                        <li><a class="dropdown-item text-danger" href="#" onclick="confirmDelete()">
+                            <i class="fas fa-trash"></i>Delete Lead
+                        </a></li>
+                        {% endif %}
+                    </ul>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Main Content -->
+    <div class="main-content">
+
+        <!-- Left Column -->
+        <div class="left-column">
+
+            <!-- Tabs -->
+            <ul class="nav nav-tabs" role="tablist">
+                <li class="nav-item" role="presentation">
+                    <button class="nav-link active" data-bs-toggle="tab" data-bs-target="#overview" type="button">
+                        <i class="fas fa-info-circle me-2"></i>Overview
+                    </button>
+                </li>
+                <li class="nav-item" role="presentation">
+                    <button class="nav-link" data-bs-toggle="tab" data-bs-target="#notes" type="button">
+                        <i class="fas fa-sticky-note me-2"></i>Notes
+                        <span class="badge bg-secondary ms-1">{{ notes_count }}</span>
+                    </button>
+                </li>
+                <li class="nav-item" role="presentation">
+                    <button class="nav-link" data-bs-toggle="tab" data-bs-target="#activities" type="button">
+                        <i class="fas fa-history me-2"></i>Activities
+                        <span class="badge bg-secondary ms-1">{{ activities_count }}</span>
+                    </button>
+                </li>
+            </ul>
+
+            <!-- Tab Content -->
+            <div class="tab-content">
+
+                <!-- Overview Tab -->
+                <div class="tab-pane fade show active" id="overview">
+                    <div class="info-card">
+                        <h5><i class="fas fa-user-circle"></i>Lead Information</h5>
+
+                        <div class="info-row">
+                            <div class="label">Full Name</div>
+                            <div class="value">{{ lead.name }}</div>
+                        </div>
+
+                        <div class="info-row">
+                            <div class="label">Phone</div>
+                            <div class="value">
+                                <i class="fas fa-phone text-success me-2"></i>
+                                <a href="tel:{{ lead.phone }}" style="color: var(--link-normal); text-decoration: none;">
+                                    {{ lead.phone }}
+                                </a>
+                            </div>
+                        </div>
+
+                        <div class="info-row">
+                            <div class="label">Email</div>
+                            <div class="value">
+                                {% if lead.email %}
+                                <i class="fas fa-envelope text-primary me-2"></i>
+                                <a href="mailto:{{ lead.email }}" style="color: var(--link-normal); text-decoration: none;">
+                                    {{ lead.email }}
+                                </a>
+                                {% else %}
+                                <span class="text-muted">Not provided</span>
+                                {% endif %}
+                            </div>
+                        </div>
+
+                        <div class="info-row">
+                            <div class="label">Source</div>
+                            <div class="value">
+                                <span class="badge-detail" style="background-color: {{ lead.source.color }}; color: white;">
+                                    <i class="{{ lead.source.icon }} me-1"></i>{{ lead.source.name }}
+                                </span>
+                            </div>
+                        </div>
+
+                        <div class="info-row">
+                            <div class="label">Stage</div>
+                            <div class="value">
+                                <span class="badge-detail" style="background-color: {{ lead.stage.color }}; color: white;">
+                                    <i class="{{ lead.stage.icon }} me-1"></i>{{ lead.stage.name }}
+                                </span>
+                            </div>
+                        </div>
+
+                        <div class="info-row">
+                            <div class="label">Status</div>
+                            <div class="value">
+                                <span class="badge-detail {% if lead.status == 'new' %}bg-info{% elif lead.status == 'contacted' %}bg-warning{% elif lead.status == 'qualified' %}bg-success{% endif %}">
+                                    {{ lead.get_status_display }}
+                                </span>
+                            </div>
+                        </div>
+
+                        <div class="info-row">
+                            <div class="label">Priority</div>
+                            <div class="value">
+                                <span class="badge-detail {% if lead.priority == 'high' %}bg-danger{% elif lead.priority == 'medium' %}bg-warning{% else %}bg-secondary{% endif %}">
+                                    {{ lead.get_priority_display }}
+                                </span>
+                            </div>
+                        </div>
+
+                        <div class="info-row">
+                            <div class="label">Assigned To</div>
+                            <div class="value">
+                                {% if lead.assigned_to %}
+                                <span style="background-color: var(--primary-blue); color: white; padding: 2px 8px; border-radius: 50%; font-size: 0.85rem; margin-right: 0.5rem;">
+                                    {{ lead.assigned_to.get_initials }}
+                                </span>
+                                {{ lead.assigned_to.get_full_name }}
+                                {% else %}
+                                <span class="text-muted">Unassigned</span>
+                                {% endif %}
+                            </div>
+                        </div>
+
+                        <div class="info-row">
+                            <div class="label">Next Follow-up</div>
+                            <div class="value">
+                                {% if lead.next_follow_up %}
+                                <i class="fas fa-calendar-alt me-2"></i>
+                                {{ lead.next_follow_up|date:"M d, Y - H:i" }}
+                                <span class="badge bg-warning ms-2">{{ lead.time_until_follow_up }}</span>
+                                {% else %}
+                                <span class="text-muted">Not scheduled</span>
+                                {% endif %}
+                            </div>
+                        </div>
+
+                        {% if lead.notes %}
+                        <div class="info-row">
+                            <div class="label">Notes</div>
+                            <div class="value">{{ lead.notes }}</div>
+                        </div>
+                        {% endif %}
+
+                        {% if lead.tags %}
+                        <div class="info-row">
+                            <div class="label">Tags</div>
+                            <div class="value">
+                                {% for tag in lead.tags %}
+                                <span class="badge bg-light text-dark me-1">{{ tag }}</span>
+                                {% endfor %}
+                            </div>
+                        </div>
+                        {% endif %}
+                    </div>
+                </div>
+
+                <!-- Notes Tab -->
+                <div class="tab-pane fade" id="notes">
+                    <div class="info-card">
+                        <h5><i class="fas fa-sticky-note"></i>Notes</h5>
+
+                        <!-- Add Note Form -->
+                        <form method="POST" class="note-form mb-4">
+                            {% csrf_token %}
+                            <textarea name="content" class="form-control" rows="3" placeholder="Add a note..." required></textarea>
+                            <button type="submit" class="btn btn-submit-note mt-2">
+                                <i class="fas fa-plus me-2"></i>Add Note
+                            </button>
+                        </form>
+
+                        <!-- Notes List -->
+                        {% if notes %}
+                        {% for note in notes %}
+                        <div class="note-item">
+                            <div class="note-header">
+                                <div>
+                                    <span class="note-author">
+                                        {{ note.user.get_full_name }}
+                                    </span>
+                                </div>
+                                <div>
+                                    <span class="note-time">{{ note.created_at|date:"M d, Y - H:i" }}</span>
+                                </div>
+                            </div>
+                            <div class="note-content">
+                                {{ note.content }}
+                            </div>
+                        </div>
+                        {% endfor %}
+                        {% else %}
+                        <div class="empty-state-small">
+                            <i class="fas fa-sticky-note"></i>
+                            <p>No notes yet. Add the first note above.</p>
+                        </div>
+                        {% endif %}
+                    </div>
+                </div>
+
+                <!-- Activities Tab -->
+                <div class="tab-pane fade" id="activities">
+                    <div class="info-card">
+                        <h5><i class="fas fa-history"></i>Activity Timeline</h5>
+
+                        {% if activities %}
+                        <div class="timeline">
+                            {% for activity in activities %}
+                            <div class="timeline-item">
+                                <div class="time">{{ activity.created_at|date:"M d, Y - H:i" }}</div>
+                                <div class="content">
+                                    <strong>{% if activity.user %}{{ activity.user.get_full_name }}{% else %}System{% endif %}</strong>
+                                    <div>{{ activity.description }}</div>
+                                </div>
+                            </div>
+                            {% endfor %}
+                        </div>
+                        {% else %}
+                        <div class="empty-state-small">
+                            <i class="fas fa-history"></i>
+                            <p>No activities yet.</p>
+                        </div>
+                        {% endif %}
+                    </div>
+                </div>
+
+            </div>
+        </div>
+
+        <!-- Right Column (Sidebar) -->
+        <div class="right-column">
+
+            <!-- Quick Stats -->
+            <div class="info-card">
+                <h5><i class="fas fa-chart-line"></i>Quick Stats</h5>
+
+                <div class="quick-stat">
+                    <div class="icon blue">
+                        <i class="fas fa-calendar-plus"></i>
+                    </div>
+                    <div class="info">
+                        <div class="label">Created</div>
+                        <div class="value">{{ lead.created_at|date:"M d, Y" }}</div>
+                    </div>
+                </div>
+
+                <div class="quick-stat">
+                    <div class="icon green">
+                        <i class="fas fa-sync"></i>
+                    </div>
+                    <div class="info">
+                        <div class="label">Last Updated</div>
+                        <div class="value">{{ lead.updated_at|date:"M d, Y" }}</div>
+                    </div>
+                </div>
+
+                <div class="quick-stat">
+                    <div class="icon orange">
+                        <i class="fas fa-clock"></i>
+                    </div>
+                    <div class="info">
+                        <div class="label">Lead Age</div>
+                        <div class="value">{{ lead.time_since_created }}</div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Quick Actions -->
+            <div class="info-card">
+                <h5><i class="fas fa-bolt"></i>Quick Actions</h5>
+
+                <div class="d-grid gap-2">
+                    <button class="btn btn-outline-primary" data-bs-toggle="modal" data-bs-target="#assignModal">
+                        <i class="fas fa-user-plus me-2"></i>Assign to Agent
+                    </button>
+                    <button class="btn btn-outline-warning" data-bs-toggle="modal" data-bs-target="#statusModal">
+                        <i class="fas fa-exchange-alt me-2"></i>Change Status
+                    </button>
+                    <button class="btn btn-outline-info" data-bs-toggle="modal" data-bs-target="#followUpModal">
+                        <i class="fas fa-calendar-check me-2"></i>Set Follow-up
+                    </button>
+                </div>
+            </div>
+
+        </div>
+    </div>
+
+</div>
+
+<!-- Delete Confirmation -->
+<form id="deleteForm" method="POST" action="{% url 'leads:lead_delete' pk=lead.pk %}">
+    {% csrf_token %}
+</form>
+
+{% endblock %}
+
+{% block extra_js %}
+<script>
+function confirmDelete() {
+    if (confirm('Are you sure you want to delete this lead? This action cannot be undone.')) {
+        document.getElementById('deleteForm').submit();
+    }
+}
+</script>
+{% endblock %}
