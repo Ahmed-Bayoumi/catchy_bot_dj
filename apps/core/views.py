@@ -11,53 +11,8 @@ from .models import Company, LeadSource, LeadStage
 @login_required
 @company_required
 def dashboard_view(request):
-    """
-    Main dashboard view - Central hub for users
-
-    This is the first page users see after login.
-    Shows comprehensive overview of the system status.
-
-    Features:
-        - Key statistics (total leads, new today, conversion rate)
-        - Lead distribution by stage (for Kanban preview)
-        - Lead distribution by source (WhatsApp, Facebook, etc.)
-        - Recent activity timeline
-        - Quick actions (add lead, view reports)
-        - Performance metrics for current user
-        - Charts for last 7/30 days trends
-
-    Access Control:
-        - Login required
-        - Company required (user must belong to a company)
-        - Admin: Sees all company data
-        - Agent: Sees only assigned leads data (will implement in Phase 3)
-
-    Context Variables:
-        company (Company): Current user's company
-        total_leads (int): Total number of leads
-        new_today (int): Leads created today
-        new_this_week (int): Leads created this week
-        new_this_month (int): Leads created this month
-        conversion_rate (float): Percentage of leads converted to patients
-        leads_by_stage (list): Lead count grouped by stage
-        leads_by_source (list): Lead count grouped by source
-        recent_leads (list): Last 10 leads created
-        user_stats (dict): Current user's performance statistics
-        last_7_days (list): Daily lead counts for chart
-        active_page (str): For sidebar highlighting
-
-    Template:
-        core/dashboard.html
-
-    Note:
-        Lead statistics are placeholders (0) until Lead model is created in Phase 3.
-        Structure is prepared for easy integration later.
-    """
-
-    # Get current user's company
     company = request.user.company
 
-    # Basic statistics - Placeholders until Lead model exists
     # Will be updated in Phase 3 with real queries
     total_leads = 0
     new_today = 0

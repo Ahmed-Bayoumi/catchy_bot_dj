@@ -19627,3 +19627,45 @@ INFO 2025-12-09 22:21:09,616 runserver HTTP POST /leads/1/change-stage/ 200 [0.0
 INFO 2025-12-09 22:21:11,053 runserver HTTP POST /leads/1/change-stage/ 200 [0.04, 172.19.0.1:47214]
 INFO 2025-12-09 22:21:11,982 runserver HTTP POST /leads/1/change-stage/ 200 [0.04, 172.19.0.1:47214]
 INFO 2025-12-09 22:21:18,602 runserver HTTP GET /leads/ 200 [0.07, 172.19.0.1:47214]
+INFO 2025-12-09 22:24:54,008 runserver HTTP GET /dashboard/ 200 [0.06, 172.19.0.1:56134]
+INFO 2025-12-09 22:28:14,110 autoreload /code/apps/core/views.py changed, reloading.
+INFO 2025-12-09 22:28:19,257 autoreload Watching for file changes with StatReloader
+INFO 2025-12-09 22:28:39,728 runserver HTTP GET /leads/kanban/ 200 [0.14, 172.19.0.1:45190]
+INFO 2025-12-09 22:28:41,587 runserver HTTP POST /leads/1/change-stage/ 200 [0.06, 172.19.0.1:45190]
+ERROR 2025-12-09 22:28:43,384 log Internal Server Error: /dashboard/
+Traceback (most recent call last):
+  File "/usr/local/lib/python3.11/site-packages/asgiref/sync.py", line 555, in thread_handler
+    raise exc_info[1]
+  File "/usr/local/lib/python3.11/site-packages/django/core/handlers/exception.py", line 42, in inner
+    response = await get_response(request)
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/local/lib/python3.11/site-packages/django/core/handlers/base.py", line 265, in _get_response_async
+    self.check_response(response, callback)
+  File "/usr/local/lib/python3.11/site-packages/django/core/handlers/base.py", line 332, in check_response
+    raise ValueError(
+ValueError: The view apps.core.views.dashboard_view didn't return an HttpResponse object. It returned None instead.
+ERROR 2025-12-09 22:28:43,388 runserver HTTP GET /dashboard/ 500 [0.06, 172.19.0.1:45190]
+ERROR 2025-12-09 22:28:46,400 log Internal Server Error: /dashboard/
+Traceback (most recent call last):
+  File "/usr/local/lib/python3.11/site-packages/asgiref/sync.py", line 555, in thread_handler
+    raise exc_info[1]
+  File "/usr/local/lib/python3.11/site-packages/django/core/handlers/exception.py", line 42, in inner
+    response = await get_response(request)
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/local/lib/python3.11/site-packages/django/core/handlers/base.py", line 265, in _get_response_async
+    self.check_response(response, callback)
+  File "/usr/local/lib/python3.11/site-packages/django/core/handlers/base.py", line 332, in check_response
+    raise ValueError(
+ValueError: The view apps.core.views.dashboard_view didn't return an HttpResponse object. It returned None instead.
+ERROR 2025-12-09 22:28:46,409 runserver HTTP GET /dashboard/ 500 [0.05, 172.19.0.1:45190]
+INFO 2025-12-09 22:28:53,859 autoreload /code/apps/core/views.py changed, reloading.
+INFO 2025-12-09 22:28:56,136 autoreload Watching for file changes with StatReloader
+INFO 2025-12-09 22:31:52,278 autoreload /code/apps/core/views.py changed, reloading.
+INFO 2025-12-09 22:31:54,608 autoreload Watching for file changes with StatReloader
+INFO 2025-12-09 22:31:56,271 runserver HTTP POST /leads/1/change-stage/ 200 [0.04, 172.19.0.1:52420]
+INFO 2025-12-09 22:31:57,487 runserver HTTP GET /dashboard/ 200 [-0.30, 172.19.0.1:52420]
+INFO 2025-12-09 22:32:12,254 runserver HTTP GET /accounts/profile/ 200 [0.04, 172.19.0.1:47110]
+INFO 2025-12-09 22:32:48,519 runserver HTTP GET /dashboard/settings/company/ 200 [0.10, 172.19.0.1:51704]
+INFO 2025-12-09 22:33:02,803 runserver HTTP GET /accounts/profile/ 200 [0.03, 172.19.0.1:59064]
+INFO 2025-12-09 22:33:09,199 runserver HTTP GET /accounts/profile/edit/ 200 [0.06, 172.19.0.1:59080]
+INFO 2025-12-09 22:36:30,591 runserver HTTP GET /accounts/profile/ 200 [0.04, 172.19.0.1:49432]
