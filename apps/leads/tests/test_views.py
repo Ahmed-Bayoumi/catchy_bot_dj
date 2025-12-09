@@ -400,13 +400,11 @@ class LeadCreateViewTest(TestCase):
             }
         )
 
-        # Should not redirect (status 200)
+        # Should stay on form (no redirect)
         self.assertEqual(response.status_code, 200)
 
-        # Check form errors manually to avoid assertFormError issues
-        form = response.context['form']
-        self.assertTrue(form.errors)
-        self.assertIn('phone', form.errors)
+        # Should have form errors
+        self.assertFormError(response, 'form', 'phone', None)
 
         # Lead should not be created
         self.assertEqual(Lead.objects.count(), initial_count)
@@ -575,7 +573,7 @@ class LeadDeleteViewTest(TestCase):
         """
         Test: Only admin can delete leads
 
-        Expected: Agent gets redirected (302) to dashboard, Admin succeeds
+        Expected: Agent gets 403, Admin succeeds
         """
         # Agent tries to delete
         self.client.login(email='agent@test.com', password='testpass123')
@@ -584,8 +582,8 @@ class LeadDeleteViewTest(TestCase):
             reverse('leads:lead_delete', kwargs={'pk': self.lead.pk})
         )
 
-        # Should be redirect (to dashboard) - admin_required behavior
-        self.assertEqual(response.status_code, 302)
+        # Should be forbidden
+        self.assertEqual(response.status_code, 403)
 
         # Lead should still exist
         self.assertTrue(Lead.objects.filter(pk=self.lead.pk).exists())
