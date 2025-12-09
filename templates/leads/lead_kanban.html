@@ -410,7 +410,7 @@
                 {% if stage_data.leads %}
                 {% for lead in stage_data.leads %}
                 <div class="kanban-card" draggable="true" data-lead-id="{{ lead.id }}"
-                    data-stage-id="{{ lead.stage.id }}">
+                    data-stage-id="{{ lead.stage.id }}" data-url="{% url 'leads:lead_detail' pk=lead.pk %}">
 
                     <!-- Card Header -->
                     <div class="kanban-card-header">
@@ -621,5 +621,26 @@
             document.getElementById('kanbanFilterForm').submit();
         });
     });
+
+    document.querySelectorAll('.kanban-card').forEach(card => {
+    let isDragging = false;
+
+    card.addEventListener('dragstart', () => {
+        isDragging = true;
+    });
+
+    card.addEventListener('dragend', () => {
+        setTimeout(() => { isDragging = false; }, 50);
+    });
+
+    card.addEventListener('click', (e) => {
+        if (!isDragging) {
+            const url = card.dataset.url;
+            if (url) {
+                window.location.href = url;
+            }
+        }
+    });
+});
 </script>
 {% endblock %}

@@ -1,0 +1,364 @@
+{% extends 'base.html' %}
+
+{% block title %}Edit Profile - Catchy Bot CRM{% endblock %}
+
+{% block page_title %}Edit Profile{% endblock %}
+{% block page_subtitle %}Update your personal information{% endblock %}
+
+{% block content %}
+
+<div class="row">
+    <div class="col-md-8 mx-auto">
+
+        <form method="POST" enctype="multipart/form-data">
+            {% csrf_token %}
+
+            <!-- Basic Information Card -->
+            <div class="card mb-4">
+                <div class="card-header">
+                    <h5 class="mb-0">
+                        <i class="fas fa-user text-primary me-2"></i>
+                        Basic Information
+                    </h5>
+                </div>
+                <div class="card-body">
+
+                    <!-- Avatar Preview & Upload -->
+                    <div class="mb-4 text-center">
+                        <div class="mb-3">
+                            {% if user.avatar %}
+                                <img src="{{ user.avatar.url }}"
+                                     alt="{{ user.get_full_name }}"
+                                     class="rounded-circle"
+                                     id="avatar-preview"
+                                     style="width: 120px; height: 120px; object-fit: cover; border: 3px solid var(--primary-color);">
+                            {% else %}
+                                <div style="width: 120px; height: 120px;
+                                            background: linear-gradient(135deg, var(--primary-color), var(--secondary-color));
+                                            border-radius: 50%;
+                                            display: inline-flex; align-items: center; justify-content: center;
+                                            border: 3px solid var(--primary-color);"
+                                     id="avatar-placeholder">
+                                    <span style="color: white; font-size: 48px; font-weight: 700;">
+                                        {{ user.get_initials }}
+                                    </span>
+                                </div>
+                            {% endif %}
+                        </div>
+
+                        <!-- Avatar Upload -->
+                        <div class="mb-3">
+                            {{ user_form.avatar }}
+                            {% if user_form.avatar.errors %}
+                                <div class="text-danger small mt-1">
+                                    {{ user_form.avatar.errors }}
+                                </div>
+                            {% endif %}
+                            {% if user_form.avatar.help_text %}
+                                <small class="form-text text-muted d-block mt-1">
+                                    {{ user_form.avatar.help_text }}
+                                </small>
+                            {% endif %}
+                        </div>
+                    </div>
+
+                    <hr>
+
+                    <!-- Name Fields -->
+                    <div class="row mb-3">
+                        <div class="col-md-6">
+                            <label class="form-label">{{ user_form.first_name.label }} <span class="text-danger">*</span></label>
+                            {{ user_form.first_name }}
+                            {% if user_form.first_name.errors %}
+                                <div class="text-danger small mt-1">
+                                    {{ user_form.first_name.errors }}
+                                </div>
+                            {% endif %}
+                        </div>
+                        <div class="col-md-6">
+                            <label class="form-label">{{ user_form.last_name.label }} <span class="text-danger">*</span></label>
+                            {{ user_form.last_name }}
+                            {% if user_form.last_name.errors %}
+                                <div class="text-danger small mt-1">
+                                    {{ user_form.last_name.errors }}
+                                </div>
+                            {% endif %}
+                        </div>
+                    </div>
+
+                    <!-- Phone -->
+                    <div class="mb-3">
+                        <label class="form-label">{{ user_form.phone.label }}</label>
+                        {{ user_form.phone }}
+                        {% if user_form.phone.errors %}
+                            <div class="text-danger small mt-1">
+                                {{ user_form.phone.errors }}
+                            </div>
+                        {% endif %}
+                        {% if user_form.phone.help_text %}
+                            <small class="form-text text-muted d-block mt-1">
+                                {{ user_form.phone.help_text }}
+                            </small>
+                        {% endif %}
+                    </div>
+
+                    <!-- Job Title & Department -->
+                    <div class="row mb-0">
+                        <div class="col-md-6">
+                            <label class="form-label">{{ user_form.job_title.label }}</label>
+                            {{ user_form.job_title }}
+                            {% if user_form.job_title.errors %}
+                                <div class="text-danger small mt-1">
+                                    {{ user_form.job_title.errors }}
+                                </div>
+                            {% endif %}
+                        </div>
+                        <div class="col-md-6">
+                            <label class="form-label">{{ user_form.department.label }}</label>
+                            {{ user_form.department }}
+                            {% if user_form.department.errors %}
+                                <div class="text-danger small mt-1">
+                                    {{ user_form.department.errors }}
+                                </div>
+                            {% endif %}
+                        </div>
+                    </div>
+
+                </div>
+            </div>
+
+            <!-- Personal Information Card -->
+            <div class="card mb-4">
+                <div class="card-header">
+                    <h5 class="mb-0">
+                        <i class="fas fa-address-card text-primary me-2"></i>
+                        Personal Information
+                    </h5>
+                </div>
+                <div class="card-body">
+
+                    <!-- Bio -->
+                    <div class="mb-3">
+                        <label class="form-label">{{ profile_form.bio.label }}</label>
+                        {{ profile_form.bio }}
+                        {% if profile_form.bio.errors %}
+                            <div class="text-danger small mt-1">
+                                {{ profile_form.bio.errors }}
+                            </div>
+                        {% endif %}
+                    </div>
+
+                    <!-- Date of Birth -->
+                    <div class="mb-3">
+                        <label class="form-label">{{ profile_form.date_of_birth.label }}</label>
+                        {{ profile_form.date_of_birth }}
+                        {% if profile_form.date_of_birth.errors %}
+                            <div class="text-danger small mt-1">
+                                {{ profile_form.date_of_birth.errors }}
+                            </div>
+                        {% endif %}
+                        {% if profile_form.date_of_birth.help_text %}
+                            <small class="form-text text-muted d-block mt-1">
+                                {{ profile_form.date_of_birth.help_text }}
+                            </small>
+                        {% endif %}
+                    </div>
+
+                    <!-- Address -->
+                    <div class="mb-3">
+                        <label class="form-label">{{ profile_form.address.label }}</label>
+                        {{ profile_form.address }}
+                        {% if profile_form.address.errors %}
+                            <div class="text-danger small mt-1">
+                                {{ profile_form.address.errors }}
+                            </div>
+                        {% endif %}
+                    </div>
+
+                    <!-- City & Country -->
+                    <div class="row mb-0">
+                        <div class="col-md-6">
+                            <label class="form-label">{{ profile_form.city.label }}</label>
+                            {{ profile_form.city }}
+                            {% if profile_form.city.errors %}
+                                <div class="text-danger small mt-1">
+                                    {{ profile_form.city.errors }}
+                                </div>
+                            {% endif %}
+                        </div>
+                        <div class="col-md-6">
+                            <label class="form-label">{{ profile_form.country.label }}</label>
+                            {{ profile_form.country }}
+                            {% if profile_form.country.errors %}
+                                <div class="text-danger small mt-1">
+                                    {{ profile_form.country.errors }}
+                                </div>
+                            {% endif %}
+                        </div>
+                    </div>
+
+                </div>
+            </div>
+
+            <!-- Social Links Card -->
+            <div class="card mb-4">
+                <div class="card-header">
+                    <h5 class="mb-0">
+                        <i class="fas fa-share-alt text-primary me-2"></i>
+                        Social Links
+                    </h5>
+                </div>
+                <div class="card-body">
+
+                    <!-- LinkedIn -->
+                    <div class="mb-3">
+                        <label class="form-label">
+                            <i class="fab fa-linkedin me-2"></i>
+                            {{ profile_form.linkedin_url.label }}
+                        </label>
+                        {{ profile_form.linkedin_url }}
+                        {% if profile_form.linkedin_url.errors %}
+                            <div class="text-danger small mt-1">
+                                {{ profile_form.linkedin_url.errors }}
+                            </div>
+                        {% endif %}
+                        {% if profile_form.linkedin_url.help_text %}
+                            <small class="form-text text-muted d-block mt-1">
+                                {{ profile_form.linkedin_url.help_text }}
+                            </small>
+                        {% endif %}
+                    </div>
+
+                    <!-- Twitter -->
+                    <div class="mb-0">
+                        <label class="form-label">
+                            <i class="fab fa-twitter me-2"></i>
+                            {{ profile_form.twitter_url.label }}
+                        </label>
+                        {{ profile_form.twitter_url }}
+                        {% if profile_form.twitter_url.errors %}
+                            <div class="text-danger small mt-1">
+                                {{ profile_form.twitter_url.errors }}
+                            </div>
+                        {% endif %}
+                        {% if profile_form.twitter_url.help_text %}
+                            <small class="form-text text-muted d-block mt-1">
+                                {{ profile_form.twitter_url.help_text }}
+                            </small>
+                        {% endif %}
+                    </div>
+
+                </div>
+            </div>
+
+            <!-- Preferences Card -->
+            <div class="card mb-4">
+                <div class="card-header">
+                    <h5 class="mb-0">
+                        <i class="fas fa-cog text-primary me-2"></i>
+                        Preferences
+                    </h5>
+                </div>
+                <div class="card-body">
+
+                    <!-- Notifications -->
+                    <div class="row mb-3">
+                        <div class="col-md-6">
+                            <div class="form-check">
+                                {{ profile_form.email_notifications }}
+                                <label class="form-check-label" for="{{ profile_form.email_notifications.id_for_label }}">
+                                    {{ profile_form.email_notifications.label }}
+                                </label>
+                            </div>
+                        </div>
+                        <div class="col-md-6">
+                            <div class="form-check">
+                                {{ profile_form.sms_notifications }}
+                                <label class="form-check-label" for="{{ profile_form.sms_notifications.id_for_label }}">
+                                    {{ profile_form.sms_notifications.label }}
+                                </label>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Theme & Language -->
+                    <div class="row mb-0">
+                        <div class="col-md-6">
+                            <label class="form-label">{{ profile_form.theme.label }}</label>
+                            {{ profile_form.theme }}
+                            {% if profile_form.theme.errors %}
+                                <div class="text-danger small mt-1">
+                                    {{ profile_form.theme.errors }}
+                                </div>
+                            {% endif %}
+                        </div>
+                        <div class="col-md-6">
+                            <label class="form-label">{{ profile_form.language.label }}</label>
+                            {{ profile_form.language }}
+                            {% if profile_form.language.errors %}
+                                <div class="text-danger small mt-1">
+                                    {{ profile_form.language.errors }}
+                                </div>
+                            {% endif %}
+                        </div>
+                    </div>
+
+                </div>
+            </div>
+
+            <!-- Action Buttons -->
+            <div class="card">
+                <div class="card-body">
+                    <div class="d-flex justify-content-between align-items-center">
+                        <a href="{% url 'accounts:profile' %}" class="btn btn-outline-secondary">
+                            <i class="fas fa-times me-2"></i>
+                            Cancel
+                        </a>
+                        <button type="submit" class="btn btn-primary">
+                            <i class="fas fa-save me-2"></i>
+                            Save Changes
+                        </button>
+                    </div>
+                </div>
+            </div>
+
+        </form>
+
+    </div>
+</div>
+
+{% endblock %}
+
+{% block extra_js %}
+<script>
+    // Avatar preview on file select
+    document.getElementById('{{ user_form.avatar.id_for_label }}').addEventListener('change', function(e) {
+        const file = e.target.files[0];
+        if (file) {
+            const reader = new FileReader();
+            reader.onload = function(e) {
+                // Hide placeholder if exists
+                const placeholder = document.getElementById('avatar-placeholder');
+                if (placeholder) {
+                    placeholder.style.display = 'none';
+                }
+
+                // Show/update preview image
+                let preview = document.getElementById('avatar-preview');
+                if (!preview) {
+                    preview = document.createElement('img');
+                    preview.id = 'avatar-preview';
+                    preview.className = 'rounded-circle';
+                    preview.style.cssText = 'width: 120px; height: 120px; object-fit: cover; border: 3px solid var(--primary-color);';
+                    if (placeholder) {
+                        placeholder.parentNode.insertBefore(preview, placeholder);
+                    }
+                }
+                preview.src = e.target.result;
+                preview.style.display = 'block';
+            }
+            reader.readAsDataURL(file);
+        }
+    });
+</script>
+{% endblock %}

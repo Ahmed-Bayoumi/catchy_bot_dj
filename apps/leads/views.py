@@ -322,8 +322,8 @@ def lead_activities_view(request, pk):
 @login_required
 @company_required
 def lead_create_view(request):
-
     if request.method == 'POST':
+        # Bind the form with POST data and pass the user's company
         form = LeadCreateForm(request.POST, company=request.user.company)
 
         if form.is_valid():
@@ -333,12 +333,11 @@ def lead_create_view(request):
 
                 if not lead.assigned_to:
                     lead.assigned_to = request.user
-
                 lead.save()
 
-                form.save_m2m()  # If using many-to-many
+                # Save many-to-many relationships (if any)
+                form.save_m2m()
 
-                # But we can add who created it
                 Activity.objects.create(
                     lead=lead,
                     user=request.user,
@@ -346,48 +345,42 @@ def lead_create_view(request):
                     description=f'Lead created by {request.user.get_full_name()}'
                 )
 
-                # Update user statistics
+
                 if lead.assigned_to:
                     lead.assigned_to.total_leads_assigned += 1
                     lead.assigned_to.save(update_fields=['total_leads_assigned'])
 
-                # Success message
                 messages.success(
                     request,
                     f'Lead "{lead.name}" created successfully'
                 )
-
-                # Redirect to lead detail page
                 return redirect('leads:lead_detail', pk=lead.pk)
 
             except Exception as e:
-                # Something went wrong
-                messages.error(
-                    request,
-                    f'Error creating lead: {str(e)}'
-                )
-        else:
-            # Form has validation errors
-            messages.error(
-                request,
-                'Please correct the errors in the form'
-            )
+                # Handle any unexpected errors during lead creation
+                messages.error(request, f'Error creating lead: {str(e)}')
+
+        # If the form is invalid or an exception occurred, re-render the form
+        context = {
+            'form': form,
+            'form_title': 'Create New Lead',
+            'submit_text': 'Create',
+            'cancel_url': 'leads:lead_list',
+        }
+        return render(request, 'leads/lead_form.html', context)
 
     else:
-        # GET request - show empty form
+        # GET request: render an empty form for creating a lead
         form = LeadCreateForm(company=request.user.company)
-
-    context = {
-        'form': form,
-        'form_title': 'Create New Lead',
-        'submit_text': 'Create',
-        'cancel_url': 'leads:lead_list',
-    }
-
-    return render(request, 'leads/lead_form.html', context)
+        context = {
+            'form': form,
+            'form_title': 'Create New Lead',
+            'submit_text': 'Create',
+            'cancel_url': 'leads:lead_list',
+        }
+        return render(request, 'leads/lead_form.html', context)
 
 
-@login_required
 @company_required
 def lead_edit_view(request, pk):
     lead = get_object_or_404(

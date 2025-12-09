@@ -19465,3 +19465,165 @@ INFO 2025-12-09 21:26:10,600 runserver HTTP POST /leads/1/change-stage/ 200 [0.0
 INFO 2025-12-09 21:26:12,147 runserver HTTP GET /leads/ 200 [0.05, 172.19.0.1:53286]
 INFO 2025-12-09 21:26:14,666 runserver HTTP GET /leads/1/ 200 [0.04, 172.19.0.1:53286]
 INFO 2025-12-09 21:26:21,696 runserver HTTP GET /dashboard/ 200 [0.03, 172.19.0.1:42216]
+INFO 2025-12-09 21:28:09,775 runserver HTTP GET /leads/ 200 [0.06, 172.19.0.1:48852]
+INFO 2025-12-09 21:28:10,830 runserver HTTP GET /leads/1/ 200 [0.04, 172.19.0.1:48852]
+INFO 2025-12-09 21:41:06,618 autoreload /code/apps/leads/signals.py changed, reloading.
+INFO 2025-12-09 21:41:10,638 autoreload Watching for file changes with StatReloader
+INFO 2025-12-09 21:41:13,093 autoreload /code/apps/leads/signals.py changed, reloading.
+INFO 2025-12-09 21:41:15,142 autoreload Watching for file changes with StatReloader
+INFO 2025-12-09 21:41:54,731 autoreload /code/apps/leads/signals.py changed, reloading.
+INFO 2025-12-09 21:41:56,845 autoreload Watching for file changes with StatReloader
+ERROR 2025-12-09 21:42:16,322 log Internal Server Error: /leads/create/
+Traceback (most recent call last):
+  File "/usr/local/lib/python3.11/site-packages/django/core/handlers/exception.py", line 55, in inner
+    response = get_response(request)
+               ^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/local/lib/python3.11/site-packages/django/core/handlers/base.py", line 197, in _get_response
+    response = wrapped_callback(request, *callback_args, **callback_kwargs)
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/local/lib/python3.11/site-packages/django/contrib/auth/decorators.py", line 23, in _wrapper_view
+    return view_func(request, *args, **kwargs)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/code/apps/accounts/decorators.py", line 153, in wrapper
+    return view_func(request, *args, **kwargs)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/code/apps/leads/views.py", line 329, in lead_create_view
+    if form.is_valid():
+       ^^^^^^^^^^^^^^^
+  File "/usr/local/lib/python3.11/site-packages/django/forms/forms.py", line 197, in is_valid
+    return self.is_bound and not self.errors
+                                 ^^^^^^^^^^^
+  File "/usr/local/lib/python3.11/site-packages/django/forms/forms.py", line 192, in errors
+    self.full_clean()
+  File "/usr/local/lib/python3.11/site-packages/django/forms/forms.py", line 327, in full_clean
+    self._clean_fields()
+  File "/usr/local/lib/python3.11/site-packages/django/forms/forms.py", line 342, in _clean_fields
+    value = getattr(self, "clean_%s" % name)()
+            ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/code/apps/leads/forms.py", line 78, in clean_email
+    email = self.cleaned_data.get('email', '').strip()
+            ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+AttributeError: 'NoneType' object has no attribute 'strip'
+WARNING 2025-12-09 21:42:20,719 log Not Found: /leads/6/
+ERROR 2025-12-09 21:42:25,063 log Internal Server Error: /leads/11/edit/
+Traceback (most recent call last):
+  File "/usr/local/lib/python3.11/site-packages/django/core/handlers/exception.py", line 55, in inner
+    response = get_response(request)
+               ^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/local/lib/python3.11/site-packages/django/core/handlers/base.py", line 197, in _get_response
+    response = wrapped_callback(request, *callback_args, **callback_kwargs)
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/local/lib/python3.11/site-packages/django/contrib/auth/decorators.py", line 23, in _wrapper_view
+    return view_func(request, *args, **kwargs)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/code/apps/accounts/decorators.py", line 153, in wrapper
+    return view_func(request, *args, **kwargs)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/code/apps/leads/views.py", line 410, in lead_edit_view
+    if form.is_valid():
+       ^^^^^^^^^^^^^^^
+  File "/usr/local/lib/python3.11/site-packages/django/forms/forms.py", line 197, in is_valid
+    return self.is_bound and not self.errors
+                                 ^^^^^^^^^^^
+  File "/usr/local/lib/python3.11/site-packages/django/forms/forms.py", line 192, in errors
+    self.full_clean()
+  File "/usr/local/lib/python3.11/site-packages/django/forms/forms.py", line 327, in full_clean
+    self._clean_fields()
+  File "/usr/local/lib/python3.11/site-packages/django/forms/forms.py", line 342, in _clean_fields
+    value = getattr(self, "clean_%s" % name)()
+            ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/code/apps/leads/forms.py", line 78, in clean_email
+    email = self.cleaned_data.get('email', '').strip()
+            ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+AttributeError: 'NoneType' object has no attribute 'strip'
+INFO 2025-12-09 21:45:28,809 autoreload /code/apps/leads/forms.py changed, reloading.
+INFO 2025-12-09 21:45:29,981 autoreload Watching for file changes with StatReloader
+WARNING 2025-12-09 21:45:39,840 log Not Found: /leads/6/
+INFO 2025-12-09 21:50:06,365 autoreload /code/apps/leads/views.py changed, reloading.
+INFO 2025-12-09 21:50:11,737 autoreload Watching for file changes with StatReloader
+INFO 2025-12-09 21:50:20,520 autoreload /code/apps/leads/views.py changed, reloading.
+INFO 2025-12-09 21:50:21,690 autoreload Watching for file changes with StatReloader
+INFO 2025-12-09 21:50:43,658 autoreload /code/apps/leads/views.py changed, reloading.
+INFO 2025-12-09 21:50:45,478 autoreload Watching for file changes with StatReloader
+INFO 2025-12-09 21:51:06,996 autoreload /code/apps/leads/views.py changed, reloading.
+INFO 2025-12-09 21:51:11,524 autoreload Watching for file changes with StatReloader
+INFO 2025-12-09 21:53:15,915 autoreload /code/apps/leads/views.py changed, reloading.
+INFO 2025-12-09 21:53:17,507 autoreload Watching for file changes with StatReloader
+WARNING 2025-12-09 21:53:26,736 log Not Found: /leads/6/
+INFO 2025-12-09 21:58:38,533 runserver HTTP GET /leads/1/edit/ 200 [0.50, 172.19.0.1:39564]
+INFO 2025-12-09 21:58:45,985 runserver HTTP POST /leads/1/edit/ 200 [0.06, 172.19.0.1:39564]
+WARNING 2025-12-09 21:59:25,308 log Not Found: /leads/8/
+WARNING 2025-12-09 22:03:54,984 log Not Found: /leads/10/
+WARNING 2025-12-09 22:04:20,542 log Not Found: /leads/43/
+INFO 2025-12-09 22:09:06,503 runserver HTTP GET /accounts/profile/ 200 [0.51, 172.19.0.1:48808]
+ERROR 2025-12-09 22:09:08,409 log Internal Server Error: /accounts/profile/edit/
+Traceback (most recent call last):
+  File "/usr/local/lib/python3.11/site-packages/asgiref/sync.py", line 555, in thread_handler
+    raise exc_info[1]
+  File "/usr/local/lib/python3.11/site-packages/django/core/handlers/exception.py", line 42, in inner
+    response = await get_response(request)
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/local/lib/python3.11/site-packages/asgiref/sync.py", line 555, in thread_handler
+    raise exc_info[1]
+  File "/usr/local/lib/python3.11/site-packages/django/core/handlers/base.py", line 253, in _get_response_async
+    response = await wrapped_callback(
+               ^^^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/local/lib/python3.11/site-packages/asgiref/sync.py", line 504, in __call__
+    ret = await asyncio.shield(exec_coro)
+          ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/local/lib/python3.11/concurrent/futures/thread.py", line 58, in run
+    result = self.fn(*self.args, **self.kwargs)
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/local/lib/python3.11/site-packages/asgiref/sync.py", line 559, in thread_handler
+    return func(*args, **kwargs)
+           ^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/local/lib/python3.11/site-packages/django/contrib/auth/decorators.py", line 23, in _wrapper_view
+    return view_func(request, *args, **kwargs)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/code/apps/accounts/views.py", line 285, in profile_edit_view
+    return render(request, 'accounts/profile_edit.html', context)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/local/lib/python3.11/site-packages/django/shortcuts.py", line 24, in render
+    content = loader.render_to_string(template_name, context, request, using=using)
+              ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/local/lib/python3.11/site-packages/django/template/loader.py", line 61, in render_to_string
+    template = get_template(template_name, using=using)
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/local/lib/python3.11/site-packages/django/template/loader.py", line 19, in get_template
+    raise TemplateDoesNotExist(template_name, chain=chain)
+django.template.exceptions.TemplateDoesNotExist: accounts/profile_edit.html
+ERROR 2025-12-09 22:09:08,457 runserver HTTP GET /accounts/profile/edit/ 500 [0.27, 172.19.0.1:48808]
+INFO 2025-12-09 22:10:07,133 autoreload /code/apps/accounts/forms.py changed, reloading.
+INFO 2025-12-09 22:10:11,092 autoreload Watching for file changes with StatReloader
+INFO 2025-12-09 22:14:30,158 runserver HTTP GET /accounts/profile/ 200 [0.15, 172.19.0.1:58372]
+INFO 2025-12-09 22:14:31,225 runserver HTTP GET /accounts/profile/ 200 [0.04, 172.19.0.1:58372]
+INFO 2025-12-09 22:14:31,917 runserver HTTP GET /accounts/profile/ 200 [0.02, 172.19.0.1:58372]
+INFO 2025-12-09 22:14:41,477 runserver HTTP GET /accounts/profile/edit/ 200 [0.08, 172.19.0.1:47826]
+INFO 2025-12-09 22:15:21,703 runserver HTTP POST /accounts/profile/edit/ 302 [0.06, 172.19.0.1:52480]
+INFO 2025-12-09 22:15:21,742 runserver HTTP GET /accounts/profile/ 200 [0.03, 172.19.0.1:52480]
+INFO 2025-12-09 22:15:58,881 runserver HTTP GET /accounts/profile/edit/ 200 [0.04, 172.19.0.1:39394]
+INFO 2025-12-09 22:16:37,946 runserver HTTP GET /leads/create/ 200 [0.10, 172.19.0.1:42360]
+INFO 2025-12-09 22:16:39,003 runserver HTTP GET /leads/kanban/ 200 [0.15, 172.19.0.1:42360]
+INFO 2025-12-09 22:16:39,832 runserver HTTP GET /leads/ 200 [0.07, 172.19.0.1:42360]
+INFO 2025-12-09 22:16:42,096 runserver HTTP GET /leads/1/ 200 [0.08, 172.19.0.1:42360]
+INFO 2025-12-09 22:16:43,842 runserver HTTP GET /leads/create/ 200 [0.04, 172.19.0.1:42360]
+INFO 2025-12-09 22:18:06,268 runserver HTTP GET /dashboard/ 200 [0.06, 172.19.0.1:56216]
+INFO 2025-12-09 22:18:08,272 runserver HTTP GET /leads/kanban/ 200 [0.07, 172.19.0.1:56224]
+INFO 2025-12-09 22:18:10,478 runserver HTTP GET /leads/1/ 200 [0.04, 172.19.0.1:56224]
+INFO 2025-12-09 22:18:14,050 runserver HTTP GET /leads/1/ 200 [0.04, 172.19.0.1:56224]
+INFO 2025-12-09 22:20:46,994 runserver HTTP GET /leads/kanban/ 200 [0.09, 172.19.0.1:47214]
+INFO 2025-12-09 22:20:47,615 runserver HTTP GET /leads/kanban/ 200 [0.07, 172.19.0.1:47214]
+INFO 2025-12-09 22:20:48,678 runserver HTTP GET /leads/1/ 200 [0.06, 172.19.0.1:47214]
+INFO 2025-12-09 22:20:51,110 runserver HTTP GET /leads/1/ 200 [0.04, 172.19.0.1:47214]
+INFO 2025-12-09 22:20:52,424 runserver HTTP POST /leads/1/change-stage/ 200 [0.06, 172.19.0.1:47214]
+INFO 2025-12-09 22:20:53,164 runserver HTTP GET /leads/1/ 200 [0.04, 172.19.0.1:47214]
+INFO 2025-12-09 22:20:55,227 runserver HTTP POST /leads/1/change-stage/ 200 [0.04, 172.19.0.1:47214]
+INFO 2025-12-09 22:20:55,950 runserver HTTP POST /leads/1/change-stage/ 200 [0.04, 172.19.0.1:47214]
+INFO 2025-12-09 22:20:56,798 runserver HTTP GET /leads/1/ 200 [0.04, 172.19.0.1:47214]
+INFO 2025-12-09 22:21:02,229 runserver HTTP GET /leads/1/ 200 [0.04, 172.19.0.1:47214]
+INFO 2025-12-09 22:21:04,917 runserver HTTP GET /leads/1/ 200 [0.04, 172.19.0.1:47214]
+INFO 2025-12-09 22:21:07,290 runserver HTTP GET /leads/1/ 200 [0.05, 172.19.0.1:47214]
+INFO 2025-12-09 22:21:09,616 runserver HTTP POST /leads/1/change-stage/ 200 [0.04, 172.19.0.1:47214]
+INFO 2025-12-09 22:21:11,053 runserver HTTP POST /leads/1/change-stage/ 200 [0.04, 172.19.0.1:47214]
+INFO 2025-12-09 22:21:11,982 runserver HTTP POST /leads/1/change-stage/ 200 [0.04, 172.19.0.1:47214]
+INFO 2025-12-09 22:21:18,602 runserver HTTP GET /leads/ 200 [0.07, 172.19.0.1:47214]

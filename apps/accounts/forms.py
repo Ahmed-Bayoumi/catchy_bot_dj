@@ -307,25 +307,6 @@ class UserEditForm(forms.ModelForm):
 
 # USER CREATE FORM
 class UserCreateForm(UserCreationForm):
-    """
-    Create new user form (Admin only)
-
-    Extends Django's UserCreationForm with custom fields
-
-    Fields:
-    - email: Email address (username)
-    - first_name: First name
-    - last_name: Last name
-    - phone: Phone number
-    - role: User role (admin/agent)
-    - password1: Password
-    - password2: Password confirmation
-
-    Features:
-    - Email uniqueness validation
-    - Password strength validation
-    - Auto-assign to company (in view)
-    """
 
     email = forms.EmailField(
         label=_('Email Address'),
@@ -442,25 +423,6 @@ class UserCreateForm(UserCreationForm):
 
 # USER PROFILE FORM
 class UserProfileForm(forms.ModelForm):
-    """
-    Fields:
-    - bio: Biography
-    - date_of_birth: Birthday
-    - address: Street address
-    - city: City
-    - country: Country
-    - email_notifications: Email notification preference
-    - sms_notifications: SMS notification preference
-    - theme: UI theme preference
-    - language: Language preference
-    - linkedin_url: LinkedIn profile URL
-    - twitter_url: Twitter profile URL
-
-    Features:
-    - Optional fields (most are not required)
-    - Date picker for birthday
-    - URL validation for social links
-    """
 
     class Meta:
         model = UserProfile

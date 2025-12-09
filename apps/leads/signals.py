@@ -5,16 +5,14 @@ from .models import Lead, Activity
 
 @receiver(post_save, sender=Lead)
 def create_lead_activity(sender, instance, created, **kwargs):
-
-    # Only run for newly created leads (not updates)
     if created:
-        # Create activity log entry
-        Activity.objects.create(
-            lead=instance,
-            user=None,  # System-generated (no specific user)
-            activity_type='created',
-            description=f'Lead created'
-        )
+        if not Activity.objects.filter(lead=instance, activity_type='created').exists():
+            Activity.objects.create(
+                lead=instance,
+                user=None,
+                activity_type='created',
+                description='Lead created'
+            )
 
 
 @receiver(pre_save, sender=Lead)

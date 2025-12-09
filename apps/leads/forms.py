@@ -73,12 +73,13 @@ class LeadCreateForm(forms.ModelForm):
             raise ValidationError('Phone number must be between 10 and 15 digits')
         
         return phone
-    
+
     def clean_email(self):
-        email = self.cleaned_data.get('email', '').strip()
+        email = self.cleaned_data.get('email')
         if email:
-            email = email.lower()
-        return email or None
+            email = email.strip().lower()
+            return email
+        return None
     
     def clean_next_follow_up(self):
         next_follow_up = self.cleaned_data.get('next_follow_up')
