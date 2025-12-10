@@ -1,13 +1,3 @@
-# Admin panel features:
-# - List view with filters and search
-# - Detailed edit forms
-# - Inline profile editing
-# - Custom actions (activate/deactivate users)
-# - Performance statistics display
-#
-# Access: http://localhost:8008/admin/
-# ==============================================================================
-
 from django.contrib import admin
 from django.contrib.auth.admin import UserAdmin as BaseUserAdmin
 from django.utils.translation import gettext_lazy as _
