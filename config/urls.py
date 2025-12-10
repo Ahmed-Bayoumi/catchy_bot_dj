@@ -14,6 +14,7 @@ urlpatterns = [
     path('dashboard/', include('apps.core.urls')),
     path('', lambda request: redirect('core:dashboard') if request.user.is_authenticated else redirect('accounts:login')),
     path('leads/', include('apps.leads.urls')),
+    path('api/', include('apps.whatsapp.urls')),
 
 
 ]

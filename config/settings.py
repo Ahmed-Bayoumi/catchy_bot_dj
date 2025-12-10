@@ -55,17 +55,17 @@ INSTALLED_APPS = [
     'taggit',  # Tags for categorizing leads
 
     # IMPORTANT: accounts must be first (custom user model)
-    'apps.accounts',  # User management & authentication
-    'apps.core',  # Core functionality (Company, etc.)
-    'apps.leads',  # Lead management
- #   'apps.whatsapp',  # WhatsApp integration
- #   'apps.chat',  # Real-time chat
- #   'apps.appointments',  # Appointment scheduling
- #   'apps.contacts',  # Contact management
-    # 'apps.reports',  # Reports & analytics
+    'apps.accounts',
+    'apps.core',
+    'apps.leads',
+    'apps.whatsapp',
+ #   'apps.chat',
+ #   'apps.appointments',
+ #   'apps.contacts',
+    # 'apps.reports',
 ]
 
-
+SITE_URL = "http://localhost:8008"
 # MIDDLEWARE
 
 # Middleware components (order matters!)
@@ -165,7 +165,7 @@ AUTH_USER_MODEL = 'accounts.User'
 
 # Password validation
 # Ensures users create strong passwords
-# AUTH_PASSWORD_VALIDATORS = [           #########################################
+# AUTH_PASSWORD_VALIDATORS = [                                      ##########################################################
 #     {
 #         'NAME': 'django.contrib.auth.password_validation.UserAttributeSimilarityValidator',
 #         # Prevents password similar to username/email
@@ -368,24 +368,17 @@ LOGGING = {
             'class': 'logging.StreamHandler',
             'formatter': 'verbose',
         },
-        'file': {
-            'class': 'logging.handlers.RotatingFileHandler',
-            'filename': BASE_DIR / 'logs' / 'django.log',
-            'maxBytes': 1024 * 1024 * 10,  # 10 MB
-            'backupCount': 5,
-            'formatter': 'verbose',
-        },
     },
 
     # Loggers
     'loggers': {
         'django': {
-            'handlers': ['console', 'file'],
+            'handlers': ['console'],
             'level': config('LOG_LEVEL', default='INFO'),
             'propagate': True,
         },
         'apps': {  # Our custom apps
-            'handlers': ['console', 'file'],
+            'handlers': ['console'],
             'level': 'DEBUG',
             'propagate': False,
         },

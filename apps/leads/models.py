@@ -35,7 +35,7 @@ class Lead(models.Model):
     stage = models.ForeignKey(LeadStage, on_delete=models.PROTECT, related_name='leads', help_text='Current stage in the lead lifecycle')
     status = models.CharField(max_length=20, choices=STATUS_CHOICES, default='new', db_index=True, help_text='Current internal status')
     priority = models.CharField(max_length=10, choices=PRIORITY_CHOICES, default='medium', help_text='How urgent is this lead?')
-    
+
     # Assignment & Management
     assigned_to = models.ForeignKey(User, on_delete=models.SET_NULL, null=True, blank=True, related_name='assigned_leads', db_index=True, help_text='Which agent is responsible for this lead')
     next_follow_up = models.DateTimeField(null=True, blank=True, db_index=True, help_text='When is the next follow-up scheduled?')

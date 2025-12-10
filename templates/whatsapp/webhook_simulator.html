@@ -1,0 +1,523 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block title %}WhatsApp Webhook Simulator{% endblock %}
+
+{% block extra_css %}
+<style>
+    /* Simulator specific styles */
+    .simulator-container {
+        max-width: 1400px;
+        margin: 0 auto;
+        padding: 20px;
+    }
+    
+    .config-status {
+        background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+        color: white;
+        padding: 20px;
+        border-radius: 10px;
+        margin-bottom: 20px;
+    }
+    
+    .config-status.error {
+        background: linear-gradient(135deg, #f44336 0%, #e91e63 100%);
+    }
+    
+    .simulator-form {
+        background: white;
+        padding: 30px;
+        border-radius: 10px;
+        box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+        margin-bottom: 20px;
+    }
+    
+    .form-group {
+        margin-bottom: 20px;
+    }
+    
+    .form-group label {
+        display: block;
+        margin-bottom: 8px;
+        font-weight: 600;
+        color: #333;
+    }
+    
+    .form-control {
+        width: 100%;
+        padding: 12px;
+        border: 1px solid #ddd;
+        border-radius: 5px;
+        font-size: 14px;
+    }
+    
+    .form-control:focus {
+        outline: none;
+        border-color: #667eea;
+        box-shadow: 0 0 0 3px rgba(102, 126, 234, 0.1);
+    }
+    
+    .btn-simulator {
+        background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+        color: white;
+        padding: 12px 30px;
+        border: none;
+        border-radius: 5px;
+        font-size: 16px;
+        font-weight: 600;
+        cursor: pointer;
+        transition: transform 0.2s;
+    }
+    
+    .btn-simulator:hover {
+        transform: translateY(-2px);
+    }
+    
+    .btn-test {
+        background: #4CAF50;
+        color: white;
+        padding: 10px 20px;
+        border: none;
+        border-radius: 5px;
+        cursor: pointer;
+        margin-left: 10px;
+    }
+    
+    .messages-list {
+        background: white;
+        padding: 30px;
+        border-radius: 10px;
+        box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+    }
+    
+    .message-item {
+        padding: 15px;
+        border: 1px solid #e1e8ed;
+        border-radius: 8px;
+        margin-bottom: 10px;
+        transition: background 0.2s;
+    }
+    
+    .message-item:hover {
+        background: #f8f9fa;
+    }
+    
+    .message-item.incoming {
+        border-left: 4px solid #17a2b8;
+    }
+    
+    .message-item.outgoing {
+        border-left: 4px solid #667eea;
+    }
+    
+    .message-header {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        margin-bottom: 10px;
+    }
+    
+    .message-direction {
+        display: inline-block;
+        padding: 3px 10px;
+        border-radius: 3px;
+        font-size: 12px;
+        font-weight: 600;
+    }
+    
+    .message-direction.incoming {
+        background: #17a2b8;
+        color: white;
+    }
+    
+    .message-direction.outgoing {
+        background: #667eea;
+        color: white;
+    }
+    
+    .message-content {
+        font-size: 14px;
+        color: #333;
+        margin-bottom: 8px;
+    }
+    
+    .message-meta {
+        font-size: 12px;
+        color: #666;
+    }
+    
+    .status-badge {
+        display: inline-block;
+        padding: 3px 8px;
+        border-radius: 3px;
+        font-size: 11px;
+        font-weight: 600;
+        margin-left: 5px;
+    }
+    
+    .status-pending { background: #ffc107; color: white; }
+    .status-sent { background: #17a2b8; color: white; }
+    .status-delivered { background: #28a745; color: white; }
+    .status-read { background: #28a745; color: white; }
+    .status-failed { background: #dc3545; color: white; }
+    
+    .alert {
+        padding: 15px;
+        border-radius: 5px;
+        margin-bottom: 20px;
+    }
+    
+    .alert-success {
+        background: #d4edda;
+        border: 1px solid #c3e6cb;
+        color: #155724;
+    }
+    
+    .alert-error {
+        background: #f8d7da;
+        border: 1px solid #f5c6cb;
+        color: #721c24;
+    }
+    
+    .grid-2 {
+        display: grid;
+        grid-template-columns: 1fr 1fr;
+        gap: 20px;
+    }
+    
+    @media (max-width: 768px) {
+        .grid-2 {
+            grid-template-columns: 1fr;
+        }
+    }
+    
+    .loading {
+        opacity: 0.6;
+        pointer-events: none;
+    }
+</style>
+{% endblock %}
+
+{% block content %}
+<div class="simulator-container">
+    
+    <!-- Page Header -->
+    <h1 style="margin-bottom: 10px;">
+        <i class="fas fa-vial"></i> WhatsApp Webhook Simulator
+    </h1>
+    <p style="color: #666; margin-bottom: 30px;">
+        Test your WhatsApp integration without needing a real Woztell account
+    </p>
+    
+    <!-- Configuration Status -->
+    <div class="config-status {% if not has_config %}error{% endif %}">
+        {% if has_config %}
+            <h3 style="margin: 0 0 10px 0;">✅ Configuration Active</h3>
+            <p style="margin: 0; opacity: 0.9;">
+                <strong>Company:</strong> {{ config.company.name }}<br>
+                <strong>Channel ID:</strong> {{ config.channel_id }}<br>
+                <strong>Webhook Secret:</strong> {{ config.webhook_secret|slice:":10" }}...
+            </p>
+        {% else %}
+            <h3 style="margin: 0 0 10px 0;">❌ No Configuration Found</h3>
+            <p style="margin: 0; opacity: 0.9;">
+                Please create a Woztell configuration from the admin panel first.<br>
+                Go to: <a href="{% url 'admin:whatsapp_woztellconfig_add' %}" style="color: white; text-decoration: underline;">Admin → WhatsApp → Woztell Configurations → Add</a>
+            </p>
+        {% endif %}
+    </div>
+    
+    {% if has_config %}
+    
+    <!-- Quick Test Button -->
+    <div style="margin-bottom: 20px;">
+        <button type="button" class="btn-test" id="quickTestBtn">
+            <i class="fas fa-bolt"></i> Quick Test (Send Test Message)
+        </button>
+        <span id="quickTestResult" style="margin-left: 15px;"></span>
+    </div>
+    
+    <!-- Alert Area -->
+    <div id="alertArea"></div>
+    
+    <!-- Main Grid -->
+    <div class="grid-2">
+        
+        <!-- Left: Simulator Form -->
+        <div>
+            <div class="simulator-form">
+                <h2 style="margin-top: 0;">
+                    <i class="fas fa-paper-plane"></i> Simulate Incoming Message
+                </h2>
+                <p style="color: #666; margin-bottom: 20px;">
+                    Simulate a message as if it came from WhatsApp
+                </p>
+                
+                <form id="simulatorForm">
+                    <div class="form-group">
+                        <label for="phone">
+                            <i class="fas fa-phone"></i> Phone Number *
+                        </label>
+                        <input 
+                            type="text" 
+                            class="form-control" 
+                            id="phone" 
+                            name="phone" 
+                            placeholder="+201234567890"
+                            required
+                        >
+                        <small style="color: #666;">Include country code (e.g., +20 for Egypt)</small>
+                    </div>
+                    
+                    <div class="form-group">
+                        <label for="name">
+                            <i class="fas fa-user"></i> Customer Name
+                        </label>
+                        <input 
+                            type="text" 
+                            class="form-control" 
+                            id="name" 
+                            name="name" 
+                            placeholder="Ahmed Ali"
+                        >
+                        <small style="color: #666;">Leave empty to auto-generate</small>
+                    </div>
+                    
+                    <div class="form-group">
+                        <label for="message">
+                            <i class="fas fa-comment"></i> Message Content *
+                        </label>
+                        <textarea 
+                            class="form-control" 
+                            id="message" 
+                            name="message" 
+                            rows="4"
+                            placeholder="السلام عليكم، عايز أحجز كشف"
+                            required
+                        ></textarea>
+                    </div>
+                    
+                    <div class="form-group">
+                        <label for="media_url">
+                            <i class="fas fa-image"></i> Media URL (Optional)
+                        </label>
+                        <input 
+                            type="url" 
+                            class="form-control" 
+                            id="media_url" 
+                            name="media_url" 
+                            placeholder="https://example.com/image.jpg"
+                        >
+                    </div>
+                    
+                    <div class="form-group">
+                        <label for="media_type">
+                            <i class="fas fa-file"></i> Media Type
+                        </label>
+                        <select class="form-control" id="media_type" name="media_type">
+                            <option value="">None</option>
+                            <option value="image">Image</option>
+                            <option value="video">Video</option>
+                            <option value="document">Document</option>
+                            <option value="audio">Audio</option>
+                        </select>
+                    </div>
+                    
+                    <button type="submit" class="btn-simulator">
+                        <i class="fas fa-rocket"></i> Send Simulated Message
+                    </button>
+                </form>
+            </div>
+        </div>
+        
+        <!-- Right: Recent Messages -->
+        <div>
+            <div class="messages-list">
+                <h2 style="margin-top: 0;">
+                    <i class="fas fa-history"></i> Recent Messages
+                    <button 
+                        type="button" 
+                        onclick="location.reload()" 
+                        style="float: right; background: #667eea; color: white; border: none; padding: 5px 15px; border-radius: 3px; cursor: pointer;"
+                    >
+                        <i class="fas fa-sync"></i> Refresh
+                    </button>
+                </h2>
+                
+                <div id="messagesList">
+                    {% if recent_messages %}
+                        {% for msg in recent_messages %}
+                        <div class="message-item {{ msg.direction }}">
+                            <div class="message-header">
+                                <div>
+                                    <span class="message-direction {{ msg.direction }}">
+                                        {% if msg.direction == 'incoming' %}
+                                            ← Incoming
+                                        {% else %}
+                                            → Outgoing
+                                        {% endif %}
+                                    </span>
+                                    <strong style="margin-left: 10px;">{{ msg.lead.name }}</strong>
+                                </div>
+                                <span class="status-badge status-{{ msg.status }}">
+                                    {{ msg.get_status_display }}
+                                </span>
+                            </div>
+                            
+                            <div class="message-content">
+                                {{ msg.content }}
+                            </div>
+                            
+                            <div class="message-meta">
+                                <i class="fas fa-phone"></i> {{ msg.lead.phone }}
+                                •
+                                <i class="fas fa-clock"></i> {{ msg.created_at|date:"Y-m-d H:i" }}
+                                {% if msg.user %}
+                                    •
+                                    <i class="fas fa-user"></i> {{ msg.user.get_full_name }}
+                                {% endif %}
+                            </div>
+                        </div>
+                        {% endfor %}
+                    {% else %}
+                        <p style="text-align: center; color: #666; padding: 40px 0;">
+                            <i class="fas fa-inbox" style="font-size: 48px; opacity: 0.3; display: block; margin-bottom: 15px;"></i>
+                            No messages yet. Send a test message to see it here!
+                        </p>
+                    {% endif %}
+                </div>
+            </div>
+        </div>
+        
+    </div>
+    
+    {% endif %}
+    
+</div>
+{% endblock %}
+
+{% block extra_js %}
+<script>
+// CSRF Token
+const csrfToken = document.querySelector('[name=csrfmiddlewaretoken]').value;
+
+// Show Alert
+function showAlert(message, type) {
+    const alertArea = document.getElementById('alertArea');
+    const alertClass = type === 'success' ? 'alert-success' : 'alert-error';
+    
+    alertArea.innerHTML = `
+        <div class="alert ${alertClass}">
+            ${message}
+        </div>
+    `;
+    
+    // Auto-hide after 5 seconds
+    setTimeout(() => {
+        alertArea.innerHTML = '';
+    }, 5000);
+}
+
+// Simulator Form Submit
+document.getElementById('simulatorForm').addEventListener('submit', async (e) => {
+    e.preventDefault();
+    
+    const form = e.target;
+    const submitBtn = form.querySelector('button[type="submit"]');
+    
+    // Get form data
+    const formData = {
+        phone: form.phone.value.trim(),
+        name: form.name.value.trim(),
+        message: form.message.value.trim(),
+        media_url: form.media_url.value.trim(),
+        media_type: form.media_type.value
+    };
+    
+    // Validate
+    if (!formData.phone) {
+        showAlert('Phone number is required', 'error');
+        return;
+    }
+    
+    if (!formData.message) {
+        showAlert('Message content is required', 'error');
+        return;
+    }
+    
+    // Disable button
+    submitBtn.disabled = true;
+    submitBtn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Sending...';
+    
+    try {
+        const response = await fetch('/api/simulate-incoming-message/', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+                'X-CSRFToken': csrfToken
+            },
+            body: JSON.stringify(formData)
+        });
+        
+        const data = await response.json();
+        
+        if (response.ok && data.status === 'success') {
+            showAlert(`✅ ${data.message}`, 'success');
+            
+            // Clear form
+            form.reset();
+            
+            // Reload messages after 1 second
+            setTimeout(() => {
+                location.reload();
+            }, 1000);
+        } else {
+            showAlert(`❌ ${data.message}`, 'error');
+        }
+    } catch (error) {
+        showAlert(`❌ Error: ${error.message}`, 'error');
+    } finally {
+        // Re-enable button
+        submitBtn.disabled = false;
+        submitBtn.innerHTML = '<i class="fas fa-rocket"></i> Send Simulated Message';
+    }
+});
+
+// Quick Test Button
+document.getElementById('quickTestBtn')?.addEventListener('click', async () => {
+    const btn = document.getElementById('quickTestBtn');
+    const result = document.getElementById('quickTestResult');
+    
+    btn.disabled = true;
+    btn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Testing...';
+    result.textContent = '';
+    
+    try {
+        const response = await fetch('/api/quick-test-webhook/', {
+            method: 'POST',
+            headers: {
+                'X-CSRFToken': csrfToken
+            }
+        });
+        
+        const data = await response.json();
+        
+        if (response.ok && data.status === 'success') {
+            result.innerHTML = `<span style="color: #28a745; font-weight: 600;">${data.message}</span>`;
+            
+            // Reload after 1 second
+            setTimeout(() => {
+                location.reload();
+            }, 1000);
+        } else {
+            result.innerHTML = `<span style="color: #dc3545; font-weight: 600;">${data.message}</span>`;
+        }
+    } catch (error) {
+        result.innerHTML = `<span style="color: #dc3545; font-weight: 600;">❌ Error: ${error.message}</span>`;
+    } finally {
+        btn.disabled = false;
+        btn.innerHTML = '<i class="fas fa-bolt"></i> Quick Test';
+    }
+});
+</script>
+{% endblock %}
