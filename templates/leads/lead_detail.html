@@ -39,7 +39,7 @@
         color: white;
         border-radius: 10px;
         padding: 2rem;
-        margin-bottom: 1.5rem;
+        margin-bottom: 2rem;
         box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
     }
 
@@ -100,20 +100,10 @@
     }
 
     /* Main Content Area */
-    .main-content {
-        display: flex;
-        gap: 1.5rem;
-    }
-
-    /* Left Column - Main Info */
-    .left-column {
-        flex: 1;
-    }
+    /* Used standard bootstrap grid instead */
 
     /* Right Column - Sidebar */
-    .right-column {
-        width: 350px;
-    }
+    /* Used standard bootstrap grid instead */
 
     /* Card Styling */
     .info-card {
@@ -459,13 +449,13 @@
                         <i class="fas fa-ellipsis-v"></i>More
                     </button>
                     <ul class="dropdown-menu">
-                        <li><a class="dropdown-item" href="#" data-bs-toggle="modal" data-bs-target="#assignModal">
+                        <li><a class="dropdown-item" href="#" onclick="openAssignModal('{{ lead.pk }}')">
                                 <i class="fas fa-user-plus"></i>Assign to Agent
                             </a></li>
-                        <li><a class="dropdown-item" href="#" data-bs-toggle="modal" data-bs-target="#statusModal">
+                        <li><a class="dropdown-item" href="#" onclick="openStatusModal('{{ lead.pk }}')">
                                 <i class="fas fa-exchange-alt"></i>Change Status
                             </a></li>
-                        <li><a class="dropdown-item" href="#" data-bs-toggle="modal" data-bs-target="#stageModal">
+                        <li><a class="dropdown-item" href="#" onclick="openStageModal('{{ lead.pk }}')">
                                 <i class="fas fa-layer-group"></i>Change Stage
                             </a></li>
                         <li>
@@ -483,10 +473,10 @@
     </div>
 
     <!-- Main Content -->
-    <div class="main-content">
+    <div class="row g-4">
 
         <!-- Left Column -->
-        <div class="left-column">
+        <div class="col-lg-8 col-xl-9">
 
             <!-- Tabs -->
             <ul class="nav nav-tabs" role="tablist">
@@ -712,7 +702,7 @@
         </div>
 
         <!-- Right Column (Sidebar) -->
-        <div class="right-column">
+        <div class="col-lg-4 col-xl-3">
 
             <!-- Quick Stats -->
             <div class="info-card">
@@ -754,13 +744,13 @@
                 <h5><i class="fas fa-bolt"></i>Quick Actions</h5>
 
                 <div class="d-grid gap-2">
-                    <button class="btn btn-outline-primary" data-bs-toggle="modal" data-bs-target="#assignModal">
+                    <button class="btn btn-outline-primary" onclick="openAssignModal('{{ lead.pk }}')">
                         <i class="fas fa-user-plus me-2"></i>Assign to Agent
                     </button>
-                    <button class="btn btn-outline-warning" data-bs-toggle="modal" data-bs-target="#statusModal">
+                    <button class="btn btn-outline-warning" onclick="openStatusModal('{{ lead.pk }}')">
                         <i class="fas fa-exchange-alt me-2"></i>Change Status
                     </button>
-                    <button class="btn btn-outline-info" data-bs-toggle="modal" data-bs-target="#followUpModal">
+                    <button class="btn btn-outline-info" onclick="openFollowUpModal('{{ lead.pk }}')">
                         <i class="fas fa-calendar-check me-2"></i>Set Follow-up
                     </button>
                 </div>
@@ -768,8 +758,12 @@
 
         </div>
     </div>
+</div>
 
 </div>
+
+<!-- Modals -->
+{% include 'leads/includes/modals.html' %}
 
 <!-- Delete Confirmation -->
 <form id="deleteForm" method="POST" action="{% url 'leads:lead_delete' pk=lead.pk %}">

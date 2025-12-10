@@ -15,7 +15,7 @@ Modals included:
 5. Bulk Actions Modal - Perform bulk operations
 
 Usage:
-    {% include 'leads/includes/modals.html' %}
+    {# {% include 'leads/includes/modals.html' %} #}
 
 Requirements:
 - Bootstrap 5
@@ -45,7 +45,9 @@ Requirements:
                         <label for="assignedTo" class="form-label">Agent</label>
                         <select class="form-select" id="assignedTo" name="assigned_to" required>
                             <option value="">Select agent...</option>
-                            <!-- Will be populated dynamically via JavaScript -->
+                            {% for agent in agents %}
+                            <option value="{{ agent.id }}">{{ agent.get_full_name }}</option>
+                            {% endfor %}
                         </select>
                     </div>
 
@@ -158,7 +160,9 @@ Requirements:
                         <label for="leadStage" class="form-label">Stage</label>
                         <select class="form-select" id="leadStage" name="stage" required>
                             <option value="">Select stage...</option>
-                            <!-- Will be populated dynamically via JavaScript -->
+                            {% for stage in stages %}
+                            <option value="{{ stage.id }}">{{ stage.name }}</option>
+                            {% endfor %}
                         </select>
                     </div>
 
@@ -202,11 +206,8 @@ Requirements:
 
                     <div class="mb-3">
                         <label for="followUpDate" class="form-label">Follow-up Date & Time</label>
-                        <input type="datetime-local"
-                               class="form-control"
-                               id="followUpDate"
-                               name="next_follow_up"
-                               required>
+                        <input type="datetime-local" class="form-control" id="followUpDate" name="next_follow_up"
+                            required>
                         <small class="form-text text-muted">
                             When should we follow up with this lead?
                         </small>
@@ -216,16 +217,20 @@ Requirements:
                     <div class="mb-3">
                         <label class="form-label">Quick Options:</label>
                         <div class="btn-group-vertical w-100" role="group">
-                            <button type="button" class="btn btn-outline-secondary btn-sm quick-follow-up" data-hours="1">
+                            <button type="button" class="btn btn-outline-secondary btn-sm quick-follow-up"
+                                data-hours="1">
                                 <i class="fas fa-clock me-2"></i>In 1 Hour
                             </button>
-                            <button type="button" class="btn btn-outline-secondary btn-sm quick-follow-up" data-hours="3">
+                            <button type="button" class="btn btn-outline-secondary btn-sm quick-follow-up"
+                                data-hours="3">
                                 <i class="fas fa-clock me-2"></i>In 3 Hours
                             </button>
-                            <button type="button" class="btn btn-outline-secondary btn-sm quick-follow-up" data-hours="24">
+                            <button type="button" class="btn btn-outline-secondary btn-sm quick-follow-up"
+                                data-hours="24">
                                 <i class="fas fa-calendar me-2"></i>Tomorrow (Same Time)
                             </button>
-                            <button type="button" class="btn btn-outline-secondary btn-sm quick-follow-up" data-hours="168">
+                            <button type="button" class="btn btn-outline-secondary btn-sm quick-follow-up"
+                                data-hours="168">
                                 <i class="fas fa-calendar-week me-2"></i>Next Week
                             </button>
                         </div>
@@ -284,6 +289,9 @@ Requirements:
                             <label for="bulkAssignTo" class="form-label">Assign To</label>
                             <select class="form-select" id="bulkAssignTo" name="user_id">
                                 <option value="">Select agent...</option>
+                                {% for agent in agents %}
+                                <option value="{{ agent.id }}">{{ agent.get_full_name }}</option>
+                                {% endfor %}
                             </select>
                         </div>
 
@@ -306,6 +314,9 @@ Requirements:
                             <label for="bulkStage" class="form-label">New Stage</label>
                             <select class="form-select" id="bulkStage" name="stage_id">
                                 <option value="">Select stage...</option>
+                                {% for stage in stages %}
+                                <option value="{{ stage.id }}">{{ stage.name }}</option>
+                                {% endfor %}
                             </select>
                         </div>
 
@@ -324,7 +335,8 @@ Requirements:
                         <div class="bulk-field" data-action="delete" style="display: none;">
                             <div class="alert alert-danger">
                                 <i class="fas fa-exclamation-triangle me-2"></i>
-                                <strong>Warning:</strong> This will delete all selected leads. This action cannot be undone.
+                                <strong>Warning:</strong> This will delete all selected leads. This action cannot be
+                                undone.
                             </div>
                             <div class="form-check">
                                 <input class="form-check-input" type="checkbox" id="bulkDeleteConfirm" required>
@@ -352,447 +364,447 @@ Requirements:
 
 <!-- MODAL JAVASCRIPT - Handles all modal functionality -->
 <script>
-// Global variables
-let currentLeadId = null;
-let selectedLeadIds = [];
+    // Global variables
+    let currentLeadId = null;
+    let selectedLeadIds = [];
 
-// ============================================================
-// UTILITY FUNCTIONS
-// ============================================================
+    // ============================================================
+    // UTILITY FUNCTIONS
+    // ============================================================
 
-// Get CSRF token
-function getCookie(name) {
-    let cookieValue = null;
-    if (document.cookie && document.cookie !== '') {
-        const cookies = document.cookie.split(';');
-        for (let i = 0; i < cookies.length; i++) {
-            const cookie = cookies[i].trim();
-            if (cookie.substring(0, name.length + 1) === (name + '=')) {
-                cookieValue = decodeURIComponent(cookie.substring(name.length + 1));
-                break;
+    // Get CSRF token
+    function getCookie(name) {
+        let cookieValue = null;
+        if (document.cookie && document.cookie !== '') {
+            const cookies = document.cookie.split(';');
+            for (let i = 0; i < cookies.length; i++) {
+                const cookie = cookies[i].trim();
+                if (cookie.substring(0, name.length + 1) === (name + '=')) {
+                    cookieValue = decodeURIComponent(cookie.substring(name.length + 1));
+                    break;
+                }
             }
         }
-    }
-    return cookieValue;
-}
-
-const csrftoken = getCookie('csrftoken');
-
-// Show loading state on button
-function setButtonLoading(btnId, loading = true) {
-    const btn = document.getElementById(btnId);
-    if (!btn) return;
-
-    if (loading) {
-        btn.disabled = true;
-        btn.innerHTML = '<i class="fas fa-spinner fa-spin me-2"></i>Processing...';
-    } else {
-        btn.disabled = false;
-    }
-}
-
-// ============================================================
-// 1. ASSIGN MODAL
-// ============================================================
-
-// Open assign modal
-function openAssignModal(leadId) {
-    currentLeadId = leadId;
-    const modal = new bootstrap.Modal(document.getElementById('assignModal'));
-
-    // Load agents list
-    loadAgents();
-
-    // Load current assignment if on detail page
-    if (typeof lead !== 'undefined' && lead.assigned_to) {
-        document.getElementById('currentAssignment').style.display = 'block';
-        document.getElementById('currentAssignedName').textContent = lead.assigned_to.name;
+        return cookieValue;
     }
 
-    modal.show();
-}
+    const csrftoken = getCookie('csrftoken');
 
-// Load agents for assignment
-function loadAgents() {
-    // This would normally fetch from API
-    // For now, populate from page data if available
-    const select = document.getElementById('assignedTo');
+    // Show loading state on button
+    function setButtonLoading(btnId, loading = true) {
+        const btn = document.getElementById(btnId);
+        if (!btn) return;
 
-    // Clear existing options except first
-    while (select.options.length > 1) {
-        select.remove(1);
-    }
-
-    // Add agents (would come from AJAX in real implementation)
-    // For now, this will be populated by the template
-}
-
-// Handle assign form submission
-document.getElementById('assignForm')?.addEventListener('submit', function(e) {
-    e.preventDefault();
-
-    const formData = new FormData(this);
-    const assignedTo = formData.get('assigned_to');
-
-    if (!currentLeadId || !assignedTo) {
-        alert('Please select an agent');
-        return;
-    }
-
-    setButtonLoading('assignSubmitBtn', true);
-
-    // Submit via AJAX
-    fetch(`/leads/${currentLeadId}/assign/`, {
-        method: 'POST',
-        headers: {
-            'X-CSRFToken': csrftoken,
-            'X-Requested-With': 'XMLHttpRequest'
-        },
-        body: formData
-    })
-    .then(response => response.json())
-    .then(data => {
-        if (data.success) {
-            // Close modal
-            bootstrap.Modal.getInstance(document.getElementById('assignModal')).hide();
-
-            // Show success message
-            alert('Lead assigned successfully');
-
-            // Reload page
-            location.reload();
+        if (loading) {
+            btn.disabled = true;
+            btn.innerHTML = '<i class="fas fa-spinner fa-spin me-2"></i>Processing...';
         } else {
-            alert('Error: ' + (data.error || 'Failed to assign lead'));
+            btn.disabled = false;
         }
-    })
-    .catch(error => {
-        alert('Error: ' + error);
-    })
-    .finally(() => {
-        setButtonLoading('assignSubmitBtn', false);
-    });
-});
-
-// ============================================================
-// 2. STATUS MODAL
-// ============================================================
-
-// Open status modal
-function openStatusModal(leadId) {
-    currentLeadId = leadId;
-    const modal = new bootstrap.Modal(document.getElementById('statusModal'));
-    modal.show();
-}
-
-// Show status description on change
-document.getElementById('leadStatus')?.addEventListener('change', function() {
-    // Hide all descriptions
-    document.querySelectorAll('.status-desc').forEach(desc => {
-        desc.style.display = 'none';
-    });
-
-    // Show selected status description
-    const selected = this.value;
-    if (selected) {
-        const desc = document.querySelector(`.status-desc[data-status="${selected}"]`);
-        if (desc) desc.style.display = 'block';
-    }
-});
-
-// Handle status form submission
-document.getElementById('statusForm')?.addEventListener('submit', function(e) {
-    e.preventDefault();
-
-    const formData = new FormData(this);
-    const status = formData.get('status');
-
-    if (!currentLeadId || !status) {
-        alert('Please select a status');
-        return;
     }
 
-    setButtonLoading('statusSubmitBtn', true);
+    // ============================================================
+    // 1. ASSIGN MODAL
+    // ============================================================
 
-    fetch(`/leads/${currentLeadId}/change-status/`, {
-        method: 'POST',
-        headers: {
-            'X-CSRFToken': csrftoken,
-            'X-Requested-With': 'XMLHttpRequest'
-        },
-        body: formData
-    })
-    .then(response => response.json())
-    .then(data => {
-        if (data.success) {
-            bootstrap.Modal.getInstance(document.getElementById('statusModal')).hide();
-            alert('Status changed successfully');
-            location.reload();
-        } else {
-            alert('Error: ' + (data.error || 'Failed to change status'));
+    // Open assign modal
+    function openAssignModal(leadId) {
+        currentLeadId = leadId;
+        const modal = new bootstrap.Modal(document.getElementById('assignModal'));
+
+        // Load agents list - already populated by template
+        // loadAgents();
+
+        // Load current assignment if on detail page
+        if (typeof lead !== 'undefined' && lead.assigned_to) {
+            document.getElementById('currentAssignment').style.display = 'block';
+            document.getElementById('currentAssignedName').textContent = lead.assigned_to.name;
         }
-    })
-    .catch(error => {
-        alert('Error: ' + error);
-    })
-    .finally(() => {
-        setButtonLoading('statusSubmitBtn', false);
-    });
-});
 
-// ============================================================
-// 3. STAGE MODAL
-// ============================================================
-
-// Open stage modal
-function openStageModal(leadId) {
-    currentLeadId = leadId;
-    const modal = new bootstrap.Modal(document.getElementById('stageModal'));
-
-    // Load stages list
-    loadStages();
-
-    modal.show();
-}
-
-// Load stages
-function loadStages() {
-    // Would fetch from API in real implementation
-    // For now, populate from page data
-}
-
-// Handle stage form submission
-document.getElementById('stageForm')?.addEventListener('submit', function(e) {
-    e.preventDefault();
-
-    const formData = new FormData(this);
-    const stage = formData.get('stage');
-
-    if (!currentLeadId || !stage) {
-        alert('Please select a stage');
-        return;
+        modal.show();
     }
 
-    setButtonLoading('stageSubmitBtn', true);
+    // Load agents for assignment
+    function loadAgents() {
+        // This would normally fetch from API
+        // For now, populate from page data if available
+        const select = document.getElementById('assignedTo');
 
-    fetch(`/leads/${currentLeadId}/change-stage/`, {
-        method: 'POST',
-        headers: {
-            'X-CSRFToken': csrftoken,
-            'X-Requested-With': 'XMLHttpRequest'
-        },
-        body: formData
-    })
-    .then(response => response.json())
-    .then(data => {
-        if (data.success) {
-            bootstrap.Modal.getInstance(document.getElementById('stageModal')).hide();
-            alert('Stage changed successfully');
-            location.reload();
-        } else {
-            alert('Error: ' + (data.error || 'Failed to change stage'));
+        // Clear existing options except first
+        while (select.options.length > 1) {
+            select.remove(1);
         }
-    })
-    .catch(error => {
-        alert('Error: ' + error);
-    })
-    .finally(() => {
-        setButtonLoading('stageSubmitBtn', false);
-    });
-});
 
-// ============================================================
-// 4. FOLLOW-UP MODAL
-// ============================================================
-
-// Open follow-up modal
-function openFollowUpModal(leadId) {
-    currentLeadId = leadId;
-    const modal = new bootstrap.Modal(document.getElementById('followUpModal'));
-
-    // Set minimum date to now
-    const now = new Date();
-    now.setMinutes(now.getMinutes() - now.getTimezoneOffset());
-    document.getElementById('followUpDate').min = now.toISOString().slice(0, 16);
-
-    modal.show();
-}
-
-// Quick follow-up buttons
-document.querySelectorAll('.quick-follow-up').forEach(btn => {
-    btn.addEventListener('click', function() {
-        const hours = parseInt(this.dataset.hours);
-        const date = new Date();
-        date.setHours(date.getHours() + hours);
-        date.setMinutes(date.getMinutes() - date.getTimezoneOffset());
-        document.getElementById('followUpDate').value = date.toISOString().slice(0, 16);
-    });
-});
-
-// Handle follow-up form submission
-document.getElementById('followUpForm')?.addEventListener('submit', function(e) {
-    e.preventDefault();
-
-    const formData = new FormData(this);
-    const followUp = formData.get('next_follow_up');
-
-    if (!currentLeadId || !followUp) {
-        alert('Please select a date and time');
-        return;
+        // Add agents (would come from AJAX in real implementation)
+        // For now, this will be populated by the template
     }
 
-    setButtonLoading('followUpSubmitBtn', true);
+    // Handle assign form submission
+    document.getElementById('assignForm')?.addEventListener('submit', function (e) {
+        e.preventDefault();
 
-    fetch(`/leads/${currentLeadId}/set-follow-up/`, {
-        method: 'POST',
-        headers: {
-            'X-CSRFToken': csrftoken
-        },
-        body: formData
-    })
-    .then(response => {
-        if (response.ok) {
-            bootstrap.Modal.getInstance(document.getElementById('followUpModal')).hide();
-            alert('Follow-up set successfully');
-            location.reload();
-        } else {
-            alert('Error: Failed to set follow-up');
-        }
-    })
-    .catch(error => {
-        alert('Error: ' + error);
-    })
-    .finally(() => {
-        setButtonLoading('followUpSubmitBtn', false);
-    });
-});
+        const formData = new FormData(this);
+        const assignedTo = formData.get('assigned_to');
 
-// ============================================================
-// 5. BULK ACTIONS MODAL
-// ============================================================
-
-// Open bulk actions modal
-function openBulkActionsModal() {
-    const selected = getSelectedLeads();
-    if (selected.length === 0) {
-        alert('Please select at least one lead');
-        return;
-    }
-
-    selectedLeadIds = selected;
-    document.getElementById('bulkSelectedCount').textContent = selected.length;
-    document.getElementById('bulkLeadIds').value = selected.join(',');
-
-    const modal = new bootstrap.Modal(document.getElementById('bulkActionsModal'));
-    modal.show();
-}
-
-// Get selected leads (from checkboxes)
-function getSelectedLeads() {
-    const checkboxes = document.querySelectorAll('.lead-checkbox:checked');
-    return Array.from(checkboxes).map(cb => cb.dataset.leadId);
-}
-
-// Show/hide bulk action fields
-document.getElementById('bulkAction')?.addEventListener('change', function() {
-    // Hide all fields
-    document.querySelectorAll('.bulk-field').forEach(field => {
-        field.style.display = 'none';
-    });
-
-    // Show selected action field
-    const selected = this.value;
-    if (selected) {
-        const field = document.querySelector(`.bulk-field[data-action="${selected}"]`);
-        if (field) field.style.display = 'block';
-    }
-});
-
-// Handle bulk actions form submission
-document.getElementById('bulkActionsForm')?.addEventListener('submit', function(e) {
-    e.preventDefault();
-
-    const formData = new FormData(this);
-    const action = formData.get('action');
-
-    if (!action) {
-        alert('Please select an action');
-        return;
-    }
-
-    // Confirm delete action
-    if (action === 'delete') {
-        if (!document.getElementById('bulkDeleteConfirm').checked) {
-            alert('Please confirm deletion');
+        if (!currentLeadId || !assignedTo) {
+            alert('Please select an agent');
             return;
         }
-        if (!confirm(`Are you sure you want to delete ${selectedLeadIds.length} leads?`)) {
-            return;
-        }
+
+        setButtonLoading('assignSubmitBtn', true);
+
+        // Submit via AJAX
+        fetch(`/leads/${currentLeadId}/assign/`, {
+            method: 'POST',
+            headers: {
+                'X-CSRFToken': csrftoken,
+                'X-Requested-With': 'XMLHttpRequest'
+            },
+            body: formData
+        })
+            .then(response => response.json())
+            .then(data => {
+                if (data.success) {
+                    // Close modal
+                    bootstrap.Modal.getInstance(document.getElementById('assignModal')).hide();
+
+                    // Show success message
+                    alert('Lead assigned successfully');
+
+                    // Reload page
+                    location.reload();
+                } else {
+                    alert('Error: ' + (data.error || 'Failed to assign lead'));
+                }
+            })
+            .catch(error => {
+                alert('Error: ' + error);
+            })
+            .finally(() => {
+                setButtonLoading('assignSubmitBtn', false);
+            });
+    });
+
+    // ============================================================
+    // 2. STATUS MODAL
+    // ============================================================
+
+    // Open status modal
+    function openStatusModal(leadId) {
+        currentLeadId = leadId;
+        const modal = new bootstrap.Modal(document.getElementById('statusModal'));
+        modal.show();
     }
 
-    setButtonLoading('bulkSubmitBtn', true);
+    // Show status description on change
+    document.getElementById('leadStatus')?.addEventListener('change', function () {
+        // Hide all descriptions
+        document.querySelectorAll('.status-desc').forEach(desc => {
+            desc.style.display = 'none';
+        });
 
-    fetch('/leads/bulk-actions/', {
-        method: 'POST',
-        headers: {
-            'X-CSRFToken': csrftoken,
-            'Content-Type': 'application/x-www-form-urlencoded'
-        },
-        body: new URLSearchParams(formData)
-    })
-    .then(response => response.json())
-    .then(data => {
-        if (data.success) {
-            bootstrap.Modal.getInstance(document.getElementById('bulkActionsModal')).hide();
-            alert(data.message || 'Action completed successfully');
-            location.reload();
-        } else {
-            alert('Error: ' + (data.error || 'Failed to perform action'));
+        // Show selected status description
+        const selected = this.value;
+        if (selected) {
+            const desc = document.querySelector(`.status-desc[data-status="${selected}"]`);
+            if (desc) desc.style.display = 'block';
         }
-    })
-    .catch(error => {
-        alert('Error: ' + error);
-    })
-    .finally(() => {
-        setButtonLoading('bulkSubmitBtn', false);
     });
-});
+
+    // Handle status form submission
+    document.getElementById('statusForm')?.addEventListener('submit', function (e) {
+        e.preventDefault();
+
+        const formData = new FormData(this);
+        const status = formData.get('status');
+
+        if (!currentLeadId || !status) {
+            alert('Please select a status');
+            return;
+        }
+
+        setButtonLoading('statusSubmitBtn', true);
+
+        fetch(`/leads/${currentLeadId}/change-status/`, {
+            method: 'POST',
+            headers: {
+                'X-CSRFToken': csrftoken,
+                'X-Requested-With': 'XMLHttpRequest'
+            },
+            body: formData
+        })
+            .then(response => response.json())
+            .then(data => {
+                if (data.success) {
+                    bootstrap.Modal.getInstance(document.getElementById('statusModal')).hide();
+                    alert('Status changed successfully');
+                    location.reload();
+                } else {
+                    alert('Error: ' + (data.error || 'Failed to change status'));
+                }
+            })
+            .catch(error => {
+                alert('Error: ' + error);
+            })
+            .finally(() => {
+                setButtonLoading('statusSubmitBtn', false);
+            });
+    });
+
+    // ============================================================
+    // 3. STAGE MODAL
+    // ============================================================
+
+    // Open stage modal
+    function openStageModal(leadId) {
+        currentLeadId = leadId;
+        const modal = new bootstrap.Modal(document.getElementById('stageModal'));
+
+        // Load stages list - already populated by template
+        // loadStages();
+
+        modal.show();
+    }
+
+    // Load stages
+    function loadStages() {
+        // Would fetch from API in real implementation
+        // For now, populate from page data
+    }
+
+    // Handle stage form submission
+    document.getElementById('stageForm')?.addEventListener('submit', function (e) {
+        e.preventDefault();
+
+        const formData = new FormData(this);
+        const stage = formData.get('stage');
+
+        if (!currentLeadId || !stage) {
+            alert('Please select a stage');
+            return;
+        }
+
+        setButtonLoading('stageSubmitBtn', true);
+
+        fetch(`/leads/${currentLeadId}/change-stage/`, {
+            method: 'POST',
+            headers: {
+                'X-CSRFToken': csrftoken,
+                'X-Requested-With': 'XMLHttpRequest'
+            },
+            body: formData
+        })
+            .then(response => response.json())
+            .then(data => {
+                if (data.success) {
+                    bootstrap.Modal.getInstance(document.getElementById('stageModal')).hide();
+                    alert('Stage changed successfully');
+                    location.reload();
+                } else {
+                    alert('Error: ' + (data.error || 'Failed to change stage'));
+                }
+            })
+            .catch(error => {
+                alert('Error: ' + error);
+            })
+            .finally(() => {
+                setButtonLoading('stageSubmitBtn', false);
+            });
+    });
+
+    // ============================================================
+    // 4. FOLLOW-UP MODAL
+    // ============================================================
+
+    // Open follow-up modal
+    function openFollowUpModal(leadId) {
+        currentLeadId = leadId;
+        const modal = new bootstrap.Modal(document.getElementById('followUpModal'));
+
+        // Set minimum date to now
+        const now = new Date();
+        now.setMinutes(now.getMinutes() - now.getTimezoneOffset());
+        document.getElementById('followUpDate').min = now.toISOString().slice(0, 16);
+
+        modal.show();
+    }
+
+    // Quick follow-up buttons
+    document.querySelectorAll('.quick-follow-up').forEach(btn => {
+        btn.addEventListener('click', function () {
+            const hours = parseInt(this.dataset.hours);
+            const date = new Date();
+            date.setHours(date.getHours() + hours);
+            date.setMinutes(date.getMinutes() - date.getTimezoneOffset());
+            document.getElementById('followUpDate').value = date.toISOString().slice(0, 16);
+        });
+    });
+
+    // Handle follow-up form submission
+    document.getElementById('followUpForm')?.addEventListener('submit', function (e) {
+        e.preventDefault();
+
+        const formData = new FormData(this);
+        const followUp = formData.get('next_follow_up');
+
+        if (!currentLeadId || !followUp) {
+            alert('Please select a date and time');
+            return;
+        }
+
+        setButtonLoading('followUpSubmitBtn', true);
+
+        fetch(`/leads/${currentLeadId}/set-follow-up/`, {
+            method: 'POST',
+            headers: {
+                'X-CSRFToken': csrftoken
+            },
+            body: formData
+        })
+            .then(response => {
+                if (response.ok) {
+                    bootstrap.Modal.getInstance(document.getElementById('followUpModal')).hide();
+                    alert('Follow-up set successfully');
+                    location.reload();
+                } else {
+                    alert('Error: Failed to set follow-up');
+                }
+            })
+            .catch(error => {
+                alert('Error: ' + error);
+            })
+            .finally(() => {
+                setButtonLoading('followUpSubmitBtn', false);
+            });
+    });
+
+    // ============================================================
+    // 5. BULK ACTIONS MODAL
+    // ============================================================
+
+    // Open bulk actions modal
+    function openBulkActionsModal() {
+        const selected = getSelectedLeads();
+        if (selected.length === 0) {
+            alert('Please select at least one lead');
+            return;
+        }
+
+        selectedLeadIds = selected;
+        document.getElementById('bulkSelectedCount').textContent = selected.length;
+        document.getElementById('bulkLeadIds').value = selected.join(',');
+
+        const modal = new bootstrap.Modal(document.getElementById('bulkActionsModal'));
+        modal.show();
+    }
+
+    // Get selected leads (from checkboxes)
+    function getSelectedLeads() {
+        const checkboxes = document.querySelectorAll('.lead-checkbox:checked');
+        return Array.from(checkboxes).map(cb => cb.dataset.leadId);
+    }
+
+    // Show/hide bulk action fields
+    document.getElementById('bulkAction')?.addEventListener('change', function () {
+        // Hide all fields
+        document.querySelectorAll('.bulk-field').forEach(field => {
+            field.style.display = 'none';
+        });
+
+        // Show selected action field
+        const selected = this.value;
+        if (selected) {
+            const field = document.querySelector(`.bulk-field[data-action="${selected}"]`);
+            if (field) field.style.display = 'block';
+        }
+    });
+
+    // Handle bulk actions form submission
+    document.getElementById('bulkActionsForm')?.addEventListener('submit', function (e) {
+        e.preventDefault();
+
+        const formData = new FormData(this);
+        const action = formData.get('action');
+
+        if (!action) {
+            alert('Please select an action');
+            return;
+        }
+
+        // Confirm delete action
+        if (action === 'delete') {
+            if (!document.getElementById('bulkDeleteConfirm').checked) {
+                alert('Please confirm deletion');
+                return;
+            }
+            if (!confirm(`Are you sure you want to delete ${selectedLeadIds.length} leads?`)) {
+                return;
+            }
+        }
+
+        setButtonLoading('bulkSubmitBtn', true);
+
+        fetch('/leads/bulk-actions/', {
+            method: 'POST',
+            headers: {
+                'X-CSRFToken': csrftoken,
+                'Content-Type': 'application/x-www-form-urlencoded'
+            },
+            body: new URLSearchParams(formData)
+        })
+            .then(response => response.json())
+            .then(data => {
+                if (data.success) {
+                    bootstrap.Modal.getInstance(document.getElementById('bulkActionsModal')).hide();
+                    alert(data.message || 'Action completed successfully');
+                    location.reload();
+                } else {
+                    alert('Error: ' + (data.error || 'Failed to perform action'));
+                }
+            })
+            .catch(error => {
+                alert('Error: ' + error);
+            })
+            .finally(() => {
+                setButtonLoading('bulkSubmitBtn', false);
+            });
+    });
 </script>
 
 <style>
-/* Modal styling overrides */
-.modal-header {
-    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-    color: white;
-    border-bottom: none;
-}
+    /* Modal styling overrides */
+    .modal-header {
+        background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+        color: white;
+        border-bottom: none;
+    }
 
-.modal-header .btn-close {
-    filter: brightness(0) invert(1);
-}
+    .modal-header .btn-close {
+        filter: brightness(0) invert(1);
+    }
 
-.modal-title {
-    font-weight: 600;
-}
+    .modal-title {
+        font-weight: 600;
+    }
 
-.modal-footer {
-    border-top: 1px solid #e1e8ed;
-}
+    .modal-footer {
+        border-top: 1px solid #e1e8ed;
+    }
 
-/* Status descriptions styling */
-.status-desc {
-    margin-top: 1rem;
-    border-radius: 8px;
-}
+    /* Status descriptions styling */
+    .status-desc {
+        margin-top: 1rem;
+        border-radius: 8px;
+    }
 
-/* Quick follow-up buttons */
-.quick-follow-up {
-    text-align: left;
-    margin-bottom: 0.25rem;
-}
+    /* Quick follow-up buttons */
+    .quick-follow-up {
+        text-align: left;
+        margin-bottom: 0.25rem;
+    }
 
-/* Bulk action fields */
-.bulk-field {
-    margin-top: 1rem;
-}
+    /* Bulk action fields */
+    .bulk-field {
+        margin-top: 1rem;
+    }
 </style>

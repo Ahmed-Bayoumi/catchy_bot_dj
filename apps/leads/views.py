@@ -106,6 +106,10 @@ def lead_list_view(request):
             on_each_side=2,
             on_ends=1
         ),
+        
+        # Modal Data
+        'agents': User.objects.filter(company=company, is_active=True).order_by('first_name'),
+        'stages': LeadStage.objects.filter(is_active=True).order_by('order'),
     }
 
     return render(request, 'leads/lead_list.html', context)
@@ -176,6 +180,10 @@ def lead_detail_view(request, pk):
 
         # Current tab (from query parameter)
         'active_tab': request.GET.get('tab', 'overview'),
+        
+        # Modal Data
+        'agents': User.objects.filter(company=request.user.company, is_active=True).order_by('first_name'),
+        'stages': LeadStage.objects.filter(is_active=True).order_by('order'),
     }
 
     return render(request, 'leads/lead_detail.html', context)

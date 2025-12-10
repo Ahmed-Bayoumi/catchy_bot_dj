@@ -579,6 +579,9 @@
         {% endif %}
     </div>
 
+    <!-- Modals -->
+    {% include 'leads/includes/modals.html' %}
+
 </div>
 {% endblock %}
 
@@ -621,26 +624,30 @@
         const selected = getSelectedLeads();
         if (selected.length === 0) return;
 
-        // Show assign modal (to be implemented)
-        alert(`Assigning ${selected.length} leads...`);
+        // Open bulk actions modal with 'assign' selected
+        document.getElementById('bulkAction').value = 'assign';
+        document.getElementById('bulkAction').dispatchEvent(new Event('change'));
+        openBulkActionsModal();
     }
 
     function bulkChangeStatus() {
         const selected = getSelectedLeads();
         if (selected.length === 0) return;
 
-        // Show status change modal (to be implemented)
-        alert(`Changing status for ${selected.length} leads...`);
+        // Open bulk actions modal with 'change_status' selected
+        document.getElementById('bulkAction').value = 'change_status';
+        document.getElementById('bulkAction').dispatchEvent(new Event('change'));
+        openBulkActionsModal();
     }
 
     function bulkDelete() {
         const selected = getSelectedLeads();
         if (selected.length === 0) return;
 
-        if (confirm(`Are you sure you want to delete ${selected.length} leads?`)) {
-            // Submit bulk delete (to be implemented)
-            alert('Deleting leads...');
-        }
+        // Open bulk actions modal with 'delete' selected
+        document.getElementById('bulkAction').value = 'delete';
+        document.getElementById('bulkAction').dispatchEvent(new Event('change'));
+        openBulkActionsModal();
     }
 
     function getSelectedLeads() {
