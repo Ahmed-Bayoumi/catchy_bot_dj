@@ -103,45 +103,6 @@ def dashboard_view(request):
 @login_required
 @company_required
 def company_settings_view(request):
-    """
-    Company settings page - Admin only
-
-    Allows admin users to view and edit company information.
-
-    Features:
-        - View current company settings
-        - Edit basic information (name, logo, description)
-        - Update contact details (phone, email, website, address)
-        - Modify working hours and timezone
-        - Toggle active status
-
-    Access Control:
-        - Login required
-        - Company required
-        - Admin only (agents redirected with error message)
-
-    Form Handling:
-        - GET: Display current settings
-        - POST: Update settings with validation
-        - Success message on save
-        - Error handling for invalid data
-
-    Context Variables:
-        company (Company): Current company instance
-        active_page (str): 'settings' for sidebar highlighting
-
-    Template:
-        core/company_settings.html
-
-    Security:
-        - Only admins can access
-        - Users can only edit their own company
-        - CSRF protection on form submission
-
-    Note:
-        Form implementation will be added after creating CompanyForm.
-        Current version only displays settings (no edit functionality yet).
-    """
 
     # Check if user is admin
     # Agents should not access company settings

@@ -1,17 +1,3 @@
-# Forms in this file:
-# 1. LoginForm - Email + password login
-# 2. UserEditForm - Edit user information
-# 3. UserCreateForm - Create new user
-# 4. UserProfileForm - Edit profile details
-# 5. PasswordResetRequestForm - Request password reset
-# 6. PasswordResetConfirmForm - Confirm password reset
-#
-# Why Django Forms?
-# - Automatic validation
-# - CSRF protection
-# - Clean data handling
-# - Bootstrap integration (crispy forms)
-# ==============================================================================
 
 from django import forms
 from django.contrib.auth.forms import UserCreationForm
@@ -29,21 +15,6 @@ User = get_user_model()
 
 # LOGIN FORM
 class LoginForm(forms.Form):
-    """
-    User login form
-
-    Fields:
-    - email: Email address (username)
-    - password: Password
-    - remember: Remember me checkbox
-
-    Features:
-    - Email validation
-    - Required field validation
-    - Bootstrap styling (crispy forms)
-    - Remember me option
-    """
-
     email = forms.EmailField(
         label=_('Email Address'),
         max_length=255,
@@ -74,14 +45,7 @@ class LoginForm(forms.Form):
     )
 
     def __init__(self, *args, **kwargs):
-        """
-        Initialize form with crispy forms helper
 
-        Crispy forms helper provides:
-        - Automatic Bootstrap styling
-        - Form layout control
-        - Submit button
-        """
         super().__init__(*args, **kwargs)
 
         self.helper = FormHelper()
@@ -99,33 +63,13 @@ class LoginForm(forms.Form):
         )
 
     def clean_email(self):
-        """
-        Clean and validate email
 
-        - Convert to lowercase
-        - Strip whitespace
-        """
         email = self.cleaned_data.get('email', '')
         return email.lower().strip()
 
 
 # USER EDIT FORM
 class UserEditForm(forms.ModelForm):
-    """
-    Used for:
-    - Editing own profile (all users)
-    - Editing other users (admins only)
-
-    Fields:
-    - Basic: first_name, last_name, phone
-    - Profile: avatar, job_title, department
-    - Admin only: role, is_active
-
-    Features:
-    - Conditional fields (based on permissions)
-    - Avatar upload with validation
-    - Phone number validation
-    """
 
     class Meta:
         model = User
@@ -188,12 +132,7 @@ class UserEditForm(forms.ModelForm):
         }
 
     def __init__(self, *args, **kwargs):
-        """
-        Initialize form with permission-based field display
 
-        Args:
-            can_edit_all_fields (bool): Whether user can edit role/status
-        """
         # Extract custom parameter
         can_edit_all_fields = kwargs.pop('can_edit_all_fields', False)
 
@@ -278,13 +217,7 @@ class UserEditForm(forms.ModelForm):
         self.helper.layout = layout
 
     def clean_avatar(self):
-        """
-        Validate avatar upload
 
-        Checks:
-        - File size (max 2MB)
-        - File type (image only)
-        """
         avatar = self.cleaned_data.get('avatar')
 
         if avatar:
@@ -407,9 +340,6 @@ class UserCreateForm(UserCreationForm):
         )
 
     def clean_email(self):
-        """
-        Validate email uniqueness
-        """
         email = self.cleaned_data.get('email', '').lower().strip()
 
         # Check if email already exists
@@ -543,16 +473,6 @@ class UserProfileForm(forms.ModelForm):
 
 # PASSWORD RESET FORMS
 class PasswordResetRequestForm(forms.Form):
-    """
-    For users who forgot their password
-
-    Fields:
-    - email: Email address to send reset link
-
-    Features:
-    - Email validation
-    - User existence check (in view, not form)
-    """
 
     email = forms.EmailField(
         label=_('Email Address'),
@@ -586,17 +506,6 @@ class PasswordResetRequestForm(forms.Form):
 
 
 class PasswordResetConfirmForm(forms.Form):
-    """
-    Confirm password reset form
-
-    Fields:
-    - new_password1: New password
-    - new_password2: Confirm new password
-
-    Features:
-    - Password strength validation
-    - Password match validation
-    """
 
     new_password1 = forms.CharField(
         label=_('New Password'),
@@ -633,13 +542,7 @@ class PasswordResetConfirmForm(forms.Form):
         )
 
     def clean_new_password1(self):
-        """
-        Validate password strength
 
-        Checks:
-        - Minimum 8 characters
-        - Contains letters and numbers (optional, can be enhanced)
-        """
         password = self.cleaned_data.get('new_password1')
 
         if len(password) < 8:
@@ -657,9 +560,6 @@ class PasswordResetConfirmForm(forms.Form):
         return password
 
     def clean(self):
-        """
-        Validate that passwords match
-        """
         cleaned_data = super().clean()
         password1 = cleaned_data.get('new_password1')
         password2 = cleaned_data.get('new_password2')
@@ -674,13 +574,6 @@ class PasswordResetConfirmForm(forms.Form):
 
 # FORM VALIDATION HELPERS
 def validate_phone_number(value):
-    """
-    Validate phone number format
-
-    Custom validator for phone numbers
-    Can be used with form fields
-
-    """
     import re
 
     # Pattern: optional +, then 9-15 digits
@@ -690,26 +583,3 @@ def validate_phone_number(value):
         raise ValidationError(
             _('Invalid phone number format. Use: +201234567890')
         )
-
-# ==============================================================================
-# NOTES ON FORM USAGE
-# ==============================================================================
-#
-# CRISPY FORMS:
-# - Automatically renders Bootstrap-styled forms
-# - No need to write HTML for forms
-# - Consistent styling across all forms
-#
-# USAGE IN TEMPLATES:
-# {% load crispy_forms_tags %}
-# {% crispy form %}
-#
-# VALIDATION FLOW:
-# 1. User submits form
-# 2. is_valid() called
-# 3. clean_fieldname() methods run
-# 4. clean() method runs (for cross-field validation)
-# 5. If valid: cleaned_data available
-# 6. If invalid: errors added to form
-#
-# ==============================================================================

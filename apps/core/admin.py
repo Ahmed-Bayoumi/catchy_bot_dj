@@ -38,9 +38,7 @@ class CompanyAdmin(admin.ModelAdmin):
     )
 
     def contact_info(self, obj):
-        """
-        Display contact information in list view
-        """
+
         html = f'<div style="line-height: 1.5;">'
         if obj.phone:
             html += f'📞 {obj.phone}<br>'
@@ -52,13 +50,7 @@ class CompanyAdmin(admin.ModelAdmin):
     contact_info.short_description = 'Contact'
 
     def status_badge(self, obj):
-        """
-        Display status as colored badge
 
-        Colors:
-            - Green (Active): #28a745
-            - Red (Inactive): #dc3545
-        """
         if obj.is_active:
             return format_html(
                 '<span style="background-color: #28a745; color: white; '
@@ -133,13 +125,7 @@ class LeadSourceAdmin(admin.ModelAdmin):
     color_preview.short_description = 'Color'
 
     def status_badge(self, obj):
-        """
-        Display status badge
 
-        Colors:
-            - Green (Active): #28a745
-            - Gray (Inactive): #6c757d
-        """
         if obj.is_active:
             return format_html(
                 '<span style="background-color: #28a745; color: white; '
@@ -225,14 +211,7 @@ class LeadStageAdmin(admin.ModelAdmin):
     color_preview.short_description = 'Color'
 
     def status_badge(self, obj):
-        """
-        Display status indicator
 
-        Shows:
-            - Colored dot with text
-            - Green for active
-            - Red for inactive
-        """
         if obj.is_active:
             return format_html(
                 '<span style="color: #28a745; font-weight: bold;">● Active</span>'

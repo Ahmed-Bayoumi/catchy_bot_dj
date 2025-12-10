@@ -1,8 +1,3 @@
-# Models:
-# 1. User - Custom user model (replaces Django's default)
-# 2. UserProfile - Extended user information
-
-
 from django.contrib.auth.models import AbstractBaseUser, PermissionsMixin, BaseUserManager
 from django.db import models
 from django.utils import timezone
@@ -10,42 +5,8 @@ from django.core.validators import RegexValidator
 from django.utils.translation import gettext_lazy as _
 
 
-
-# USER MANAGER (handles user creation)
 class UserManager(BaseUserManager):
-    """
-    Custom user manager for User model
-
-    Provides methods to:
-    - Create regular users
-    - Create superusers (admins)
-    - Handle email-based authentication
-    """
-
     def create_user(self, email, password=None, **extra_fields):
-        """
-        Create and save a regular user
-
-        Args:
-            email (str): User's email address (required)
-            password (str): User's password (required)
-            **extra_fields: Additional fields (first_name, last_name, etc.)
-
-        Returns:
-            User: The created user object
-
-        Raises:
-            ValueError: If email is not provided
-
-        Example:
-            user = User.objects.create_user(
-                email='agent@clinic.com',
-                password='securepass123',
-                first_name='Ahmed',
-                last_name='Ali',
-                role='agent'
-            )
-        """
         if not email:
             raise ValueError(_('Users must have an email address'))
 
@@ -69,16 +30,7 @@ class UserManager(BaseUserManager):
         return user
 
     def create_superuser(self, email, password=None, **extra_fields):
-        """
-        Create and save a superuser (admin)
 
-        Superusers have all permissions and can access admin panel
-
-        Args:
-            email (str): Admin email
-            password (str): Admin password
-            **extra_fields: Additional fields
-        """
         # Set required superuser flags
         extra_fields.setdefault('is_staff', True)
         extra_fields.setdefault('is_superuser', True)
@@ -98,17 +50,6 @@ class UserManager(BaseUserManager):
 
 # USER MODEL
 class User(AbstractBaseUser, PermissionsMixin):
-    """
-    Custom User model for Catchy Bot
-
-    Features:
-    - Email-based authentication (no username)
-    - Multi-tenancy support (company field)
-    - Role-based access (admin, agent)
-    - Performance tracking (leads assigned, converted, won)
-    - Activity tracking (login count, last login, IP)
-    """
-
     # Email as primary identifier (instead of username)
     email = models.EmailField(_('email address'),unique=True,max_length=255,db_index=True,help_text=_('Required. Used for login.'))
     first_name = models.CharField(_('first name'),max_length=50,blank=True,help_text=_('User\'s first name (e.g., Ahmed)'))
@@ -161,15 +102,6 @@ class User(AbstractBaseUser, PermissionsMixin):
 
     # STRING REPRESENTATION
     def __str__(self):
-        """
-        String representation of user
-
-        Returns:
-            str: User's full name and email
-
-        Example:
-            "Ahmed Ali (ahmed@clinic.com)"
-        """
         if self.first_name and self.last_name:
             return f"{self.first_name} {self.last_name} ({self.email})"
         return self.email
@@ -187,11 +119,6 @@ class User(AbstractBaseUser, PermissionsMixin):
         return self.first_name if self.first_name else self.email
 
     def get_initials(self):
-        """
-        Get user's initials
-        Returns:
-            str: First letter of first name + first letter of last name
-        """
         if self.first_name and self.last_name:
             return f"{self.first_name[0]}{self.last_name[0]}".upper()
         elif self.first_name:
@@ -209,27 +136,13 @@ class User(AbstractBaseUser, PermissionsMixin):
 
     # PERFORMANCE CALCULATIONS
     def get_conversion_rate(self):
-        """
-        Calculate lead conversion rate
 
-        Formula: (converted leads / assigned leads) * 100
-
-        Returns:
-            float: Conversion rate percentage (0-100)
-        """
         if self.total_leads_assigned == 0:
             return 0.0
         return (self.total_leads_converted / self.total_leads_assigned) * 100
 
     def get_win_rate(self):
-        """
-        Calculate lead win rate
 
-        Formula: (won leads / assigned leads) * 100
-
-        Returns:
-            float: Win rate percentage (0-100)
-        """
         if self.total_leads_assigned == 0:
             return 0.0
         return (self.total_leads_won / self.total_leads_assigned) * 100
@@ -237,18 +150,8 @@ class User(AbstractBaseUser, PermissionsMixin):
     def get_performance_score(self):
         """
         Calculate overall performance score
-
         Formula: (conversion_rate * 0.6) + (win_rate * 0.4)
         Weights: Conversion is more important (60%) than win (40%)
-
-        Returns:
-            float: Performance score (0-100)
-
-        Example:
-            >>> user.get_conversion_rate()  # 30%
-            >>> user.get_win_rate()  # 25%
-            >>> user.get_performance_score()
-            28.0  # (30 * 0.6) + (25 * 0.4)
         """
         conversion_rate = self.get_conversion_rate()
         win_rate = self.get_win_rate()
@@ -256,49 +159,20 @@ class User(AbstractBaseUser, PermissionsMixin):
 
     # ACTIVITY TRACKING
     def increment_login_count(self, ip_address=None):
-        """
-        Increment login count and update last login IP
-
-        Called when user logs in successfully
-
-        Args:
-            ip_address (str, optional): User's IP address
-
-        Example:
-            user.increment_login_count(ip_address='192.168.1.1')
-        """
         self.login_count += 1
         if ip_address:
             self.last_login_ip = ip_address
         self.save(update_fields=['login_count', 'last_login_ip'])
 
     def increment_leads_assigned(self, count=1):
-        """
-        Increment total leads assigned
-
-        Args:
-            count (int): Number to increment by (default: 1)
-        """
         self.total_leads_assigned += count
         self.save(update_fields=['total_leads_assigned'])
 
     def increment_leads_converted(self, count=1):
-        """
-        Increment total leads converted
-
-        Args:
-            count (int): Number to increment by (default: 1)
-        """
         self.total_leads_converted += count
         self.save(update_fields=['total_leads_converted'])
 
     def increment_leads_won(self, count=1):
-        """
-        Increment total leads won
-
-        Args:
-            count (int): Number to increment by (default: 1)
-        """
         self.total_leads_won += count
         self.save(update_fields=['total_leads_won'])
 
@@ -307,27 +181,6 @@ class User(AbstractBaseUser, PermissionsMixin):
 # USER PROFILE MODEL (Extended Information)
 
 class UserProfile(models.Model):
-    """
-    Extended user profile information
-
-    This model stores additional user information that doesn't belong in User model
-    Automatically created when User is created (via signals)
-
-    Fields:
-    - bio: User biography/description
-    - date_of_birth: Birthday
-    - address: Physical address
-    - city: City
-    - country: Country
-    - preferences: JSON field for user preferences
-    - notification_settings: Email/SMS notification preferences
-
-    Why separate model?
-    1. Keeps User model clean and focused
-    2. One-to-One relationship (each user has one profile)
-    3. Can be extended easily
-    4. Better database performance
-    """
 
     user = models.OneToOneField(User, on_delete=models.CASCADE, related_name='profile', verbose_name=_('user'),help_text=_('The user this profile belongs to'))
     bio = models.TextField(_('biography'), max_length=500, blank=True, help_text=_('Short bio or description (max 500 characters)'))
@@ -372,15 +225,7 @@ class UserProfile(models.Model):
         return age
 
     def is_complete(self):
-        """
-        Check if profile is complete
 
-        A complete profile has:
-        - Bio filled
-        - Date of birth set
-        - Address filled
-        - City filled
-        """
         return all([
             self.bio,
             self.date_of_birth,
@@ -389,12 +234,7 @@ class UserProfile(models.Model):
         ])
 
     def get_completion_percentage(self):
-        """
-        Calculate profile completion percentage
 
-        Returns:
-            int: Completion percentage (0-100)
-        """
         fields = [
             self.bio,
             self.date_of_birth,
@@ -407,33 +247,3 @@ class UserProfile(models.Model):
         filled = sum(1 for field in fields if field)
         return int((filled / len(fields)) * 100)
 
-# ==============================================================================
-# NOTES & BEST PRACTICES
-# ==============================================================================
-#
-# 1. NEVER modify User model after migrations!
-#    - Add new fields to UserProfile instead
-#    - Or create new related models
-#
-# 2. Always use get_user_model() instead of importing User directly:
-#    from django.contrib.auth import get_user_model
-#    User = get_user_model()
-#
-# 3. Performance optimization:
-#    - Use select_related() when querying user with company
-#    - Use prefetch_related() for reverse relationships
-#    Example:
-#    users = User.objects.select_related('company', 'profile').all()
-#
-# 4. Security:
-#    - Never store plain passwords (use set_password())
-#    - Always validate email uniqueness
-#    - Check is_active before allowing login
-#
-# 5. Testing:
-#    - Create test users with create_user()
-#    - Test all helper methods
-#    - Test role checks
-#    - Test performance calculations
-#
-# ==============================================================================

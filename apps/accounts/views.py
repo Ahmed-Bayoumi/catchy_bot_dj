@@ -1,14 +1,3 @@
-# Views in this file:
-# 1. Authentication: login, logout
-# 2. Profile: view, edit
-# 3. Password: change, reset
-# 4. User Management: list, detail, create, edit, delete
-#
-# View types:
-# - Function-based views (FBV) - simple and clear
-# - Uses Django's built-in authentication system
-
-
 from django.shortcuts import render, redirect, get_object_or_404
 from django.contrib.auth import authenticate, login, logout, update_session_auth_hash
 from django.contrib.auth.decorators import login_required
@@ -36,15 +25,7 @@ from .decorators import admin_required
 
 # HELPER FUNCTIONS
 def get_client_ip(request):
-    """
-    Get user's IP address from request
 
-    Checks X-Forwarded-For header first (for proxies/load balancers)
-    Falls back to REMOTE_ADDR
-    Example:
-        ip = get_client_ip(request)
-        user.last_login_ip = ip
-    """
     x_forwarded_for = request.META.get('HTTP_X_FORWARDED_FOR')
     if x_forwarded_for:
         # X-Forwarded-For can contain multiple IPs (proxy chain)
@@ -60,22 +41,6 @@ def get_client_ip(request):
 # AUTHENTICATION VIEWS
 @never_cache
 def login_view(request):
-    """
-    User login page
-
-    GET: Display login form
-    POST: Process login credentials
-
-    Features:
-    - Email + password authentication
-    - Remember me checkbox (30 days vs session)
-    - Redirect to 'next' parameter or dashboard
-    - Track login count and IP
-    - Show error messages for invalid credentials
-
-    URL: /accounts/login/
-    Template: templates/accounts/login.html
-    """
     # If already logged in, redirect to dashboard
     if request.user.is_authenticated:
         return redirect('core:dashboard')
@@ -150,20 +115,6 @@ def login_view(request):
 
 @login_required
 def logout_view(request):
-    """
-    Logs out current user and redirects to login page
-
-    Features:
-    - Clears session data
-    - Shows success message
-    - Redirects to login
-
-    URL: /accounts/logout/
-
-    Security:
-    - Requires login (cannot logout if not logged in)
-    - CSRF protection (should be POST in production)
-    """
     # Store user name before logout (for message)
     user_name = request.user.get_full_name()
 
@@ -184,19 +135,7 @@ def logout_view(request):
 # PROFILE VIEWS
 @login_required
 def profile_view(request):
-    """
-    User profile page
 
-    Features:
-    - Personal information
-    - Profile details
-    - Performance statistics
-    - Activity tracking
-    - Edit button
-
-    URL: /accounts/profile/
-    Template: templates/accounts/profile.html
-    """
     user = request.user
     profile = user.profile
 
@@ -219,25 +158,7 @@ def profile_view(request):
 
 @login_required
 def profile_edit_view(request):
-    """
-    Features:
-    - Edit personal information (name, phone, etc.)
-    - Update profile details (bio, address, etc.)
-    - Change avatar
-    - Update preferences (theme, language, notifications)
 
-    URL: /accounts/profile/edit/
-    Template: templates/accounts/profile_edit.html
-
-    Forms:
-    - UserEditForm: User model fields
-    - UserProfileForm: Profile model fields
-
-    Validation:
-    - Email uniqueness
-    - Phone format
-    - Avatar file size/type
-    """
     user = request.user
     profile = user.profile
 
@@ -288,19 +209,7 @@ def profile_edit_view(request):
 # PASSWORD MANAGEMENT VIEWS
 @login_required
 def password_change_view(request):
-    """
-    GET: Display password change form
-    POST: Process password change
 
-    Features:
-    - Verify old password
-    - Validate new password
-    - Password strength requirements
-    - Keep user logged in after change
-
-    URL: /accounts/password/change/
-    Template: templates/accounts/password_change.html
-    """
     if request.method == 'POST':
         # Django's built-in password change form
         form = PasswordChangeForm(user=request.user, data=request.POST)
@@ -336,41 +245,7 @@ def password_change_view(request):
 
 @never_cache
 def password_reset_request_view(request):          #################################################
-    """
-    Password reset request (for logged-out users)
 
-    GET: Display email input form
-    POST: Send reset email
-
-    Features:
-    - Enter email address
-    - Send reset link via email
-    - Secure token generation
-    - Token expires in 24 hours
-
-    URL: /accounts/password/reset/
-    Template: templates/accounts/password_reset.html
-
-    Flow:
-    1. User enters email
-    2. System checks if email exists
-    3. Generates secure token
-    4. Sends email with reset link
-    5. Link format: /accounts/password/reset/<uid>/<token>/
-
-    Security:
-    - Rate limiting (prevent spam)
-    - Same message for valid/invalid email (prevent email enumeration)
-    - Token expires after use or 24 hours
-
-    Example POST data:
-    {
-        'email': 'ahmed@clinic.com'
-    }
-
-    Note: Will be fully implemented in Phase 9 (Email Configuration)
-    For now, shows success message but doesn't send actual email
-    """
     if request.method == 'POST':
         form = PasswordResetRequestForm(request.POST)
 
@@ -427,35 +302,7 @@ def password_reset_request_view(request):          #############################
 
 @never_cache
 def password_reset_confirm_view(request, uidb64, token):             ##########################################################
-    """
-    Password reset confirmation (from email link)
 
-    GET: Display new password form
-    POST: Set new password
-
-    Features:
-    - Verify reset token
-    - Set new password
-    - Token expires after use
-    - Auto-login after reset
-
-    URL: /accounts/password/reset/<uidb64>/<token>/
-    Template: templates/accounts/password_reset_confirm.html
-
-    Parameters:
-    - uidb64: Base64 encoded user ID
-    - token: Password reset token
-
-    Example URL:
-    /accounts/password/reset/MQ/5xz-abc123def456/
-
-    Security:
-    - Token valid only once
-    - Token expires in 24 hours
-    - CSRF protection
-
-    Note: Will be fully implemented in Phase 9
-    """
     # TODO: Implement token verification
     # from django.contrib.auth.tokens import default_token_generator
     # from django.utils.http import urlsafe_base64_decode
@@ -486,26 +333,7 @@ def password_reset_confirm_view(request, uidb64, token):             ###########
 @login_required
 @admin_required
 def user_list_view(request):             #################################################
-    """
-    List all users in company (Admin only)
 
-    Features:
-    - Paginated list
-    - Search by name, email, phone
-    - Filter by role, status
-    - Sort by various fields
-    - Quick actions (activate/deactivate)
-
-    URL: /accounts/users/
-    Template: templates/accounts/user_list.html
-
-    Query parameters:
-    - q: Search query
-    - role: Filter by role (admin/agent)
-    - status: Filter by status (active/inactive)
-    - sort: Sort field (name/email/joined)
-    - page: Page number
-    """
     company = request.user.company
 
     queryset = User.objects.filter(company=company)
@@ -566,9 +394,7 @@ def user_list_view(request):             #######################################
 
 @login_required
 def user_detail_view(request, pk):
-    """
-    View detailed information about a user
-    """
+
     viewed_user = get_object_or_404(User, pk=pk)
 
     # Permission check
@@ -608,32 +434,6 @@ def user_detail_view(request, pk):
 @login_required
 @admin_required
 def user_create_view(request):
-    """
-    Create new user (Admin only)
-
-    Features:
-    - Set user role (admin/agent)
-    - Set initial password (user can change later)
-    - Auto-assign to admin's company
-    - Send welcome email (Phase 9)
-
-    URL: /accounts/users/create/
-    Template: templates/accounts/user_form.html
-
-    Form fields:
-    - email
-    - first_name
-    - last_name
-    - phone
-    - role
-    - password1
-    - password2
-
-    Validation:
-    - Email uniqueness
-    - Password strength
-    - Required fields
-    """
     if request.method == 'POST':
         form = UserCreateForm(request.POST)
 
@@ -676,21 +476,7 @@ def user_create_view(request):
 
 @login_required
 def user_edit_view(request, pk):
-    """
-    Edit user (Admin or own profile)
 
-    Access control:
-    - Admin: Can edit any user in company
-    - Agent: Can only edit own profile
-
-    URL: /accounts/users/<pk>/edit/
-    Template: templates/accounts/user_form.html
-
-    Restrictions:
-    - Agents cannot change role
-    - Agents cannot activate/deactivate
-    - Cannot change email (security)
-    """
     user = get_object_or_404(User, pk=pk)
 
     # Permission check
@@ -746,18 +532,7 @@ def user_edit_view(request, pk):
 @admin_required
 @require_http_methods(['POST'])
 def user_delete_view(request, pk):
-    """
-    Delete user (Admin only, POST only)
 
-    Security:
-    - Cannot delete self
-    - Cannot delete superuser (unless you're superuser)
-    - Requires confirmation
-    - TODO: Reassign leads before deletion (Phase 3)
-
-    URL: /accounts/users/<pk>/delete/
-    Method: POST only (for security)
-    """
     user = get_object_or_404(User, pk=pk)
 
     # Cannot delete self
@@ -797,15 +572,6 @@ def user_delete_view(request, pk):
 @login_required
 @require_http_methods(['POST'])
 def toggle_user_status(request, pk):
-    """
-    Toggle user active status via AJAX
-
-    Quick activate/deactivate without page reload
-
-    URL: /accounts/users/<pk>/toggle-status/
-    Method: POST
-    Returns: JSON response
-    """
     if not request.user.is_admin():
         return JsonResponse({'success': False, 'error': 'Permission denied'}, status=403)
 

@@ -83,14 +83,10 @@ class Lead(models.Model):
         return "?"
     
     def can_be_assigned(self):
-        """Check if lead can be assigned (not won/lost)"""
         return self.status not in ['won', 'lost']
     
     def assign_to(self, user, assigned_by=None):
-        """
-        Assign lead to user (agent)
-        Updates assigned_to field, creates activity log, updates user statistics
-        """
+
         if not self.can_be_assigned():
             return False
         
@@ -174,15 +170,12 @@ class Lead(models.Model):
         return note
     
     def get_activities(self):
-        """Get all activities for this lead (ordered newest first)"""
         return self.activities.all().select_related('user').order_by('-created_at')
     
     def get_notes(self):
-        """Get all notes for this lead (ordered newest first)"""
         return self.notes_set.all().select_related('user').order_by('-created_at')
     
     def time_since_created(self):
-        """Returns time elapsed since lead was created"""
         delta = timezone.now() - self.created_at
         
         if delta.days > 30:
@@ -200,7 +193,6 @@ class Lead(models.Model):
             return "Just now"
     
     def time_until_follow_up(self):
-        """Returns time until next follow-up"""
         if not self.next_follow_up:
             return None
         
@@ -235,7 +227,6 @@ class Note(models.Model):
         ]
     
     def __str__(self):
-        """String representation"""
         preview = self.content[:50] + '...' if len(self.content) > 50 else self.content
         return f"Note by {self.user.get_full_name() if self.user else 'Unknown'}: {preview}"
 
@@ -270,6 +261,5 @@ class Activity(models.Model):
         ]
     
     def __str__(self):
-        """String representation"""
         user_name = self.user.get_full_name() if self.user else 'System'
         return f"{user_name}: {self.description}"

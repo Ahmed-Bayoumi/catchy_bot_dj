@@ -1,11 +1,3 @@
-"""
-Leads App Configuration
-=======================
-
-This module configures the Leads Django app.
-Handles app initialization and signal registration.
-"""
-
 from django.apps import AppConfig
 
 

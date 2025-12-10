@@ -1,20 +1,6 @@
-# URLs in this file:
-# - /accounts/login/          → Login page
-# - /accounts/logout/         → Logout action
-# - /accounts/profile/        → User profile page
-# - /accounts/profile/edit/   → Edit profile
-# - /accounts/password/change → Change password
-
-# Namespace: 'accounts'
-# Usage in templates: {% url 'accounts:login' %}
-# ==============================================================================
-
 from django.urls import path
 from . import views
 
-# Namespace for this app's URLs
-# Allows referring to URLs as 'accounts:login' instead of just 'login'
-# Prevents conflicts if multiple apps have 'login' URL
 app_name = 'accounts'
 
 urlpatterns = [
@@ -38,28 +24,3 @@ urlpatterns = [
 
     path('users/<int:pk>/delete/', views.user_delete_view, name='user_delete'),
 ]
-
-
-
-# ==============================================================================
-# TESTING URLS
-# ==============================================================================
-#
-# Test URL resolution:
-# from django.urls import reverse
-#
-# # Test login URL
-# url = reverse('accounts:login')
-# assert url == '/accounts/login/'
-#
-# # Test user detail URL
-# url = reverse('accounts:user_detail', kwargs={'pk': 5})
-# assert url == '/accounts/users/5/'
-#
-# # Test in Django shell
-# python manage.py shell
-# >>> from django.urls import reverse
-# >>> reverse('accounts:profile')
-# '/accounts/profile/'
-#
-# ==============================================================================

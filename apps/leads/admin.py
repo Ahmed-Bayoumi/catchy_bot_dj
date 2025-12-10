@@ -105,7 +105,6 @@ class LeadAdmin(admin.ModelAdmin):
     
 
     def phone_display(self, obj):
-        """Display phone with icon"""
         return format_html(
             '<i class="fas fa-phone text-success"></i> {}',
             obj.phone
@@ -113,7 +112,6 @@ class LeadAdmin(admin.ModelAdmin):
     phone_display.short_description = 'Phone'
     
     def source_badge(self, obj):
-        """Display source with colored badge"""
         return format_html(
             '<span style="background-color: {}; color: white; padding: 3px 8px; '
             'border-radius: 3px; font-size: 11px;">'
@@ -125,7 +123,6 @@ class LeadAdmin(admin.ModelAdmin):
     source_badge.short_description = 'Source'
     
     def stage_badge(self, obj):
-        """Display stage with colored badge"""
         return format_html(
             '<span style="background-color: {}; color: white; padding: 3px 8px; '
             'border-radius: 3px; font-size: 11px;">'
@@ -137,7 +134,6 @@ class LeadAdmin(admin.ModelAdmin):
     stage_badge.short_description = 'Stage'
     
     def status_badge(self, obj):
-        """Display status with colored badge"""
         colors = {
             'new': '#17a2b8',
             'contacted': '#ffc107',
@@ -155,7 +151,6 @@ class LeadAdmin(admin.ModelAdmin):
     status_badge.short_description = 'Status'
     
     def priority_badge(self, obj):
-        """Display priority with colored badge"""
         colors = {
             'low': '#6c757d',
             'medium': '#ffc107',
@@ -177,7 +172,6 @@ class LeadAdmin(admin.ModelAdmin):
     priority_badge.short_description = 'Priority'
     
     def assigned_to_display(self, obj):
-        """Display assigned user with avatar/initials"""
         if obj.assigned_to:
             return format_html(
                 '<span style="background-color: #667eea; color: white; '
@@ -190,7 +184,6 @@ class LeadAdmin(admin.ModelAdmin):
     assigned_to_display.short_description = 'Assigned To'
     
     def created_at_display(self, obj):
-        """Display creation date with relative time"""
         return format_html(
             '<span title="{}">{}</span>',
             obj.created_at.strftime('%Y-%m-%d %H:%M:%S'),
@@ -199,7 +192,6 @@ class LeadAdmin(admin.ModelAdmin):
     created_at_display.short_description = 'Created'
     
     def next_follow_up_display(self, obj):
-        """Display next follow-up with color coding"""
         if not obj.next_follow_up:
             return format_html('<span style="color: #999;">-</span>')
         
@@ -324,7 +316,6 @@ class NoteAdmin(admin.ModelAdmin):
     readonly_fields = ['created_at']
     
     def content_preview(self, obj):
-        """Show first 100 characters of content"""
         preview = obj.content[:100] + '...' if len(obj.content) > 100 else obj.content
         return preview
     content_preview.short_description = 'Content'

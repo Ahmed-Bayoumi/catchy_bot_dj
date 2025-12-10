@@ -42,9 +42,7 @@ class Company(models.Model):
         return self.name
 
     def save(self, *args, **kwargs):
-        """
-        Override save to auto-generate slug from name
-        """
+
         if not self.slug:
             self.slug = slugify(self.name)
         super().save(*args, **kwargs)
@@ -115,9 +113,7 @@ class LeadStage(models.Model):
         return self.name
 
     def save(self, *args, **kwargs):
-        """
-        Override save to auto-generate slug from name
-        """
+
         if not self.slug:
             self.slug = slugify(self.name)
         super().save(*args, **kwargs)

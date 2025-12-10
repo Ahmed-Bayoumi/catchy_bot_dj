@@ -9,20 +9,7 @@ from .models import User, UserProfile
 
 # USER PROFILE INLINE (Edit profile inside user form)
 class UserProfileInline(admin.StackedInline):
-    """
-    Inline admin for UserProfile
 
-    This allows editing user profile directly within user edit form
-    No need to go to separate page
-
-    Display type: StackedInline (vertical layout)
-    Alternative: TabularInline (horizontal/table layout)
-
-    Benefits:
-    - Edit user and profile together
-    - Better user experience
-    - See all info in one place
-    """
     model = UserProfile
 
     # Show only 1 profile (since it's OneToOne relationship)
@@ -62,18 +49,6 @@ class UserProfileInline(admin.StackedInline):
 # CUSTOM USER ADMIN
 @admin.register(User)
 class UserAdmin(BaseUserAdmin):
-    """
-    Custom admin interface for User model
-
-    Features:
-    1. List view with search and filters
-    2. Detailed edit form with sections
-    3. Inline profile editing
-    4. Custom actions (activate/deactivate)
-    5. Performance metrics display
-    6. Read-only fields for important data
-    """
-
     list_display = (
         'email',
         'get_full_name_display',
@@ -194,20 +169,13 @@ class UserAdmin(BaseUserAdmin):
 
     # CUSTOM DISPLAY METHODS
     def get_full_name_display(self, obj):
-        """
-        Display user's full name in list view
-
-        """
         return obj.get_full_name()
 
     get_full_name_display.short_description = _('Full Name')
     get_full_name_display.admin_order_field = 'first_name'
 
     def role_badge(self, obj):
-        """
-        Display role as colored badge
 
-        """
         if obj.role == 'admin':
             color = '#28a745'  # Green
             icon = '⭐'
@@ -225,9 +193,6 @@ class UserAdmin(BaseUserAdmin):
     role_badge.admin_order_field = 'role'
 
     def is_active_badge(self, obj):
-        """
-        Display active status as badge
-        """
         if obj.is_active:
             return format_html(
                 '<span style="background: #28a745; color: white; padding: 3px 10px; '
@@ -243,12 +208,7 @@ class UserAdmin(BaseUserAdmin):
     is_active_badge.admin_order_field = 'is_active'
 
     def performance_display(self, obj):
-        """
-        Display performance metrics as progress bar
-
-        """
         score = obj.get_performance_score()
-
         try:
             score = float(score)
         except:
@@ -275,21 +235,12 @@ class UserAdmin(BaseUserAdmin):
     performance_display.short_description = _('Performance')
 
     def get_conversion_rate_display(self, obj):
-        """
-        Display conversion rate with formatting
-
-        Returns:
-            str: "30.5% (30/100)"
-        """
         rate = obj.get_conversion_rate()
         return f"{rate:.1f}% ({obj.total_leads_converted}/{obj.total_leads_assigned})"
 
     get_conversion_rate_display.short_description = _('Conversion Rate')
 
     def get_win_rate_display(self, obj):
-        """
-        Display win rate with formatting
-        """
         rate = obj.get_win_rate()
         return f"{rate:.1f}% ({obj.total_leads_won}/{obj.total_leads_assigned})"
 
@@ -345,12 +296,7 @@ class UserAdmin(BaseUserAdmin):
 
     # CUSTOM QUERYSET (for performance)
     def get_queryset(self, request):
-        """
-        Optimize queryset to reduce database queries
 
-        Uses select_related to fetch company in same query
-        Avoids N+1 query problem
-        """
         queryset = super().get_queryset(request)
         queryset = queryset.select_related('company', 'profile')
         return queryset
@@ -358,14 +304,6 @@ class UserAdmin(BaseUserAdmin):
 
     # PERMISSIONS
     def has_delete_permission(self, request, obj=None):
-        """
-        Control who can delete users
-
-        Rules:
-        - Superusers can delete anyone
-        - Regular admins cannot delete superusers
-        - Users cannot delete themselves
-        """
         if obj and obj == request.user:
             return False  # Cannot delete yourself
 
@@ -378,13 +316,6 @@ class UserAdmin(BaseUserAdmin):
 # USER PROFILE ADMIN (Standalone)
 @admin.register(UserProfile)
 class UserProfileAdmin(admin.ModelAdmin):
-    """
-    Standalone admin for UserProfile
-
-    Usually accessed via User inline, but available separately if needed
-    Useful for bulk editing profile settings
-    """
-
     list_display = (
         'user',
         'city',
@@ -437,10 +368,7 @@ class UserProfileAdmin(admin.ModelAdmin):
     )
 
     def profile_completion(self, obj):
-        """
-        Display profile completion percentage
 
-        """
         percentage = obj.get_completion_percentage()
 
         if percentage == 100:
@@ -470,41 +398,3 @@ admin.site.site_title = _('Catchy Bot')
 admin.site.index_title = _('Welcome to Catchy Bot Admin Panel')
 
 
-
-# ==============================================================================
-# ADMIN DASHBOARD CUSTOMIZATION (Optional - Advanced)
-# ==============================================================================
-
-# You can add custom admin dashboard views here
-# Example: Statistics, charts, quick actions
-#
-# class CustomAdminSite(admin.AdminSite):
-#     def index(self, request, extra_context=None):
-#         extra_context = extra_context or {}
-#         extra_context['user_count'] = User.objects.count()
-#         extra_context['active_users'] = User.objects.filter(is_active=True).count()
-#         return super().index(request, extra_context)
-
-
-# ==============================================================================
-# TESTING ADMIN PANEL
-# ==============================================================================
-#
-# 1. Create superuser:
-#    docker compose exec web python manage.py createsuperuser
-#
-# 2. Access admin:
-#    http://localhost:8008/admin/
-#
-# 3. Test features:
-#    ✓ List view loads
-#    ✓ Search works
-#    ✓ Filters work
-#    ✓ Can create user
-#    ✓ Profile inline appears
-#    ✓ Can edit user
-#    ✓ Can activate/deactivate
-#    ✓ Performance metrics show
-#    ✓ Badges display correctly
-#
-# ==============================================================================

@@ -239,8 +239,7 @@ class LeadBulkActionForm(forms.Form):
 
 
 class FollowUpReminderForm(forms.Form):
-    """Form for setting follow-up with reminder options"""
-    
+
     next_follow_up = forms.DateTimeField(label='Follow-up Date & Time', widget=forms.DateTimeInput(attrs={'class': 'form-control', 'type': 'datetime-local'}), help_text='When should you follow up with this lead?')
     
     reminder_before = forms.ChoiceField(choices=getattr(settings, 'LEAD_REMINDER_OPTIONS', [('1hour', '1 hour before')]), label='Remind Me', widget=forms.Select(attrs={'class': 'form-select'}), help_text='When should you receive a reminder?')
