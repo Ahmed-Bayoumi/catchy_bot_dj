@@ -148,8 +148,8 @@ def company_required(view_func):
             messages.error(request, _('Please login to continue.'))
             return redirect('accounts:login')
 
-        # Check if user has company
-        if request.user.company:
+        # Check if user has company OR is superuser
+        if request.user.company or request.user.is_superuser:
             return view_func(request, *args, **kwargs)
 
         messages.error(

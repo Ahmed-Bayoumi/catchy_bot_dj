@@ -334,9 +334,15 @@ def password_reset_confirm_view(request, uidb64, token):             ###########
 @admin_required
 def user_list_view(request):             #################################################
 
-    company = request.user.company
-
-    queryset = User.objects.filter(company=company)
+    request_user = request.user
+    
+    # Superuser sees ALL users
+    if request_user.is_superuser:
+        queryset = User.objects.all()
+    else:
+        # Admin sees only their company's users
+        # AND strictly excludes superusers from the list
+        queryset = User.objects.filter(company=request_user.company, is_superuser=False)
 
     # Search
     search_query = request.GET.get('q', '').strip()
@@ -398,20 +404,22 @@ def user_detail_view(request, pk):
     viewed_user = get_object_or_404(User, pk=pk)
 
     # Permission check
-    if not request.user.is_admin() and viewed_user != request.user:
+    # 1. Regular admins cannot view superusers
+    if viewed_user.is_superuser and not request.user.is_superuser:
         messages.error(
             request,
-            _('You do not have permission to view this user.')
+            _('You do not have permission to view superusers.')
         )
-        return redirect('accounts:profile')
+        return redirect('accounts:user_list')
 
-    # Check if user belongs to same company (for admins)
-    if request.user.is_admin() and viewed_user.company != request.user.company:
-         messages.error(
-             request,
-             _('User not found.')
-         )
-         return redirect('accounts:user_list')
+    # 2. Regular admins can only view users in their company
+    if request.user.is_admin() and not request.user.is_superuser:
+        if viewed_user.company != request.user.company:
+             messages.error(
+                 request,
+                 _('User not found.')
+             )
+             return redirect('accounts:user_list')
 
     profile = viewed_user.profile
 
@@ -441,8 +449,9 @@ def user_create_view(request):
             # Create user (don't save yet)
             user = form.save(commit=False)
 
-            # Assign to admin's company
-            # user.company = request.user.company
+            # Assign to admin's company if available
+            if request.user.company:
+                user.company = request.user.company
 
             # Save user
             user.save()
@@ -481,14 +490,19 @@ def user_edit_view(request, pk):
 
     # Permission check
     can_edit_all_fields = request.user.is_admin()
-    can_edit = can_edit_all_fields or user == request.user
-
-    if not can_edit:
+    
+    # 1. Check if user has permission to edit this specific profile
+    if not (can_edit_all_fields or user == request.user):
         return HttpResponseForbidden(_('You do not have permission to edit this user.'))
 
-    # Check company
-    # if request.user.is_admin() and user.company != request.user.company:
-    #     return HttpResponseForbidden(_('User not found.'))
+    # 2. Strict Superuser Protection: Normal Admins CANNOT edit Superusers
+    if user.is_superuser and not request.user.is_superuser:
+        return HttpResponseForbidden(_('You cannot edit a superuser.'))
+
+    # 3. Company Protection: Normal Admins can only edit users in their company
+    if request.user.is_admin() and not request.user.is_superuser:
+        if user.company != request.user.company:
+             return HttpResponseForbidden(_('User not found.'))
 
     if request.method == 'POST':
         form = UserEditForm(
@@ -545,9 +559,10 @@ def user_delete_view(request, pk):
         messages.error(request, _('You cannot delete a superuser.'))
         return redirect('accounts:user_list')
 
-    # Check company
-    # if user.company != request.user.company:
-    #     return HttpResponseForbidden(_('User not found.'))
+    # Company check: Admin can only delete users in their company
+    if request.user.is_admin() and not request.user.is_superuser:
+        if user.company != request.user.company:
+             return HttpResponseForbidden(_('User not found.'))
 
     # Store name for message
     user_name = user.get_full_name()
@@ -581,9 +596,14 @@ def toggle_user_status(request, pk):
     if user == request.user:
         return JsonResponse({'success': False, 'error': 'Cannot deactivate yourself'})
 
-    # Cannot deactivate superuser
+    # Cannot deactivate superuser (unless you are a superuser)
     if user.is_superuser and not request.user.is_superuser:
         return JsonResponse({'success': False, 'error': 'Cannot deactivate superuser'})
+
+    # Company check: Admin can only deactivate users in their company
+    if request.user.is_admin() and not request.user.is_superuser:
+        if user.company != request.user.company:
+             return JsonResponse({'success': False, 'error': 'User not found in your company'}, status=404)
 
     # Toggle status
     user.is_active = not user.is_active

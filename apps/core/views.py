@@ -17,11 +17,20 @@ def dashboard_view(request):
 
     # Base QuerySet
     # Robustly exclude 'delete'/'deleted' from status and stage
-    leads_qs = Lead.objects.filter(company=company) \
-        .exclude(status__iexact='delete') \
-        .exclude(status__iexact='deleted') \
-        .exclude(stage__name__iexact='delete') \
-        .exclude(stage__name__iexact='deleted')
+    if request.user.is_superuser:
+        # Superuser sees all leads in the system
+        leads_qs = Lead.objects.all() \
+            .exclude(status__iexact='delete') \
+            .exclude(status__iexact='deleted') \
+            .exclude(stage__name__iexact='delete') \
+            .exclude(stage__name__iexact='deleted')
+    else:
+        # Regular users see their company's leads
+        leads_qs = Lead.objects.filter(company=company) \
+            .exclude(status__iexact='delete') \
+            .exclude(status__iexact='deleted') \
+            .exclude(stage__name__iexact='delete') \
+            .exclude(stage__name__iexact='deleted')
 
     # 1. Key Metrics
     total_leads = leads_qs.count()
@@ -144,9 +153,16 @@ def company_settings_view(request):
 
     # Check if user is admin
     # Agents should not access company settings
+    # Check if user is admin
+    # Agents should not access company settings
     if not request.user.is_admin():
         messages.error(request, 'Only admins can access company settings')
         return redirect('core:dashboard')
+
+    # Superuser check: If no company assigned, redirect to Admin Panel
+    if request.user.is_superuser and not request.user.company:
+        messages.info(request, 'Global Superusers manage settings via the Django Admin Panel.')
+        return redirect('admin:index')
 
     # Get current company
     company = request.user.company
@@ -179,6 +195,11 @@ def deactivate_company_view(request):
     """
     if not request.user.is_admin():
         messages.error(request, 'Only admins can deactivate the company.')
+        return redirect('core:dashboard')
+        
+    # Superuser check
+    if request.user.is_superuser and not request.user.company:
+        messages.error(request, 'Global superusers cannot deactivate the platform from here.')
         return redirect('core:dashboard')
 
     if request.method == 'POST':

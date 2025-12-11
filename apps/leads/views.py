@@ -22,9 +22,15 @@ from io import StringIO, TextIOWrapper
 
 @login_required
 @company_required
+@company_required
 def lead_list_view(request):
     company = request.user.company
-    leads = Lead.objects.filter(company=company).exclude(status='deleted').select_related('source','stage','assigned_to').order_by('-created_at')
+    
+    # Superuser sees ALL leads
+    if request.user.is_superuser:
+        leads = Lead.objects.all().exclude(status='deleted').select_related('source','stage','assigned_to').order_by('-created_at')
+    else:
+        leads = Lead.objects.filter(company=company).exclude(status='deleted').select_related('source','stage','assigned_to').order_by('-created_at')
 
     search_query = request.GET.get('search', '').strip()
 
@@ -116,19 +122,23 @@ def lead_list_view(request):
 
 
 @login_required
+@login_required
 @company_required
 def lead_detail_view(request, pk):
-    lead = get_object_or_404(
-        Lead.objects.select_related(
-            'company',
-            'source',
-            'stage',
-            'assigned_to',
-            'assigned_to__profile'
-        ),
-        pk=pk,
-        company=request.user.company
+    # Base query
+    queryset = Lead.objects.select_related(
+        'company',
+        'source',
+        'stage',
+        'assigned_to',
+        'assigned_to__profile'
     )
+
+    # Superuser can see any lead. Regular users filtered by company
+    if request.user.is_superuser:
+        lead = get_object_or_404(queryset, pk=pk)
+    else:
+        lead = get_object_or_404(queryset, pk=pk, company=request.user.company)
 
     if request.method == 'POST':
         note_form = NoteForm(request.POST)
@@ -337,7 +347,12 @@ def lead_create_view(request):
         if form.is_valid():
             try:
                 lead = form.save(commit=False)
-                lead.company = request.user.company
+                
+                if request.user.company:
+                    lead.company = request.user.company
+                elif request.user.is_superuser:
+                    messages.error(request, "Superusers must use the Admin Panel to create leads for specific companies.")
+                    return redirect('leads:lead_list')
 
                 if not lead.assigned_to:
                     lead.assigned_to = request.user
@@ -379,7 +394,9 @@ def lead_create_view(request):
 
     else:
         # GET request: render an empty form for creating a lead
-        form = LeadCreateForm(company=request.user.company)
+        # Handle case where superuser has no company
+        company = request.user.company if request.user.company else None
+        form = LeadCreateForm(company=company)
         context = {
             'form': form,
             'form_title': 'Create New Lead',
