@@ -147,7 +147,7 @@ class UserAdmin(BaseUserAdmin):
             'classes': ('wide',),
         }),
         (_('Company & Role'), {
-            'fields': ('role',),
+            'fields': ('company','role',),
             'classes': ('wide',),
         }),
         (_('Permissions'), {

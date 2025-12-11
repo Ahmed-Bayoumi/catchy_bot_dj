@@ -54,6 +54,25 @@
         background: rgba(255, 255, 255, 0.3);
     }
 
+    /* New Lead Button */
+    .btn-new-lead {
+        background: linear-gradient(135deg, var(--primary-blue) 0%, var(--secondary-purple) 100%);
+        border: none;
+        color: white;
+        padding: 0.6rem 1.5rem;
+        border-radius: 8px;
+        font-weight: 500;
+        box-shadow: 0 2px 4px rgba(102, 126, 234, 0.3);
+        transition: all 0.3s;
+    }
+
+    .btn-new-lead:hover {
+        transform: translateY(-2px);
+        box-shadow: 0 4px 8px rgba(102, 126, 234, 0.4);
+        color: white;
+    }
+
+
     /* Kanban Board */
     .kanban-board {
         display: flex;
@@ -344,9 +363,9 @@
         <div class="d-flex justify-content-between align-items-start">
             <div>
                 <h1><i class="fas fa-th me-2"></i>Kanban Board</h1>
-                <div style="margin-top: 0.5rem; opacity: 0.9;">
-                    Drag and drop leads between stages
-                </div>
+<!--                <div style="margin-top: 0.5rem; opacity: 0.9;">-->
+<!--                    Drag and drop leads between stages-->
+<!--                </div>-->
             </div>
             <div class="d-flex gap-2">
                 <!-- View Toggle -->
@@ -358,6 +377,9 @@
                         <i class="fas fa-th"></i>
                     </a>
                 </div>
+                <a href="{% url 'leads:lead_create' %}" class="btn btn-new-lead">
+                    <i class="fas fa-plus me-2"></i>New Lead
+                </a>
             </div>
         </div>
     </div>

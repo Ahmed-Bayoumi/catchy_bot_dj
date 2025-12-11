@@ -136,6 +136,8 @@ def dashboard_view(request):
     return render(request, 'core/dashboard.html', context)
 
 
+from .forms import CompanySettingsForm
+
 @login_required
 @company_required
 def company_settings_view(request):
@@ -151,15 +153,51 @@ def company_settings_view(request):
 
     # Handle form submission
     if request.method == 'POST':
-        # TODO: Implement form handling
-        # Will create CompanyForm and process here
-        # For now, just show the page
-        pass
+        form = CompanySettingsForm(request.POST, request.FILES, instance=company)
+        if form.is_valid():
+            form.save()
+            messages.success(request, 'Company settings updated successfully.')
+            return redirect('core:company_settings')
+    else:
+        form = CompanySettingsForm(instance=company)
 
     # Prepare context
     context = {
         'company': company,
+        'form': form,
         'active_page': 'settings',
     }
 
     return render(request, 'core/company_settings.html', context)
+
+
+@login_required
+@company_required
+def deactivate_company_view(request):
+    """
+    Deactivates the company and logs out the user.
+    """
+    if not request.user.is_admin():
+        messages.error(request, 'Only admins can deactivate the company.')
+        return redirect('core:dashboard')
+
+    if request.method == 'POST':
+        confirmation = request.POST.get('confirmation')
+        if confirmation == 'CONFIRM':
+            company = request.user.company
+            company.is_active = False
+            company.save()
+            
+            # Log out the user
+            from django.contrib.auth import logout
+            logout(request)
+            
+            # We can't use messages here easily because session is flushed on logout usually,
+            # unless we put it in a query param or rely on the login page to handle it.
+            # simpler to just redirect to login alone for now.
+            return redirect('accounts:login')
+        else:
+            messages.error(request, 'Incorrect confirmation text.')
+            return redirect('core:company_settings')
+
+    return redirect('core:company_settings')
