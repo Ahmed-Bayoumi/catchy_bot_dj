@@ -442,24 +442,6 @@
                         {% endif %}
                     </div>
 
-                    <!-- Status -->
-                    <div class="col-md-6">
-                        <label class="form-label">
-                            Status
-                            <span class="required">*</span>
-                        </label>
-                        <div class="input-with-icon">
-                            <i class="fas fa-info-circle"></i>
-                            {{ form.status }}
-                        </div>
-                        {% if form.status.errors %}
-                        <ul class="errorlist">
-                            {% for error in form.status.errors %}
-                            <li>{{ error }}</li>
-                            {% endfor %}
-                        </ul>
-                        {% endif %}
-                    </div>
 
                     <!-- Priority -->
                     <div class="col-md-6">
@@ -530,7 +512,7 @@
 
                 <div class="row g-3">
                     <!-- Notes -->
-                    <div class="col-md-12">
+                    <!-- <div class="col-md-12">
                         <label class="form-label">Notes</label>
                         {{ form.notes }}
                         {% if form.notes.errors %}
@@ -541,7 +523,7 @@
                         </ul>
                         {% endif %}
                         <small class="form-text">General notes about this lead</small>
-                    </div>
+                    </div> -->
 
                     <!-- Tags -->
                     <div class="col-md-12">
