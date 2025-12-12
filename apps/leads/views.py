@@ -180,8 +180,8 @@ def lead_detail_view(request, pk):
         # Current tab (from query parameter)
         'active_tab': request.GET.get('tab', 'overview'),
         
-        # Modal Data
-        'agents': User.objects.filter(company=request.user.company, is_active=True).order_by('first_name'),
+        # Modal Data - use lead's company for agents
+        'agents': User.objects.filter(company=lead.company, is_active=True).order_by('first_name'),
         'stages': LeadStage.objects.filter(is_active=True).order_by('order'),
     }
 
@@ -190,7 +190,10 @@ def lead_detail_view(request, pk):
 
 @login_required
 def lead_json_view(request, pk):
-
+    company = get_user_company(request)
+    if not company:
+        return JsonResponse({'error': 'No company selected'}, status=400)
+    
     try:
         lead = Lead.objects.select_related(
             'source',
@@ -198,7 +201,7 @@ def lead_json_view(request, pk):
             'assigned_to'
         ).get(
             pk=pk,
-            company=request.user.company
+            company=company
         )
 
         data = {
@@ -264,11 +267,15 @@ def lead_json_view(request, pk):
 
 @login_required
 def lead_activities_view(request, pk):
+    company = get_user_company(request)
+    if not company:
+        return JsonResponse({'error': 'No company selected'}, status=400)
+    
     try:
         lead = get_object_or_404(
             Lead,
             pk=pk,
-            company=request.user.company
+            company=company
         )
 
         activities = Activity.objects.filter(
@@ -388,10 +395,15 @@ def lead_create_view(request):
 
 
 def lead_edit_view(request, pk):
+    company = get_user_company(request)
+    if not company:
+        messages.error(request, 'No company selected')
+        return redirect('core:company_selector')
+    
     lead = get_object_or_404(
         Lead,
         pk=pk,
-        company=request.user.company
+        company=company
     )
 
     if not (request.user.is_admin() or lead.assigned_to == request.user):
@@ -402,7 +414,7 @@ def lead_edit_view(request, pk):
         form = LeadEditForm(
             request.POST,
             instance=lead,
-            company=request.user.company
+            company=company
         )
 
         if form.is_valid():
@@ -447,7 +459,7 @@ def lead_edit_view(request, pk):
         # GET - show form with current data
         form = LeadEditForm(
             instance=lead,
-            company=request.user.company
+            company=company
         )
 
     context = {
@@ -467,10 +479,17 @@ def lead_edit_view(request, pk):
 @require_POST
 def lead_delete_view(request, pk):
     """Delete a lead (hard delete)"""
+    company = get_user_company(request)
+    if not company:
+        if request.headers.get('X-Requested-With') == 'XMLHttpRequest':
+            return JsonResponse({'success': False, 'error': 'No company selected'}, status=400)
+        messages.error(request, 'No company selected')
+        return redirect('core:company_selector')
+    
     lead = get_object_or_404(
         Lead,
         pk=pk,
-        company=request.user.company
+        company=company
     )
 
     try:
@@ -510,10 +529,15 @@ def lead_delete_view(request, pk):
 
 @login_required
 def lead_assign_view(request, pk):
+    company = get_user_company(request)
+    if not company:
+        messages.error(request, 'No company selected')
+        return redirect('core:company_selector')
+    
     lead = get_object_or_404(
         Lead,
         pk=pk,
-        company=request.user.company
+        company=company
     )
 
     if not lead.can_be_assigned():
@@ -521,7 +545,7 @@ def lead_assign_view(request, pk):
         return redirect('leads:lead_detail', pk=lead.pk)
 
     if request.method == 'POST':
-        form = LeadAssignForm(request.POST, company=request.user.company)
+        form = LeadAssignForm(request.POST, company=company)
 
         if form.is_valid():
             new_agent = form.cleaned_data['assigned_to']
@@ -547,7 +571,7 @@ def lead_assign_view(request, pk):
     else:
         # GET - show form
         form = LeadAssignForm(
-            company=request.user.company,
+            company=company,
             initial={'assigned_to': lead.assigned_to}
         )
 
@@ -605,10 +629,15 @@ def lead_change_stage_view(request, pk):
 @login_required
 @require_POST
 def lead_set_follow_up_view(request, pk):
+    company = get_user_company(request)
+    if not company:
+        messages.error(request, 'No company selected')
+        return redirect('core:company_selector')
+    
     lead = get_object_or_404(
         Lead,
         pk=pk,
-        company=request.user.company
+        company=company
     )
 
     follow_up_str = request.POST.get('next_follow_up')
@@ -618,8 +647,9 @@ def lead_set_follow_up_view(request, pk):
             # Parse datetime string
             follow_up_dt = datetime.fromisoformat(follow_up_str)
 
-            # Make timezone aware
-            follow_up_dt = timezone.make_aware(follow_up_dt)
+            # Make timezone aware only if naive (doesn't have timezone info)
+            if timezone.is_naive(follow_up_dt):
+                follow_up_dt = timezone.make_aware(follow_up_dt)
 
             # Validate (cannot be in past)
             if follow_up_dt < timezone.now():
@@ -651,10 +681,17 @@ def lead_set_follow_up_view(request, pk):
 @login_required
 @require_POST
 def lead_add_note_view(request, pk):
+    company = get_user_company(request)
+    if not company:
+        if request.headers.get('X-Requested-With') == 'XMLHttpRequest':
+            return JsonResponse({'success': False, 'error': 'No company selected'}, status=400)
+        messages.error(request, 'No company selected')
+        return redirect('core:company_selector')
+    
     lead = get_object_or_404(
         Lead,
         pk=pk,
-        company=request.user.company
+        company=company
     )
 
     form = NoteForm(request.POST)
@@ -694,10 +731,15 @@ def lead_add_note_view(request, pk):
 @login_required
 @require_POST
 def note_delete_view(request, note_id):
+    company = get_user_company(request)
+    if not company:
+        messages.error(request, 'No company selected')
+        return redirect('core:company_selector')
+    
     note = get_object_or_404(
         Note.objects.select_related('lead', 'user'),
         pk=note_id,
-        lead__company=request.user.company
+        lead__company=company
     )
 
     # Permission check
@@ -722,10 +764,17 @@ def note_delete_view(request, note_id):
 @login_required
 @require_POST
 def lead_quick_update_view(request, pk):
+    company = get_user_company(request)
+    if not company:
+        return JsonResponse({
+            'success': False,
+            'error': 'No company selected'
+        }, status=400)
+    
     lead = get_object_or_404(
         Lead,
         pk=pk,
-        company=request.user.company
+        company=company
     )
     
     # Permission check - user must be admin or assigned to this lead
@@ -783,7 +832,9 @@ def lead_quick_update_view(request, pk):
             if value:
                 try:
                     follow_up_dt = datetime.fromisoformat(value)
-                    follow_up_dt = timezone.make_aware(follow_up_dt)
+                    # Make timezone aware only if naive
+                    if timezone.is_naive(follow_up_dt):
+                        follow_up_dt = timezone.make_aware(follow_up_dt)
                     
                     # Validate that date is not in the past
                     if follow_up_dt < timezone.now():
@@ -969,6 +1020,11 @@ def lead_bulk_actions_view(request):
 
         if action == 'assign':
             user_id = data.get('user_id')
+            if not user_id:
+                return JsonResponse({
+                    'success': False,
+                    'error': 'Please select an agent'
+                }, status=400)
 
             try:
                 user = User.objects.get(
@@ -989,6 +1045,11 @@ def lead_bulk_actions_view(request):
 
         elif action == 'change_stage':
             stage_id = data.get('stage_id')
+            if not stage_id:
+                return JsonResponse({
+                    'success': False,
+                    'error': 'Please select a stage'
+                }, status=400)
 
             try:
                 stage = LeadStage.objects.get(pk=stage_id, is_active=True)
@@ -1006,6 +1067,11 @@ def lead_bulk_actions_view(request):
 
         elif action == 'set_priority':
             priority = data.get('priority')
+            if not priority:
+                return JsonResponse({
+                    'success': False,
+                    'error': 'Please select a priority'
+                }, status=400)
 
             if priority not in dict(Lead.PRIORITY_CHOICES):
                 return JsonResponse({
@@ -1190,8 +1256,13 @@ def lead_export_view(request):
 @login_required
 @admin_required
 def lead_import_view(request):
+    company = get_user_company(request)
+    if not company:
+        messages.error(request, 'No company selected')
+        return redirect('core:company_selector')
+    
     if request.method == 'POST':
-        form = LeadImportForm(request.POST, request.FILES, company=request.user.company)
+        form = LeadImportForm(request.POST, request.FILES, company=company)
 
         if form.is_valid():
             uploaded_file = form.cleaned_data['file']
@@ -1251,7 +1322,7 @@ def lead_import_view(request):
                 # Get existing phones (to check duplicates)
                 existing_phones = set(
                     Lead.objects.filter(
-                        company=request.user.company
+                        company=company
                     ).values_list('phone', flat=True)
                 )
 
@@ -1277,7 +1348,7 @@ def lead_import_view(request):
 
 
                         lead = Lead.objects.create(
-                            company=request.user.company,
+                            company=company,
                             name=row_data['name'],
                             phone=row_data['phone'],
                             email=row_data['email'] or None,
@@ -1327,7 +1398,7 @@ def lead_import_view(request):
 
     else:
         # GET - show form
-        form = LeadImportForm(company=request.user.company)
+        form = LeadImportForm(company=company)
 
     context = {
         'form': form,

@@ -588,6 +588,27 @@ Requirements:
             return;
         }
 
+        // Validate required fields based on action
+        if (action === 'assign') {
+            const userId = formData.get('user_id');
+            if (!userId) {
+                alert('Please select an agent to assign');
+                return;
+            }
+        } else if (action === 'change_stage') {
+            const stageId = formData.get('stage_id');
+            if (!stageId) {
+                alert('Please select a stage');
+                return;
+            }
+        } else if (action === 'set_priority') {
+            const priority = formData.get('priority');
+            if (!priority) {
+                alert('Please select a priority');
+                return;
+            }
+        }
+
         // Confirm delete action
         if (action === 'delete') {
             if (!document.getElementById('bulkDeleteConfirm').checked) {
