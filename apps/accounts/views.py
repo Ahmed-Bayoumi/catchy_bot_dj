@@ -333,12 +333,19 @@ def password_reset_confirm_view(request, uidb64, token):             ###########
 @login_required
 @admin_required
 def user_list_view(request):             #################################################
+    from apps.core.utils import get_user_company
 
     request_user = request.user
+    company = get_user_company(request)
     
-    # Superuser sees ALL users
+    # Superuser: show users from selected company only
+    # If no company selected, redirect to company selector
     if request_user.is_superuser:
-        queryset = User.objects.all()
+        if not company:
+            messages.info(request, _('Please select a company first.'))
+            return redirect('core:company_selector')
+        # Filter by selected company, include superusers for superuser view
+        queryset = User.objects.filter(company=company)
     else:
         # Admin sees only their company's users
         # AND strictly excludes superusers from the list
