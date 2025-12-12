@@ -195,12 +195,18 @@ def simulate_incoming_message(request):
                 'status': 'error',
                 'message': f'Error calling webhook: {str(e)}'
             }, status=500)
-    
+        except Exception as e:
+            logger.error(f"Error simulating message: {str(e)}", exc_info=True)
+            return JsonResponse({
+                'status': 'error',
+                'message': f'Simulation error: {str(e)}'
+            }, status=500)
+
     except Exception as e:
-        logger.error(f"Error in simulate_incoming_message: {str(e)}", exc_info=True)
+        logger.error(f"Top-level error in simulator: {str(e)}")
         return JsonResponse({
             'status': 'error',
-            'message': f'Internal error: {str(e)}'
+            'message': f'System error: {str(e)}'
         }, status=500)
 
 
