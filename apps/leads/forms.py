@@ -11,7 +11,7 @@ import re
 class LeadCreateForm(forms.ModelForm):
     class Meta:
         model = Lead
-        fields = ['name', 'phone', 'email', 'source', 'stage', 'status', 'priority', 'assigned_to', 'next_follow_up', 'notes']
+        fields = ['name', 'phone', 'email', 'source', 'stage', 'priority', 'assigned_to', 'next_follow_up', 'notes']
         
         widgets = {
             'name': forms.TextInput(attrs={'class': 'form-control', 'placeholder': 'e.g. Ahmed Ali Mohamed', 'autofocus': True}),
@@ -19,7 +19,7 @@ class LeadCreateForm(forms.ModelForm):
             'email': forms.EmailInput(attrs={'class': 'form-control', 'placeholder': 'example@email.com', 'dir': 'ltr'}),
             'source': forms.Select(attrs={'class': 'form-select'}),
             'stage': forms.Select(attrs={'class': 'form-select'}),
-            'status': forms.Select(attrs={'class': 'form-select'}),
+
             'priority': forms.Select(attrs={'class': 'form-select'}),
             'assigned_to': forms.Select(attrs={'class': 'form-select'}),
             'next_follow_up': forms.DateTimeInput(attrs={'class': 'form-control', 'type': 'datetime-local'}),
@@ -54,7 +54,6 @@ class LeadCreateForm(forms.ModelForm):
             except:
                 pass
             
-            self.fields['status'].initial = 'new'
             self.fields['priority'].initial = 'medium'
     
     def clean_phone(self):
@@ -96,10 +95,7 @@ class LeadEditForm(LeadCreateForm):
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
         
-        if self.instance and self.instance.status in ['won', 'lost']:
-            self.fields['status'].widget.attrs['disabled'] = True
-            self.fields['stage'].widget.attrs['disabled'] = True
-            self.fields['status'].help_text = 'Cannot change status for closed leads (won/lost)'
+
 
 
 class LeadQuickEditForm(forms.ModelForm):
@@ -125,8 +121,6 @@ class LeadAssignForm(forms.Form):
             self.fields['assigned_to'].queryset = User.objects.filter(company=company, is_active=True).order_by('first_name', 'last_name')
 
 
-class LeadStatusChangeForm(forms.Form):
-    status = forms.ChoiceField(choices=Lead.STATUS_CHOICES, label='New Status', required=True, widget=forms.Select(attrs={'class': 'form-select'}))
 
 
 class LeadStageChangeForm(forms.Form):
@@ -146,7 +140,7 @@ class LeadFilterForm(forms.Form):
     search = forms.CharField(required=False, label='Search', widget=forms.TextInput(attrs={'class': 'form-control', 'placeholder': 'Search by name, phone, or email...'}))
     source = forms.ModelChoiceField(queryset=LeadSource.objects.filter(is_active=True).order_by('order'), required=False, label='Source', empty_label='All Sources', widget=forms.Select(attrs={'class': 'form-select'}))
     stage = forms.ModelChoiceField(queryset=LeadStage.objects.filter(is_active=True).order_by('order'), required=False, label='Stage', empty_label='All Stages', widget=forms.Select(attrs={'class': 'form-select'}))
-    status = forms.ChoiceField(choices=[('', 'All Statuses')] + Lead.STATUS_CHOICES, required=False, label='Status', widget=forms.Select(attrs={'class': 'form-select'}))
+
     priority = forms.ChoiceField(choices=[('', 'All Priorities')] + Lead.PRIORITY_CHOICES, required=False, label='Priority', widget=forms.Select(attrs={'class': 'form-select'}))
     assigned_to = forms.ModelChoiceField(queryset=User.objects.none(), required=False, label='Assigned To', empty_label='All', widget=forms.Select(attrs={'class': 'form-select'}))
     date_from = forms.DateField(required=False, label='From Date', widget=forms.DateInput(attrs={'class': 'form-control', 'type': 'date'}))
@@ -190,7 +184,7 @@ class LeadBulkActionForm(forms.Form):
     
     ACTION_CHOICES = [
         ('assign', 'Assign to agent'),
-        ('change_status', 'Change status'),
+
         ('change_stage', 'Change stage'),
         ('set_priority', 'Set priority'),
         ('delete', 'Delete'),
@@ -201,7 +195,7 @@ class LeadBulkActionForm(forms.Form):
     
     # Conditional fields (shown based on action)
     assigned_to = forms.ModelChoiceField(queryset=User.objects.none(), required=False, label='Assign To', widget=forms.Select(attrs={'class': 'form-select'}))
-    status = forms.ChoiceField(choices=Lead.STATUS_CHOICES, required=False, label='Status', widget=forms.Select(attrs={'class': 'form-select'}))
+
     stage = forms.ModelChoiceField(queryset=LeadStage.objects.filter(is_active=True).order_by('order'), required=False, label='Stage', widget=forms.Select(attrs={'class': 'form-select'}))
     priority = forms.ChoiceField(choices=Lead.PRIORITY_CHOICES, required=False, label='Priority', widget=forms.Select(attrs={'class': 'form-select'}))
     
@@ -228,8 +222,7 @@ class LeadBulkActionForm(forms.Form):
         # Validate required fields based on action
         if action == 'assign' and not cleaned_data.get('assigned_to'):
             raise ValidationError({'assigned_to': 'Please select an agent'})
-        elif action == 'change_status' and not cleaned_data.get('status'):
-            raise ValidationError({'status': 'Please select a status'})
+
         elif action == 'change_stage' and not cleaned_data.get('stage'):
             raise ValidationError({'stage': 'Please select a stage'})
         elif action == 'set_priority' and not cleaned_data.get('priority'):

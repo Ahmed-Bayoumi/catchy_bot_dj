@@ -11,7 +11,6 @@ urlpatterns = [
     path('<int:pk>/edit/', views.lead_edit_view, name='lead_edit'),
     path('<int:pk>/delete/', views.lead_delete_view, name='lead_delete'),
     path('<int:pk>/assign/', views.lead_assign_view, name='lead_assign'),
-    path('<int:pk>/change-status/', views.lead_change_status_view, name='lead_change_status'),
     path('<int:pk>/change-stage/', views.lead_change_stage_view, name='lead_change_stage'),
     path('<int:pk>/set-follow-up/', views.lead_set_follow_up_view, name='lead_set_follow_up'),
     path('<int:pk>/add-note/', views.lead_add_note_view, name='lead_add_note'),

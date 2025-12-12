@@ -52,7 +52,6 @@ class LeadAdmin(admin.ModelAdmin):
         'phone_display',
         'source_badge',
         'stage_badge',
-        'status_badge',
         'priority_badge',
         'assigned_to_display',
         'created_at_display',
@@ -63,7 +62,6 @@ class LeadAdmin(admin.ModelAdmin):
         'company',
         'source',
         'stage',
-        'status',
         'priority',
         'assigned_to',
         'created_at',
@@ -85,7 +83,7 @@ class LeadAdmin(admin.ModelAdmin):
             'fields': ['company', 'name', 'phone', 'email']
         }),
         ('Classification', {
-            'fields': ['source', 'stage', 'status', 'priority']
+            'fields': ['source', 'stage', 'priority']
         }),
         ('Assignment & Follow-up', {
             'fields': ['assigned_to', 'next_follow_up']
@@ -133,22 +131,7 @@ class LeadAdmin(admin.ModelAdmin):
         )
     stage_badge.short_description = 'Stage'
     
-    def status_badge(self, obj):
-        colors = {
-            'new': '#17a2b8',
-            'contacted': '#ffc107',
-            'qualified': '#28a745',
-            'converted': '#667eea',
-            'won': '#28a745',
-            'lost': '#dc3545',
-        }
-        return format_html(
-            '<span style="background-color: {}; color: white; padding: 3px 8px; '
-            'border-radius: 3px; font-size: 11px;">{}</span>',
-            colors.get(obj.status, '#6c757d'),
-            obj.get_status_display()
-        )
-    status_badge.short_description = 'Status'
+
     
     def priority_badge(self, obj):
         colors = {
@@ -215,56 +198,12 @@ class LeadAdmin(admin.ModelAdmin):
     # Custom actions
     
     actions = [
-        'mark_as_contacted',
-        'mark_as_qualified',
-        'mark_as_lost',
         'set_high_priority',
         'set_medium_priority',
         'set_low_priority',
     ]
     
-    def mark_as_contacted(self, request, queryset):
-        count = queryset.update(status='contacted')
 
-        for lead in queryset:
-            Activity.objects.create(
-                lead=lead,
-                user=request.user,
-                activity_type='status_changed',
-                description='Status changed to "Contacted" (bulk action)'
-            )
-        
-        self.message_user(request, f'Updated {count} leads to "Contacted"')
-    mark_as_contacted.short_description = 'Mark as "Contacted"'
-    
-    def mark_as_qualified(self, request, queryset):
-        count = queryset.update(status='qualified')
-        
-        for lead in queryset:
-            Activity.objects.create(
-                lead=lead,
-                user=request.user,
-                activity_type='status_changed',
-                description='Status changed to "Qualified" (bulk action)'
-            )
-        
-        self.message_user(request, f'Updated {count} leads to "Qualified"')
-    mark_as_qualified.short_description = 'Mark as "Qualified"'
-    
-    def mark_as_lost(self, request, queryset):
-        count = queryset.update(status='lost')
-        
-        for lead in queryset:
-            Activity.objects.create(
-                lead=lead,
-                user=request.user,
-                activity_type='status_changed',
-                description='Status changed to "Lost" (bulk action)'
-            )
-        
-        self.message_user(request, f'Updated {count} leads to "Lost"')
-    mark_as_lost.short_description = 'Mark as "Lost"'
-    
     def set_high_priority(self, request, queryset):
         count = queryset.update(priority='high')
         self.message_user(request, f'Set high priority for {count} leads')

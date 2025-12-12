@@ -7,16 +7,6 @@ from taggit.managers import TaggableManager
 
 class Lead(models.Model):
     
-    # Status choices
-    STATUS_CHOICES = [
-        ('new', 'New'),
-        ('contacted', 'Contacted'),
-        ('qualified', 'Qualified'),
-        ('converted', 'Converted'),
-        ('won', 'Won'),
-        ('lost', 'Lost'),
-    ]
-    
     # Priority choices
     PRIORITY_CHOICES = [
         ('low', 'Low'),
@@ -33,7 +23,6 @@ class Lead(models.Model):
     # Lead Classification
     source = models.ForeignKey(LeadSource, on_delete=models.PROTECT, related_name='leads', help_text='Where did this lead come from?')
     stage = models.ForeignKey(LeadStage, on_delete=models.PROTECT, related_name='leads', help_text='Current stage in the lead lifecycle')
-    status = models.CharField(max_length=20, choices=STATUS_CHOICES, default='new', db_index=True, help_text='Current internal status')
     priority = models.CharField(max_length=10, choices=PRIORITY_CHOICES, default='medium', help_text='How urgent is this lead?')
 
     # Assignment & Management
@@ -54,7 +43,6 @@ class Lead(models.Model):
         ordering = ['-created_at']
         unique_together = ['company', 'phone']
         indexes = [
-            models.Index(fields=['company', 'status']),
             models.Index(fields=['company', 'stage']),
             models.Index(fields=['company', 'assigned_to']),
             models.Index(fields=['created_at']),
@@ -62,8 +50,8 @@ class Lead(models.Model):
         ]
     
     def __str__(self):
-        """String representation: Name (Phone) - Status"""
-        return f"{self.name} ({self.phone}) - {self.get_status_display()}"
+        """String representation: Name (Phone) - Stage"""
+        return f"{self.name} ({self.phone}) - {self.stage.name}"
     
     def get_absolute_url(self):
         """Returns URL to lead detail page"""
@@ -83,7 +71,17 @@ class Lead(models.Model):
         return "?"
     
     def can_be_assigned(self):
-        return self.status not in ['won', 'lost']
+        """
+        Check if lead can be assigned based on stage
+        Returns False if stage is 'won' or 'lost' type
+        """
+        # Check if stage has specific types that prevent assignment
+        if hasattr(self.stage, 'stage_type'):
+            return self.stage.stage_type not in ['won', 'lost', 'closed']
+        # Fallback: check stage name
+        stage_name_lower = self.stage.name.lower()
+        return stage_name_lower not in ['won', 'lost', 'closed', 'converted']
+    
     
     def assign_to(self, user, assigned_by=None):
 
@@ -126,31 +124,7 @@ class Lead(models.Model):
             description=f'Stage changed from "{old_stage.name}" to "{new_stage.name}"'
         )
     
-    def change_status(self, new_status, user=None):
 
-        old_status = self.status
-        self.status = new_status
-        self.save()
-        
-        # Update user statistics
-        if self.assigned_to:
-            if new_status == 'converted':
-                self.assigned_to.total_leads_converted += 1
-                self.assigned_to.save(update_fields=['total_leads_converted'])
-            elif new_status == 'won':
-                self.assigned_to.total_leads_won += 1
-                self.assigned_to.save(update_fields=['total_leads_won'])
-        
-        # Create activity log
-        status_display = dict(self.STATUS_CHOICES).get(new_status, new_status)
-        old_status_display = dict(self.STATUS_CHOICES).get(old_status, old_status)
-        Activity.objects.create(
-            lead=self,
-            user=user,
-            activity_type='status_changed',
-            description=f'Status changed from "{old_status_display}" to "{status_display}"'
-        )
-    
     def add_note(self, content, user):
 
         note = Note.objects.create(

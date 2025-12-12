@@ -9,6 +9,7 @@ from django.utils import timezone
 from datetime import datetime
 from django.views.decorators.http import require_POST
 from apps.accounts.decorators import company_required, admin_required
+from apps.core.utils import get_user_company
 from .models import Lead, Note, Activity
 from apps.core.models import LeadSource, LeadStage
 from .forms import *
@@ -21,16 +22,15 @@ from io import StringIO, TextIOWrapper
 
 
 @login_required
-@company_required
-@company_required
 def lead_list_view(request):
-    company = request.user.company
+    company = get_user_company(request)
     
-    # Superuser sees ALL leads
-    if request.user.is_superuser:
-        leads = Lead.objects.all().exclude(status='deleted').select_related('source','stage','assigned_to').order_by('-created_at')
-    else:
-        leads = Lead.objects.filter(company=company).exclude(status='deleted').select_related('source','stage','assigned_to').order_by('-created_at')
+    # Redirect to selector if no company selected
+    if not company:
+        return redirect('core:company_selector')
+    
+    # ALL users see company leads only (including superuser)
+    leads = Lead.objects.filter(company=company).select_related('source','stage','assigned_to').order_by('-created_at')
 
     search_query = request.GET.get('search', '').strip()
 
@@ -53,9 +53,7 @@ def lead_list_view(request):
         if filter_form.cleaned_data.get('stage'):
             leads = leads.filter(stage=filter_form.cleaned_data['stage'])
 
-        # Filter by status
-        if filter_form.cleaned_data.get('status'):
-            leads = leads.filter(status=filter_form.cleaned_data['status'])
+
 
         # Filter by priority
         if filter_form.cleaned_data.get('priority'):
@@ -75,14 +73,7 @@ def lead_list_view(request):
             leads = leads.filter(created_at__date__lte=filter_form.cleaned_data['date_to'])
 
     total_count = leads.count()
-    status_counts = {
-        'new': leads.filter(status='new').count(),
-        'contacted': leads.filter(status='contacted').count(),
-        'qualified': leads.filter(status='qualified').count(),
-        'converted': leads.filter(status='converted').count(),
-        'won': leads.filter(status='won').count(),
-        'lost': leads.filter(status='lost').count(),
-    }
+
 
     paginator = Paginator(leads, 50)
     page_number = request.GET.get('page', 1)
@@ -101,7 +92,6 @@ def lead_list_view(request):
         'leads': page_obj,
         'filter_form': filter_form,
         'total_count': total_count,
-        'status_counts': status_counts,
         'page_obj': page_obj,
         'search_query': search_query,
 
@@ -123,7 +113,6 @@ def lead_list_view(request):
 
 @login_required
 @login_required
-@company_required
 def lead_detail_view(request, pk):
     # Base query
     queryset = Lead.objects.select_related(
@@ -200,7 +189,6 @@ def lead_detail_view(request, pk):
 
 
 @login_required
-@company_required
 def lead_json_view(request, pk):
 
     try:
@@ -234,9 +222,7 @@ def lead_json_view(request, pk):
                 'icon': lead.stage.icon,
             },
 
-            # Status
-            'status': lead.status,
-            'status_display': lead.get_status_display(),
+
 
             # Priority
             'priority': lead.priority,
@@ -260,7 +246,6 @@ def lead_json_view(request, pk):
             # Computed fields
             'time_since_created': lead.time_since_created(),
             'time_until_follow_up': lead.time_until_follow_up(),
-            'can_be_assigned': lead.can_be_assigned(),
         }
 
         return JsonResponse(data)
@@ -278,7 +263,6 @@ def lead_json_view(request, pk):
 
 
 @login_required
-@company_required
 def lead_activities_view(request, pk):
     try:
         lead = get_object_or_404(
@@ -338,21 +322,21 @@ def lead_activities_view(request, pk):
 
 
 @login_required
-@company_required
 def lead_create_view(request):
+    company = get_user_company(request)
+    
+    # Redirect to selector if no company
+    if not company:
+        return redirect('core:company_selector')
+    
     if request.method == 'POST':
-        # Bind the form with POST data and pass the user's company
-        form = LeadCreateForm(request.POST, company=request.user.company)
+        # Bind the form with POST data and pass the company
+        form = LeadCreateForm(request.POST, company=company)
 
         if form.is_valid():
             try:
                 lead = form.save(commit=False)
-                
-                if request.user.company:
-                    lead.company = request.user.company
-                elif request.user.is_superuser:
-                    messages.error(request, "Superusers must use the Admin Panel to create leads for specific companies.")
-                    return redirect('leads:lead_list')
+                lead.company = company  # Always use selected company
 
                 if not lead.assigned_to:
                     lead.assigned_to = request.user
@@ -367,7 +351,6 @@ def lead_create_view(request):
                     activity_type='created',
                     description=f'Lead created by {request.user.get_full_name()}'
                 )
-
 
                 if lead.assigned_to:
                     lead.assigned_to.total_leads_assigned += 1
@@ -394,8 +377,6 @@ def lead_create_view(request):
 
     else:
         # GET request: render an empty form for creating a lead
-        # Handle case where superuser has no company
-        company = request.user.company if request.user.company else None
         form = LeadCreateForm(company=company)
         context = {
             'form': form,
@@ -406,7 +387,6 @@ def lead_create_view(request):
         return render(request, 'leads/lead_form.html', context)
 
 
-@company_required
 def lead_edit_view(request, pk):
     lead = get_object_or_404(
         Lead,
@@ -483,39 +463,28 @@ def lead_edit_view(request, pk):
 
 
 @login_required
-@company_required
 @admin_required
 @require_POST
 def lead_delete_view(request, pk):
+    """Delete a lead (hard delete)"""
     lead = get_object_or_404(
         Lead,
         pk=pk,
         company=request.user.company
     )
 
-    if lead.status == 'won':
-        messages.error(
-            request,
-            'Cannot delete won leads'
-        )
-        return redirect('leads:lead_detail', pk=lead.pk)
-
     try:
         lead_name = lead.name
 
-        # Soft delete: Change status to 'deleted'
-        lead.status = 'deleted'
-        lead.save()
+        # Hard delete
+        lead.delete()
 
-        # Or hard delete (not recommended):
-        # lead.delete()
-
-        Activity.objects.create(
-            lead=lead,
-            user=request.user,
-            activity_type='status_changed',
-            description=f'Lead deleted by {request.user.get_full_name()}'
-        )
+        # Check if AJAX request
+        if request.headers.get('X-Requested-With') == 'XMLHttpRequest':
+            return JsonResponse({
+                'success': True,
+                'message': f'Lead "{lead_name}" deleted successfully'
+            })
 
         messages.success(
             request,
@@ -525,15 +494,21 @@ def lead_delete_view(request, pk):
         return redirect('leads:lead_list')
 
     except Exception as e:
+        # Check if AJAX request
+        if request.headers.get('X-Requested-With') == 'XMLHttpRequest':
+            return JsonResponse({
+                'success': False,
+                'error': str(e)
+            }, status=500)
+
         messages.error(
             request,
             f'Error deleting lead: {str(e)}'
         )
-        return redirect('leads:lead_detail', pk=lead.pk)
+        return redirect('leads:lead_detail', pk=pk)
 
 
 @login_required
-@company_required
 def lead_assign_view(request, pk):
     lead = get_object_or_404(
         Lead,
@@ -585,48 +560,18 @@ def lead_assign_view(request, pk):
 
 
 @login_required
-@company_required
-@require_POST
-def lead_change_status_view(request, pk):
-    lead = get_object_or_404(
-        Lead,
-        pk=pk,
-        company=request.user.company
-    )
-    new_status = request.POST.get('status')
-
-    if new_status and new_status in dict(Lead.STATUS_CHOICES):
-        lead.change_status(new_status, user=request.user)
-
-        messages.success(request,f'Status changed to "{lead.get_status_display()}"')
-
-        # AJAX response
-        if request.headers.get('X-Requested-With') == 'XMLHttpRequest':
-            return JsonResponse({
-                'success': True,
-                'status': lead.status,
-                'status_display': lead.get_status_display()
-            })
-
-        return redirect('leads:lead_detail', pk=lead.pk)
-
-    else:
-        messages.error(request, 'Invalid status')
-
-        if request.headers.get('X-Requested-With') == 'XMLHttpRequest':
-            return JsonResponse({'success': False, 'error': 'Invalid status'})
-
-        return redirect('leads:lead_detail', pk=lead.pk)
-
-
-@login_required
-@company_required
 @require_POST
 def lead_change_stage_view(request, pk):
+    company = get_user_company(request)
+    if not company:
+        if request.headers.get('X-Requested-With') == 'XMLHttpRequest':
+            return JsonResponse({'success': False, 'error': 'No company selected'}, status=400)
+        return redirect('core:company_selector')
+    
     lead = get_object_or_404(
         Lead,
         pk=pk,
-        company=request.user.company
+        company=company
     )
 
     stage_id = request.POST.get('stage')
@@ -658,7 +603,6 @@ def lead_change_stage_view(request, pk):
 
 
 @login_required
-@company_required
 @require_POST
 def lead_set_follow_up_view(request, pk):
     lead = get_object_or_404(
@@ -705,7 +649,6 @@ def lead_set_follow_up_view(request, pk):
 
 
 @login_required
-@company_required
 @require_POST
 def lead_add_note_view(request, pk):
     lead = get_object_or_404(
@@ -749,7 +692,6 @@ def lead_add_note_view(request, pk):
 
 
 @login_required
-@company_required
 @require_POST
 def note_delete_view(request, note_id):
     note = get_object_or_404(
@@ -778,7 +720,6 @@ def note_delete_view(request, note_id):
 
 
 @login_required
-@company_required
 @require_POST
 def lead_quick_update_view(request, pk):
     lead = get_object_or_404(
@@ -814,7 +755,7 @@ def lead_quick_update_view(request, pk):
                 'error': 'Field and value are required'
             }, status=400)
         
-        allowed_fields = ['priority', 'status', 'next_follow_up']
+        allowed_fields = ['priority', 'next_follow_up']
 
         if field not in allowed_fields:
             return JsonResponse({
@@ -825,19 +766,8 @@ def lead_quick_update_view(request, pk):
         # Store old value for activity log
         old_value = getattr(lead, field)
         
-        # Handle different fields with specific validation
-        if field == 'status':
-            # Validate status value
-            if value not in dict(Lead.STATUS_CHOICES):
-                return JsonResponse({
-                    'success': False,
-                    'error': 'Invalid status value'
-                }, status=400)
-            # Use model method for status changes
-            lead.change_status(value, user=request.user)
-            activity_type = 'status_changed'
-            
-        elif field == 'priority':
+        
+        if field == 'priority':
             # Validate priority value
             if value not in dict(Lead.PRIORITY_CHOICES):
                 return JsonResponse({
@@ -908,15 +838,24 @@ def lead_quick_update_view(request, pk):
 
 
 @login_required
-@company_required
 def lead_kanban_view(request):
-    company = request.user.company
+    """
+    Kanban board view for leads by stage
+    
+    Features:
+    - Drag and drop between stages
+    - Stage-based organization
+    - Filtering and search
+    """
+    company = get_user_company(request)
     stages = LeadStage.objects.filter(
         is_active=True
     ).order_by('order')
 
+    # Base queryset - all leads in company
     leads_queryset = Lead.objects.filter(
-        company=company).exclude(status='deleted').select_related('source','stage','assigned_to')
+        company=company
+    ).select_related('source', 'stage', 'assigned_to')
 
 
     search_query = request.GET.get('search', '').strip()
@@ -987,9 +926,16 @@ def lead_kanban_view(request):
 
 
 @login_required
-@company_required
 @require_POST
 def lead_bulk_actions_view(request):
+    company = get_user_company(request)
+    
+    # Return error if no company selected
+    if not company:
+        return JsonResponse({
+            'success': False,
+            'error': 'No company selected'
+        }, status=400)
 
     try:
         # Parse request data
@@ -1009,7 +955,7 @@ def lead_bulk_actions_view(request):
 
         leads = Lead.objects.filter(
             pk__in=lead_ids,
-            company=request.user.company
+            company=company  # Use selected company
         )
 
         count = leads.count()
@@ -1027,7 +973,7 @@ def lead_bulk_actions_view(request):
             try:
                 user = User.objects.get(
                     pk=user_id,
-                    company=request.user.company
+                    company=company  # Use selected company
                 )
 
                 for lead in leads:
@@ -1040,21 +986,6 @@ def lead_bulk_actions_view(request):
                     'success': False,
                     'error': 'User not found'
                 }, status=404)
-
-        elif action == 'change_status':
-            status = data.get('status')
-
-            if status not in dict(Lead.STATUS_CHOICES):
-                return JsonResponse({
-                    'success': False,
-                    'error': 'Invalid status'
-                }, status=400)
-
-            for lead in leads:
-                lead.change_status(status, user=request.user)
-
-            status_display = dict(Lead.STATUS_CHOICES)[status]
-            message = f'{count} lead(s) status changed to "{status_display}"'
 
         elif action == 'change_stage':
             stage_id = data.get('stage_id')
@@ -1096,24 +1027,9 @@ def lead_bulk_actions_view(request):
             message = f'Priority "{priority_display}" set for {count} lead(s)'
 
         elif action == 'delete':
-            # Delete leads (soft delete)
-            if not request.user.is_admin():
-                return JsonResponse({
-                    'success': False,
-                    'error': 'Permission denied'
-                }, status=403)
-
-            # Soft delete
-            leads.update(status='deleted')
-
-            # Log activities
+            # Hard delete
             for lead in leads:
-                Activity.objects.create(
-                    lead=lead,
-                    user=request.user,
-                    activity_type='status_changed',
-                    description=f'Lead deleted (bulk action)'
-                )
+                lead.delete()
 
             message = f'{count} lead(s) deleted'
 
@@ -1149,10 +1065,10 @@ def lead_bulk_actions_view(request):
 
 
 @login_required
-@company_required
 def lead_export_view(request):
+    """Export leads to Excel or CSV"""
     export_format = request.GET.get('format', 'excel')
-    company = request.user.company
+    company = get_user_company(request)
     leads = Lead.objects.filter(company=company).select_related('source', 'stage', 'assigned_to')
 
     search_query = request.GET.get('search', '').strip()
@@ -1169,8 +1085,6 @@ def lead_export_view(request):
             leads = leads.filter(source=filter_form.cleaned_data['source'])
         if filter_form.cleaned_data.get('stage'):
             leads = leads.filter(stage=filter_form.cleaned_data['stage'])
-        if filter_form.cleaned_data.get('status'):
-            leads = leads.filter(status=filter_form.cleaned_data['status'])
         if filter_form.cleaned_data.get('priority'):
             leads = leads.filter(priority=filter_form.cleaned_data['priority'])
         if filter_form.cleaned_data.get('assigned_to'):
@@ -1185,7 +1099,7 @@ def lead_export_view(request):
 
         headers = [
             'ID', 'Name', 'Phone', 'Email',
-            'Source', 'Stage', 'Status', 'Priority',
+            'Source', 'Stage', 'Priority',
             'Assigned To', 'Created Date', 'Next Follow-up'
         ]
 
@@ -1203,11 +1117,10 @@ def lead_export_view(request):
             ws.cell(row=row, column=4, value=lead.email or '')
             ws.cell(row=row, column=5, value=lead.source.name)
             ws.cell(row=row, column=6, value=lead.stage.name)
-            ws.cell(row=row, column=7, value=lead.get_status_display())
-            ws.cell(row=row, column=8, value=lead.get_priority_display())
-            ws.cell(row=row, column=9, value=lead.assigned_to.get_full_name() if lead.assigned_to else '')
-            ws.cell(row=row, column=10, value=lead.created_at.strftime('%Y-%m-%d %H:%M'))
-            ws.cell(row=row, column=11,
+            ws.cell(row=row, column=7, value=lead.get_priority_display())
+            ws.cell(row=row, column=8, value=lead.assigned_to.get_full_name() if lead.assigned_to else '')
+            ws.cell(row=row, column=9, value=lead.created_at.strftime('%Y-%m-%d %H:%M'))
+            ws.cell(row=row, column=10,
                     value=lead.next_follow_up.strftime('%Y-%m-%d %H:%M') if lead.next_follow_up else '')
 
         # Adjust column widths
@@ -1248,7 +1161,7 @@ def lead_export_view(request):
 
         writer.writerow([
             'ID', 'Name', 'Phone', 'Email',
-            'Source', 'Stage', 'Status', 'Priority',
+            'Source', 'Stage', 'Priority',
             'Assigned To', 'Created Date', 'Next Follow-up'
         ])
 
@@ -1261,7 +1174,6 @@ def lead_export_view(request):
                 lead.email or '',
                 lead.source.name,
                 lead.stage.name,
-                lead.get_status_display(),
                 lead.get_priority_display(),
                 lead.assigned_to.get_full_name() if lead.assigned_to else '',
                 lead.created_at.strftime('%Y-%m-%d %H:%M'),
@@ -1276,7 +1188,6 @@ def lead_export_view(request):
 
 
 @login_required
-@company_required
 @admin_required
 def lead_import_view(request):
     if request.method == 'POST':

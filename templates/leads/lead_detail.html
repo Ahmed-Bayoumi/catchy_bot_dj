@@ -452,9 +452,7 @@
                         <li><a class="dropdown-item" href="#" onclick="openAssignModal('{{ lead.pk }}')">
                                 <i class="fas fa-user-plus"></i>Assign to Agent
                             </a></li>
-                        <li><a class="dropdown-item" href="#" onclick="openStatusModal('{{ lead.pk }}')">
-                                <i class="fas fa-exchange-alt"></i>Change Status
-                            </a></li>
+
                         <li><a class="dropdown-item" href="#" onclick="openStageModal('{{ lead.pk }}')">
                                 <i class="fas fa-layer-group"></i>Change Stage
                             </a></li>
@@ -558,15 +556,7 @@
                             </div>
                         </div>
 
-                        <div class="info-row">
-                            <div class="label">Status</div>
-                            <div class="value">
-                                <span
-                                    class="badge-detail {% if lead.status == 'new' %}bg-info{% elif lead.status == 'contacted' %}bg-warning{% elif lead.status == 'qualified' %}bg-success{% endif %}">
-                                    {{ lead.get_status_display }}
-                                </span>
-                            </div>
-                        </div>
+
 
                         <div class="info-row">
                             <div class="label">Priority</div>
@@ -747,8 +737,8 @@
                     <button class="btn btn-outline-primary" onclick="openAssignModal('{{ lead.pk }}')">
                         <i class="fas fa-user-plus me-2"></i>Assign to Agent
                     </button>
-                    <button class="btn btn-outline-warning" onclick="openStatusModal('{{ lead.pk }}')">
-                        <i class="fas fa-exchange-alt me-2"></i>Change Status
+                    <button class="btn btn-outline-warning" onclick="openStageModal('{{ lead.pk }}')">
+                        <i class="fas fa-exchange-alt me-2"></i>Change Stage
                     </button>
                     <button class="btn btn-outline-info" onclick="openFollowUpModal('{{ lead.pk }}')">
                         <i class="fas fa-calendar-check me-2"></i>Set Follow-up

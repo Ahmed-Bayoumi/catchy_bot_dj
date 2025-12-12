@@ -117,7 +117,6 @@ class LeadModelTest(TestCase):
             email='test@example.com',
             source=self.source,
             stage=self.stage,
-            status='new',
             priority='medium',
             assigned_to=self.agent1
         )
@@ -129,7 +128,6 @@ class LeadModelTest(TestCase):
         self.assertEqual(lead.email, 'test@example.com')
         self.assertEqual(lead.source, self.source)
         self.assertEqual(lead.stage, self.stage)
-        self.assertEqual(lead.status, 'new')
         self.assertEqual(lead.priority, 'medium')
         self.assertEqual(lead.assigned_to, self.agent1)
         self.assertEqual(lead.company, self.company)
@@ -142,18 +140,17 @@ class LeadModelTest(TestCase):
         """
         Test: __str__ method returns correct format
 
-        Expected: "Name (Phone) - Status"
+        Expected: "Name (Phone) - Stage"
         """
         lead = Lead.objects.create(
             company=self.company,
             name='Ahmed Ali',
             phone='+201234567890',
             source=self.source,
-            stage=self.stage,
-            status='contacted'
+            stage=self.stage
         )
 
-        expected = "Ahmed Ali (+201234567890) - تم التواصل"
+        expected = f"Ahmed Ali (+201234567890) - {self.stage.name}"
         self.assertEqual(str(lead), expected)
 
     def test_lead_unique_phone_per_company(self):
@@ -211,44 +208,40 @@ class LeadModelTest(TestCase):
 
     def test_lead_can_be_assigned(self):
         """
-        Test: can_be_assigned() checks if lead can be assigned
+        Test: can_be_assigned() checks if lead can be assigned based on stage
 
         Expected:
-        - New/Contacted/Qualified leads → True
-        - Won/Lost leads → False
+        - Regular stages → True
+        - Won/Lost/Closed stages → False
         """
-        # New lead - can be assigned
+        # Regular lead stage - can be assigned
         lead_new = Lead.objects.create(
             company=self.company,
             name='New Lead',
             phone='+201234567890',
             source=self.source,
-            stage=self.stage,
-            status='new'
+            stage=self.stage  # 'Lead' stage
         )
         self.assertTrue(lead_new.can_be_assigned())
 
+        # Create won stage
+        won_stage = LeadStage.objects.create(
+            name='Won',
+            stage_type='won',
+            icon='fas fa-trophy',
+            color='#28a745',
+            order=10
+        )
+        
         # Won lead - cannot be assigned
         lead_won = Lead.objects.create(
             company=self.company,
             name='Won Lead',
             phone='+201234567891',
             source=self.source,
-            stage=self.stage,
-            status='won'
+            stage=won_stage
         )
         self.assertFalse(lead_won.can_be_assigned())
-
-        # Lost lead - cannot be assigned
-        lead_lost = Lead.objects.create(
-            company=self.company,
-            name='Lost Lead',
-            phone='+201234567892',
-            source=self.source,
-            stage=self.stage,
-            status='lost'
-        )
-        self.assertFalse(lead_lost.can_be_assigned())
 
     def test_lead_assign_to_method(self):
         """
@@ -264,8 +257,7 @@ class LeadModelTest(TestCase):
             name='Test Lead',
             phone='+201234567890',
             source=self.source,
-            stage=self.stage,
-            status='new'
+            stage=self.stage
         )
 
         # Get initial stats
@@ -307,7 +299,6 @@ class LeadModelTest(TestCase):
             phone='+201234567890',
             source=self.source,
             stage=self.stage,
-            status='new',
             assigned_to=self.agent1
         )
 
@@ -327,48 +318,6 @@ class LeadModelTest(TestCase):
         # Assert counts updated
         self.assertEqual(self.agent1.total_leads_assigned, 4)  # Decreased
         self.assertEqual(self.agent2.total_leads_assigned, 4)  # Increased
-
-    def test_lead_change_status_method(self):
-        """
-        Test: change_status() changes status and creates activity
-
-        Expected:
-        - Lead.status updated
-        - Activity created
-        - User statistics updated (for converted/won)
-        """
-        lead = Lead.objects.create(
-            company=self.company,
-            name='Test Lead',
-            phone='+201234567890',
-            source=self.source,
-            stage=self.stage,
-            status='new',
-            assigned_to=self.agent1
-        )
-
-        # Get initial converted count
-        initial_converted = self.agent1.total_leads_converted
-
-        # Change status to converted
-        lead.change_status('converted', user=self.admin)
-
-        # Assert status changed
-        self.assertEqual(lead.status, 'converted')
-
-        # Assert activity created
-        activities = Activity.objects.filter(
-            lead=lead,
-            activity_type='status_changed'
-        )
-        self.assertTrue(activities.exists())
-
-        # Assert user statistics updated
-        self.agent1.refresh_from_db()
-        self.assertEqual(
-            self.agent1.total_leads_converted,
-            initial_converted + 1
-        )
 
     def test_lead_change_stage_method(self):
         """
@@ -393,8 +342,7 @@ class LeadModelTest(TestCase):
             name='Test Lead',
             phone='+201234567890',
             source=self.source,
-            stage=self.stage,  # Lead stage
-            status='qualified'
+            stage=self.stage  # Lead stage
         )
 
         # Change stage to Patient

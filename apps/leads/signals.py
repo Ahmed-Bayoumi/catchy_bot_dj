@@ -23,7 +23,6 @@ def track_lead_changes(sender, instance, **kwargs):
             old_lead = Lead.objects.get(pk=instance.pk)
 
             # Store old values as temporary attributes
-            instance._old_status = old_lead.status
             instance._old_stage = old_lead.stage
             instance._old_assigned_to = old_lead.assigned_to
 

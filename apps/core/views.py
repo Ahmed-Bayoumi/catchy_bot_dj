@@ -7,30 +7,63 @@ from datetime import timedelta, date
 from apps.accounts.decorators import company_required
 from .models import Company, LeadSource, LeadStage
 from apps.leads.models import Lead
+from .utils import get_user_company, set_selected_company
 
 
 @login_required
-@company_required
+def company_selector_view(request):
+    """
+    Company selector for Superuser
+    Simple page to choose which company to manage
+    """
+    # Only superusers can access
+    if not request.user.is_superuser:
+        return redirect('core:dashboard')
+    
+    # Handle company selection via GET parameter
+    company_id = request.GET.get('company_id')
+    if company_id:
+        if set_selected_company(request, company_id):
+            return redirect('core:dashboard')
+    
+    # Get all companies
+    companies = Company.objects.all().order_by('name')
+    
+    # Get current selection
+    selected_company = get_user_company(request)
+    
+    context = {
+        'companies': companies,
+        'selected_company': selected_company,
+    }
+    
+    return render(request, 'core/company_selector.html', context)
+
+
+@login_required
 def dashboard_view(request):
-    company = request.user.company
+    """
+    Main dashboard view
+    - Superuser: sees selected company data (or redirected to selector)
+    - Admin/Agent: sees their company data
+    """
+    # Get company (selected for superuser, or user.company for others)
+    company = get_user_company(request)
+    
+    # Superuser without selection → redirect to selector
+    if request.user.is_superuser and not company:
+        return redirect('core:company_selector')
+    
+    # Regular user without company → error
+    if not company:
+        return redirect('login')  # Or show error page
+    
     today = timezone.now().date()
 
-    # Base QuerySet
-    # Robustly exclude 'delete'/'deleted' from status and stage
-    if request.user.is_superuser:
-        # Superuser sees all leads in the system
-        leads_qs = Lead.objects.all() \
-            .exclude(status__iexact='delete') \
-            .exclude(status__iexact='deleted') \
-            .exclude(stage__name__iexact='delete') \
-            .exclude(stage__name__iexact='deleted')
-    else:
-        # Regular users see their company's leads
-        leads_qs = Lead.objects.filter(company=company) \
-            .exclude(status__iexact='delete') \
-            .exclude(status__iexact='deleted') \
-            .exclude(stage__name__iexact='delete') \
-            .exclude(stage__name__iexact='deleted')
+    # Base QuerySet - company leads only
+    leads_qs = Lead.objects.filter(company=company) \
+        .exclude(stage__name__iexact='delete') \
+        .exclude(stage__name__iexact='deleted')
 
     # 1. Key Metrics
     total_leads = leads_qs.count()
@@ -46,9 +79,13 @@ def dashboard_view(request):
         created_at__month=today.month
     ).count()
 
-    # Conversion Rate (Leads won / Total Leads)
-    # Note: Using 'won' status as conversion for this metric
-    won_leads = leads_qs.filter(status='won').count()
+    # Conversion Rate (Leads in 'won' stage / Total Leads)
+    # Find 'won' stage(s) by checking stage_type or name
+    won_stages = LeadStage.objects.filter(
+        Q(stage_type='won') | Q(name__iexact='won'),
+        is_active=True
+    )
+    won_leads = leads_qs.filter(stage__in=won_stages).count()
     conversion_rate = (won_leads / total_leads * 100) if total_leads > 0 else 0
 
     # 2. Lead Distribution by Stage
@@ -86,12 +123,42 @@ def dashboard_view(request):
             'icon': source.icon,
         })
 
-    # 4. User Performance Statistics
-    # These rely on the User model methods which use assigned/converted fields
-    assigned = request.user.total_leads_assigned
-    converted = request.user.total_leads_converted
-    won = request.user.total_leads_won
-
+    # 4. User Performance Statistics (Dynamic - always accurate)
+    # Calculate from actual database counts instead of cached fields
+    # - Agents: see their own stats
+    # - Admins/Superusers: see company-wide stats (in frontend only)
+    
+    if request.user.is_admin() or request.user.is_superuser:
+        # Admins/Superusers see COMPANY-WIDE stats in frontend
+        # (Django admin will still show everything for superuser)
+        user_assigned_leads = Lead.objects.filter(company=company)
+        stats_label = "Company"  # For UI display
+    else:
+        # Regular agents see THEIR OWN stats
+        user_assigned_leads = Lead.objects.filter(
+            assigned_to=request.user,
+            company=company
+        )
+        stats_label = "My"  # For UI display
+    
+    # Count assigned leads
+    assigned = user_assigned_leads.count()
+    
+    # Find "converted" and "won" stages dynamically
+    converted_stages = LeadStage.objects.filter(
+        Q(stage_type='converted') | Q(name__iexact='converted') | Q(name__iexact='patient'),
+        is_active=True
+    )
+    won_stages = LeadStage.objects.filter(
+        Q(stage_type='won') | Q(name__iexact='won'),
+        is_active=True
+    )
+    
+    # Count converted and won leads
+    converted = user_assigned_leads.filter(stage__in=converted_stages).count()
+    won = user_assigned_leads.filter(stage__in=won_stages).count()
+    
+    # Calculate percentages
     conversion_percentage = (converted / assigned * 100) if assigned > 0 else 0
     win_percentage = (won / assigned * 100) if assigned > 0 else 0
 
@@ -99,10 +166,11 @@ def dashboard_view(request):
         'assigned': assigned,
         'converted': converted,
         'won': won,
-        'conversion_rate': request.user.get_conversion_rate(),
-        'win_rate': request.user.get_win_rate(),
+        'conversion_rate': conversion_percentage,  # Same as conversion_percentage
+        'win_rate': win_percentage,  # Same as win_percentage  
         'conversion_percentage': conversion_percentage,
         'win_percentage': win_percentage,
+        'stats_label': stats_label,  # "My" or "Company"
     }
 
     # 5. Recent Activity

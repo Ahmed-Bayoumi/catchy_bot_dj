@@ -72,72 +72,6 @@ Requirements:
 
 
 
-<!-- 2. STATUS MODAL - Change Lead Status -->
-<div class="modal fade" id="statusModal" tabindex="-1" aria-labelledby="statusModalLabel" aria-hidden="true">
-    <div class="modal-dialog modal-dialog-centered">
-        <div class="modal-content">
-            <div class="modal-header">
-                <h5 class="modal-title" id="statusModalLabel">
-                    <i class="fas fa-exchange-alt me-2"></i>Change Status
-                </h5>
-                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-            </div>
-            <form id="statusForm" method="POST">
-                {% csrf_token %}
-                <div class="modal-body">
-                    <p class="text-muted mb-3">
-                        Select the new status for this lead
-                    </p>
-
-                    <div class="mb-3">
-                        <label for="leadStatus" class="form-label">Status</label>
-                        <select class="form-select" id="leadStatus" name="status" required>
-                            <option value="">Select status...</option>
-                            <option value="new">New</option>
-                            <option value="contacted">Contacted</option>
-                            <option value="qualified">Qualified</option>
-                            <option value="converted">Converted</option>
-                            <option value="won">Won</option>
-                            <option value="lost">Lost</option>
-                        </select>
-                    </div>
-
-                    <!-- Status descriptions -->
-                    <div class="status-descriptions">
-                        <div class="status-desc alert alert-info" data-status="new" style="display: none;">
-                            <strong>New:</strong> Fresh lead, not contacted yet
-                        </div>
-                        <div class="status-desc alert alert-warning" data-status="contacted" style="display: none;">
-                            <strong>Contacted:</strong> Lead has been contacted
-                        </div>
-                        <div class="status-desc alert alert-success" data-status="qualified" style="display: none;">
-                            <strong>Qualified:</strong> Lead is qualified and interested
-                        </div>
-                        <div class="status-desc alert alert-primary" data-status="converted" style="display: none;">
-                            <strong>Converted:</strong> Lead became a patient
-                        </div>
-                        <div class="status-desc alert alert-success" data-status="won" style="display: none;">
-                            <strong>Won:</strong> Successfully converted and paid
-                        </div>
-                        <div class="status-desc alert alert-danger" data-status="lost" style="display: none;">
-                            <strong>Lost:</strong> Lead is lost (rejected/no response)
-                        </div>
-                    </div>
-                </div>
-                <div class="modal-footer">
-                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">
-                        <i class="fas fa-times me-2"></i>Cancel
-                    </button>
-                    <button type="submit" class="btn btn-primary" id="statusSubmitBtn">
-                        <i class="fas fa-check me-2"></i>Change Status
-                    </button>
-                </div>
-            </form>
-        </div>
-    </div>
-</div>
-
-
 
 <!-- 3. STAGE MODAL - Change Lead Stage -->
 <div class="modal fade" id="stageModal" tabindex="-1" aria-labelledby="stageModalLabel" aria-hidden="true">
@@ -275,7 +209,6 @@ Requirements:
                         <select class="form-select" id="bulkAction" name="action" required>
                             <option value="">Select action...</option>
                             <option value="assign">Assign to Agent</option>
-                            <option value="change_status">Change Status</option>
                             <option value="change_stage">Change Stage</option>
                             <option value="set_priority">Set Priority</option>
                             <option value="delete">Delete Leads</option>
@@ -295,19 +228,7 @@ Requirements:
                             </select>
                         </div>
 
-                        <!-- Status fields -->
-                        <div class="bulk-field" data-action="change_status" style="display: none;">
-                            <label for="bulkStatus" class="form-label">New Status</label>
-                            <select class="form-select" id="bulkStatus" name="status">
-                                <option value="">Select status...</option>
-                                <option value="new">New</option>
-                                <option value="contacted">Contacted</option>
-                                <option value="qualified">Qualified</option>
-                                <option value="converted">Converted</option>
-                                <option value="won">Won</option>
-                                <option value="lost">Lost</option>
-                            </select>
-                        </div>
+
 
                         <!-- Stage fields -->
                         <div class="bulk-field" data-action="change_stage" style="display: none;">
@@ -485,71 +406,7 @@ Requirements:
             });
     });
 
-    // ============================================================
-    // 2. STATUS MODAL
-    // ============================================================
 
-    // Open status modal
-    function openStatusModal(leadId) {
-        currentLeadId = leadId;
-        const modal = new bootstrap.Modal(document.getElementById('statusModal'));
-        modal.show();
-    }
-
-    // Show status description on change
-    document.getElementById('leadStatus')?.addEventListener('change', function () {
-        // Hide all descriptions
-        document.querySelectorAll('.status-desc').forEach(desc => {
-            desc.style.display = 'none';
-        });
-
-        // Show selected status description
-        const selected = this.value;
-        if (selected) {
-            const desc = document.querySelector(`.status-desc[data-status="${selected}"]`);
-            if (desc) desc.style.display = 'block';
-        }
-    });
-
-    // Handle status form submission
-    document.getElementById('statusForm')?.addEventListener('submit', function (e) {
-        e.preventDefault();
-
-        const formData = new FormData(this);
-        const status = formData.get('status');
-
-        if (!currentLeadId || !status) {
-            alert('Please select a status');
-            return;
-        }
-
-        setButtonLoading('statusSubmitBtn', true);
-
-        fetch(`/leads/${currentLeadId}/change-status/`, {
-            method: 'POST',
-            headers: {
-                'X-CSRFToken': csrftoken,
-                'X-Requested-With': 'XMLHttpRequest'
-            },
-            body: formData
-        })
-            .then(response => response.json())
-            .then(data => {
-                if (data.success) {
-                    bootstrap.Modal.getInstance(document.getElementById('statusModal')).hide();
-                    alert('Status changed successfully');
-                    location.reload();
-                } else {
-                    alert('Error: ' + (data.error || 'Failed to change status'));
-                }
-            })
-            .catch(error => {
-                alert('Error: ' + error);
-            })
-            .finally(() => {
-                setButtonLoading('statusSubmitBtn', false);
-            });
-    });
 
     // ============================================================
     // 3. STAGE MODAL

@@ -316,271 +316,251 @@
                         <i class="fas fa-list me-1"></i>
                         <strong>{{ total_count }}</strong> Total
                     </div>
-                    <div class="stat-item">
-                        <i class="fas fa-plus-circle me-1"></i>
-                        <strong>{{ status_counts.new }}</strong> New
-                    </div>
-                    <div class="stat-item">
-                        <i class="fas fa-phone me-1"></i>
-                        <strong>{{ status_counts.contacted }}</strong> Contacted
-                    </div>
-                    <div class="stat-item">
-                        <i class="fas fa-check-circle me-1"></i>
-                        <strong>{{ status_counts.qualified }}</strong> Qualified
-                    </div>
                 </div>
-            </div>
-            <div class="d-flex gap-2">
-                <!-- View Toggle -->
-                <div class="view-toggle">
-                    <a href="{% url 'leads:lead_list' %}" class="btn active">
-                        <i class="fas fa-list"></i>
-                    </a>
-                    <a href="{% url 'leads:lead_kanban' %}" class="btn">
-                        <i class="fas fa-th"></i>
-                    </a>
-                </div>
-
-                <!-- New Lead Button -->
-                <a href="{% url 'leads:lead_create' %}" class="btn btn-new-lead">
-                    <i class="fas fa-plus me-2"></i>New Lead
-                </a>
             </div>
         </div>
+        <div class="d-flex gap-2">
+            <!-- View Toggle -->
+            <div class="view-toggle">
+                <a href="{% url 'leads:lead_list' %}" class="btn active">
+                    <i class="fas fa-list"></i>
+                </a>
+                <a href="{% url 'leads:lead_kanban' %}" class="btn">
+                    <i class="fas fa-th"></i>
+                </a>
+            </div>
+
+            <!-- New Lead Button -->
+            <a href="{% url 'leads:lead_create' %}" class="btn btn-new-lead">
+                <i class="fas fa-plus me-2"></i>New Lead
+            </a>
+        </div>
     </div>
+</div>
 
-    <!-- Filters Section -->
-    <div class="filter-section">
-        <h5><i class="fas fa-filter me-2"></i>Filters & Search</h5>
+<!-- Filters Section -->
+<div class="filter-section">
+    <h5><i class="fas fa-filter me-2"></i>Filters & Search</h5>
 
-        <form method="GET" id="filterForm">
+    <form method="GET" id="filterForm">
+        <div class="row g-3">
+            <!-- Search -->
+            <div class="col-md-3">
+                <div class="search-box">
+                    <input type="text" name="search" class="form-control" placeholder="Search name, phone, email..."
+                        value="{{ search_query }}">
+                </div>
+            </div>
+
+            <!-- Source Filter -->
+            <div class="col-md-2">
+                {{ filter_form.source }}
+            </div>
+
+            <!-- Stage Filter -->
+            <div class="col-md-2">
+                {{ filter_form.stage }}
+            </div>
+
+
+            <!-- Priority Filter -->
+            <div class="col-md-2">
+                {{ filter_form.priority }}
+            </div>
+
+            <!-- Search Button -->
+            <div class="col-md-1">
+                <button type="submit" class="btn btn-view w-100">
+                    <i class="fas fa-search"></i>
+                </button>
+            </div>
+        </div>
+
+        <!-- Advanced Filters (Collapsible) -->
+        <div class="collapse mt-3" id="advancedFilters">
             <div class="row g-3">
-                <!-- Search -->
                 <div class="col-md-3">
-                    <div class="search-box">
-                        <input type="text" name="search" class="form-control" placeholder="Search name, phone, email..."
-                            value="{{ search_query }}">
-                    </div>
+                    {{ filter_form.assigned_to }}
                 </div>
-
-                <!-- Source Filter -->
-                <div class="col-md-2">
-                    {{ filter_form.source }}
+                <div class="col-md-3">
+                    {{ filter_form.date_from }}
                 </div>
-
-                <!-- Stage Filter -->
-                <div class="col-md-2">
-                    {{ filter_form.stage }}
+                <div class="col-md-3">
+                    {{ filter_form.date_to }}
                 </div>
-
-                <!-- Status Filter -->
-                <div class="col-md-2">
-                    {{ filter_form.status }}
-                </div>
-
-                <!-- Priority Filter -->
-                <div class="col-md-2">
-                    {{ filter_form.priority }}
-                </div>
-
-                <!-- Search Button -->
-                <div class="col-md-1">
-                    <button type="submit" class="btn btn-view w-100">
-                        <i class="fas fa-search"></i>
+                <div class="col-md-3">
+                    <button type="button" class="btn btn-outline-secondary w-100" onclick="resetFilters()">
+                        <i class="fas fa-redo me-2"></i>Reset
                     </button>
                 </div>
             </div>
-
-            <!-- Advanced Filters (Collapsible) -->
-            <div class="collapse mt-3" id="advancedFilters">
-                <div class="row g-3">
-                    <div class="col-md-3">
-                        {{ filter_form.assigned_to }}
-                    </div>
-                    <div class="col-md-3">
-                        {{ filter_form.date_from }}
-                    </div>
-                    <div class="col-md-3">
-                        {{ filter_form.date_to }}
-                    </div>
-                    <div class="col-md-3">
-                        <button type="button" class="btn btn-outline-secondary w-100" onclick="resetFilters()">
-                            <i class="fas fa-redo me-2"></i>Reset
-                        </button>
-                    </div>
-                </div>
-            </div>
-
-            <!-- Toggle Advanced Filters -->
-            <div class="mt-2">
-                <a class="btn btn-link" data-bs-toggle="collapse" href="#advancedFilters"
-                    style="color: var(--link-normal); text-decoration: none;">
-                    <i class="fas fa-chevron-down me-1"></i>Advanced Filters
-                </a>
-            </div>
-        </form>
-    </div>
-
-    <!-- Bulk Actions Bar -->
-    <div class="bulk-actions" id="bulkActionsBar">
-        <div class="d-flex justify-content-between align-items-center">
-            <span><strong id="selectedCount">0</strong> leads selected</span>
-            <div class="d-flex gap-2">
-                <button class="btn btn-sm btn-outline-primary" onclick="bulkAssign()">
-                    <i class="fas fa-user-plus me-1"></i>Assign
-                </button>
-                <button class="btn btn-sm btn-outline-warning" onclick="bulkChangeStatus()">
-                    <i class="fas fa-exchange-alt me-1"></i>Change Status
-                </button>
-                <button class="btn btn-sm btn-outline-danger" onclick="bulkDelete()">
-                    <i class="fas fa-trash me-1"></i>Delete
-                </button>
-            </div>
         </div>
-    </div>
 
-    <!-- Leads Table -->
-    <div class="leads-table">
-        {% if leads %}
-        <table class="table table-hover">
-            <thead>
-                <tr>
-                    <th style="width: 40px;">
-                        <input type="checkbox" class="form-check-input" id="selectAll">
-                    </th>
-                    <th>Name</th>
-                    <th>Phone</th>
-                    <th>Source</th>
-                    <th>Stage</th>
-                    <th>Status</th>
-                    <th>Priority</th>
-                    <th>Assigned To</th>
-                    <th>Created</th>
-                    <th style="width: 100px;">Actions</th>
-                </tr>
-            </thead>
-            <tbody>
-                {% for lead in leads %}
-                <tr>
-                    <td>
-                        <input type="checkbox" class="form-check-input lead-checkbox" data-lead-id="{{ lead.id }}">
-                    </td>
-                    <td>
-                        <strong>{{ lead.name }}</strong>
-                        {% if lead.email %}
-                        <br><small class="text-muted">{{ lead.email }}</small>
-                        {% endif %}
-                    </td>
-                    <td>
-                        <i class="fas fa-phone text-success me-1"></i>
-                        {{ lead.phone }}
-                    </td>
-                    <td>
-                        <span class="badge-source" style="background-color: {{ lead.source.color }}; color: white;">
-                            <i class="{{ lead.source.icon }} me-1"></i>{{ lead.source.name }}
-                        </span>
-                    </td>
-                    <td>
-                        <span class="badge-source" style="background-color: {{ lead.stage.color }}; color: white;">
-                            <i class="{{ lead.stage.icon }} me-1"></i>{{ lead.stage.name }}
-                        </span>
-                    </td>
-                    <td>
-                        <span class="badge badge-status-{{ lead.status }}">
-                            {{ lead.get_status_display }}
-                        </span>
-                    </td>
-                    <td>
-                        <span class="badge badge-priority-{{ lead.priority }}">
-                            {{ lead.get_priority_display }}
-                        </span>
-                    </td>
-                    <td>
-                        {% if lead.assigned_to %}
-                        <span
-                            style="background-color: var(--primary-blue); color: white; padding: 2px 6px; border-radius: 50%; font-size: 0.75rem;">
-                            {{ lead.assigned_to.get_initials }}
-                        </span>
-                        {{ lead.assigned_to.get_full_name }}
-                        {% else %}
-                        <span class="text-muted">Unassigned</span>
-                        {% endif %}
-                    </td>
-                    <td>
-                        <small class="text-muted">{{ lead.time_since_created }}</small>
-                    </td>
-                    <td>
-                        <a href="{% url 'leads:lead_detail' pk=lead.pk %}" class="btn btn-view btn-sm">
-                            <i class="fas fa-eye"></i>
-                        </a>
-                    </td>
-                </tr>
-                {% endfor %}
-            </tbody>
-        </table>
-
-        <!-- Pagination -->
-        {% if is_paginated %}
-        <div class="p-3">
-            <nav>
-                <ul class="pagination justify-content-center mb-0">
-                    {% if page_obj.has_previous %}
-                    <li class="page-item">
-                        <a class="page-link" href="?page=1{% if search_query %}&search={{ search_query }}{% endif %}">
-                            <i class="fas fa-angle-double-left"></i>
-                        </a>
-                    </li>
-                    <li class="page-item">
-                        <a class="page-link"
-                            href="?page={{ page_obj.previous_page_number }}{% if search_query %}&search={{ search_query }}{% endif %}">
-                            <i class="fas fa-angle-left"></i>
-                        </a>
-                    </li>
-                    {% endif %}
-
-                    {% for num in page_range %}
-                    <li class="page-item {% if page_obj.number == num %}active{% endif %}">
-                        <a class="page-link"
-                            href="?page={{ num }}{% if search_query %}&search={{ search_query }}{% endif %}">
-                            {{ num }}
-                        </a>
-                    </li>
-                    {% endfor %}
-
-                    {% if page_obj.has_next %}
-                    <li class="page-item">
-                        <a class="page-link"
-                            href="?page={{ page_obj.next_page_number }}{% if search_query %}&search={{ search_query }}{% endif %}">
-                            <i class="fas fa-angle-right"></i>
-                        </a>
-                    </li>
-                    <li class="page-item">
-                        <a class="page-link"
-                            href="?page={{ page_obj.paginator.num_pages }}{% if search_query %}&search={{ search_query }}{% endif %}">
-                            <i class="fas fa-angle-double-right"></i>
-                        </a>
-                    </li>
-                    {% endif %}
-                </ul>
-            </nav>
-        </div>
-        {% endif %}
-
-        {% else %}
-        <!-- Empty State -->
-        <div class="empty-state">
-            <i class="fas fa-inbox"></i>
-            <h4>No Leads Found</h4>
-            <p>No leads match your current filters, or you haven't created any leads yet.</p>
-            <a href="{% url 'leads:lead_create' %}" class="btn btn-new-lead mt-3">
-                <i class="fas fa-plus me-2"></i>Create Your First Lead
+        <!-- Toggle Advanced Filters -->
+        <div class="mt-2">
+            <a class="btn btn-link" data-bs-toggle="collapse" href="#advancedFilters"
+                style="color: var(--link-normal); text-decoration: none;">
+                <i class="fas fa-chevron-down me-1"></i>Advanced Filters
             </a>
         </div>
-        {% endif %}
-    </div>
+    </form>
+</div>
 
-    <!-- Modals -->
-    {% include 'leads/includes/modals.html' %}
+<!-- Bulk Actions Bar -->
+<div class="bulk-actions" id="bulkActionsBar">
+    <div class="d-flex justify-content-between align-items-center">
+        <span><strong id="selectedCount">0</strong> leads selected</span>
+        <div class="d-flex gap-2">
+            <button class="btn btn-sm btn-outline-primary" onclick="bulkAssign()">
+                <i class="fas fa-user-plus me-1"></i>Assign
+            </button>
+            <button class="btn btn-sm btn-outline-warning" onclick="bulkChangeStage()">
+                <i class="fas fa-exchange-alt me-1"></i>Change Stage
+            </button>
+            <button class="btn btn-sm btn-outline-danger" onclick="bulkDelete()">
+                <i class="fas fa-trash me-1"></i>Delete
+            </button>
+        </div>
+    </div>
+</div>
+
+<!-- Leads Table -->
+<div class="leads-table">
+    {% if leads %}
+    <table class="table table-hover">
+        <thead>
+            <tr>
+                <th style="width: 40px;">
+                    <input type="checkbox" class="form-check-input" id="selectAll">
+                </th>
+                <th>Name</th>
+                <th>Phone</th>
+                <th>Source</th>
+                <th>Stage</th>
+                <th>Priority</th>
+                <th>Assigned To</th>
+                <th>Created</th>
+                <th style="width: 100px;">Actions</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for lead in leads %}
+            <tr>
+                <td>
+                    <input type="checkbox" class="form-check-input lead-checkbox" data-lead-id="{{ lead.id }}">
+                </td>
+                <td>
+                    <strong>{{ lead.name }}</strong>
+                    {% if lead.email %}
+                    <br><small class="text-muted">{{ lead.email }}</small>
+                    {% endif %}
+                </td>
+                <td>
+                    <i class="fas fa-phone text-success me-1"></i>
+                    {{ lead.phone }}
+                </td>
+                <td>
+                    <span class="badge-source" style="background-color: {{ lead.source.color }}; color: white;">
+                        <i class="{{ lead.source.icon }} me-1"></i>{{ lead.source.name }}
+                    </span>
+                </td>
+                <td>
+                    <span class="badge-source" style="background-color: {{ lead.stage.color }}; color: white;">
+                        <i class="{{ lead.stage.icon }} me-1"></i>{{ lead.stage.name }}
+                    </span>
+                </td>
+
+                <td>
+                    <span class="badge badge-priority-{{ lead.priority }}">
+                        {{ lead.get_priority_display }}
+                    </span>
+                </td>
+                <td>
+                    {% if lead.assigned_to %}
+                    <span
+                        style="background-color: var(--primary-blue); color: white; padding: 2px 6px; border-radius: 50%; font-size: 0.75rem;">
+                        {{ lead.assigned_to.get_initials }}
+                    </span>
+                    {{ lead.assigned_to.get_full_name }}
+                    {% else %}
+                    <span class="text-muted">Unassigned</span>
+                    {% endif %}
+                </td>
+                <td>
+                    <small class="text-muted">{{ lead.time_since_created }}</small>
+                </td>
+                <td>
+                    <a href="{% url 'leads:lead_detail' pk=lead.pk %}" class="btn btn-view btn-sm">
+                        <i class="fas fa-eye"></i>
+                    </a>
+                </td>
+            </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+
+    <!-- Pagination -->
+    {% if is_paginated %}
+    <div class="p-3">
+        <nav>
+            <ul class="pagination justify-content-center mb-0">
+                {% if page_obj.has_previous %}
+                <li class="page-item">
+                    <a class="page-link" href="?page=1{% if search_query %}&search={{ search_query }}{% endif %}">
+                        <i class="fas fa-angle-double-left"></i>
+                    </a>
+                </li>
+                <li class="page-item">
+                    <a class="page-link"
+                        href="?page={{ page_obj.previous_page_number }}{% if search_query %}&search={{ search_query }}{% endif %}">
+                        <i class="fas fa-angle-left"></i>
+                    </a>
+                </li>
+                {% endif %}
+
+                {% for num in page_range %}
+                <li class="page-item {% if page_obj.number == num %}active{% endif %}">
+                    <a class="page-link"
+                        href="?page={{ num }}{% if search_query %}&search={{ search_query }}{% endif %}">
+                        {{ num }}
+                    </a>
+                </li>
+                {% endfor %}
+
+                {% if page_obj.has_next %}
+                <li class="page-item">
+                    <a class="page-link"
+                        href="?page={{ page_obj.next_page_number }}{% if search_query %}&search={{ search_query }}{% endif %}">
+                        <i class="fas fa-angle-right"></i>
+                    </a>
+                </li>
+                <li class="page-item">
+                    <a class="page-link"
+                        href="?page={{ page_obj.paginator.num_pages }}{% if search_query %}&search={{ search_query }}{% endif %}">
+                        <i class="fas fa-angle-double-right"></i>
+                    </a>
+                </li>
+                {% endif %}
+            </ul>
+        </nav>
+    </div>
+    {% endif %}
+
+    {% else %}
+    <!-- Empty State -->
+    <div class="empty-state">
+        <i class="fas fa-inbox"></i>
+        <h4>No Leads Found</h4>
+        <p>No leads match your current filters, or you haven't created any leads yet.</p>
+        <a href="{% url 'leads:lead_create' %}" class="btn btn-new-lead mt-3">
+            <i class="fas fa-plus me-2"></i>Create Your First Lead
+        </a>
+    </div>
+    {% endif %}
+</div>
+
+<!-- Modals -->
+{% include 'leads/includes/modals.html' %}
 
 </div>
 {% endblock %}
@@ -630,12 +610,12 @@
         openBulkActionsModal();
     }
 
-    function bulkChangeStatus() {
+    function bulkChangeStage() {
         const selected = getSelectedLeads();
         if (selected.length === 0) return;
 
-        // Open bulk actions modal with 'change_status' selected
-        document.getElementById('bulkAction').value = 'change_status';
+        // Open bulk actions modal with 'change_stage' selected
+        document.getElementById('bulkAction').value = 'change_stage';
         document.getElementById('bulkAction').dispatchEvent(new Event('change'));
         openBulkActionsModal();
     }
